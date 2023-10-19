@@ -1,4 +1,5 @@
-import type { Config } from 'tailwindcss'
+import { ThemeConfig } from "antd";
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
@@ -8,7 +9,11 @@ const config: Config = {
   ],
   theme: {
     colors: {
+      transparent: "transparent",
+      white: "#FFFFFF",
+      black: "#000000",
       dark: {
+        1: "#020C16",
         2: "#262D34",
         4: "#2C353D",
       },
@@ -48,4 +53,4 @@ const config: Config = {
   },
   plugins: [],
 };
-export default config
+export default config;

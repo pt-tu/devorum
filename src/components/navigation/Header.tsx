@@ -5,6 +5,7 @@ import {
   Communication,
   DropDownArrow,
   Home,
+  Logo,
   Search,
 } from "@/assets";
 import React from "react";
@@ -15,7 +16,8 @@ export default function Header() {
     <div className="h-20 px-5 flex flex-1 flex-row bg-dark-2 items-center justify-between ">
       {/* Left */}
       <div className="flex flex-row gap-[10px] w-1/3 justify-between items-center pr-7">
-        <div className="h-[30px] w-[30px] bg-orange-8" />
+        <Logo width={30} height={30} />
+
         <div className="flex flex-row items-center w-fit gap-5">
           <Home className="w-5 h-5" fill="#F4F6F8" />
           <Communication className="w-5 h-5" fill="#F4F6F8" />

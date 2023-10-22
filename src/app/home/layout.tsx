@@ -1,4 +1,4 @@
-import { Header, HorizontalNavi } from "@/components";
+import { Header, HorizontalNav } from "@/components";
 
 export default function DashboardLayout({
   children,
@@ -9,7 +9,7 @@ export default function DashboardLayout({
     <section>
       <Header />
       <div className="flex flex-row flex-1">
-        <HorizontalNavi />
+        <HorizontalNav />
         {children}
       </div>
     </section>

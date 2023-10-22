@@ -39,10 +39,10 @@ const items: MenuProps["items"] = [
   ]),
 ];
 
-export default function HorizontalNavi() {
-    const {Item, Divider, ItemGroup, SubMenu} = Menu;
+export default function HorizontalNav() {
+  const { Item, Divider, ItemGroup, SubMenu } = Menu;
   const onClick: MenuProps["onClick"] = (e) => {
-    // console.log("Item ", Item.t);
+    console.log("Item ", Item.t);
   };
 
   return (

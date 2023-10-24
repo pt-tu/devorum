@@ -12,6 +12,7 @@
     "@nextui-org/react": "^2.1.13",
     "antd": "^5.10.1",
     "classnames": "^2.3.2",
+    "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
     "next": "latest",
     "react": "latest",

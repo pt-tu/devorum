@@ -1,11 +1,10 @@
 'use client'
 
-import { Button, Image, Input, Link } from '@nextui-org/react'
+import { Image, Link } from '@nextui-org/react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import ThirdPartiesAuth from '@/components/auth/ThirdPartiesAuth'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { PasswordInput } from '@/components/auth'
+import { useState } from 'react'
 import { useFormik } from 'formik'
 import validationSchema from './validation'
 import RegisterForm from '@/components/auth/RegisterForm'

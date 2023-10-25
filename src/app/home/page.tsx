@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function Page() {
-  return <div className="bg-dark-4 min-h-screen w-full">home</div>;
+  return <div className="bg-dark-1 h-full w-full">home</div>;
 }

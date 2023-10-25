@@ -28,7 +28,7 @@ export default function AppInput(
       {leftIcon}
       <input
         className={classNames(
-          "h-[46px] mx-3 text-secondary-4 text-sm flex-1 bg-dark-4 outline-none",
+          "h-[46px] mx-3 text-gray-4 text-sm flex-1 bg-dark-4 outline-none",
           className
         )}
       />

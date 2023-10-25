@@ -2,6 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import { Providers } from "./providers";
+import { Header } from "@/components";
+import classnames from "classnames";
 
 const rubik = Rubik({ subsets: ["latin"], display: "swap" });
 
@@ -17,7 +19,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={rubik.className}>
+      <body className={classnames(rubik.className, "h-screen max-h-screen")}>
+        <Header />
         <Providers>{children}</Providers>
       </body>
     </html>

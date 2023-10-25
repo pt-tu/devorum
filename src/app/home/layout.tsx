@@ -7,8 +7,7 @@ export default function DashboardLayout({
 }) {
   return (
     <section>
-      <Header />
-      <div className="flex flex-row flex-1">
+      <div className="grid grid-cols-12 gap-5 px-10 pt-5 bg-dark-1 h-screen">
         <HorizontalNav />
         {children}
       </div>

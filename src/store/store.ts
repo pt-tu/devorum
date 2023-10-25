@@ -1,10 +1,7 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { menuSlice } from "./menuSlice";
+import { createMenuSlice } from './slices/menuSlice';
+import { NavMenuProps } from "@/types/navType";
+import { create } from "zustand";
 
-export const store = configureStore({
-    reducer: {
-      [menuSlice.name]: menuSlice.reducer,
-    },
-    // devTools: true,
-  });
-export type AppState = ReturnType<typeof store.getState>;
+export const useMenuStore = create<NavMenuProps>()((...a)=>({
+  ...createMenuSlice(...a)
+}))

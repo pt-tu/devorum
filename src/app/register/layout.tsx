@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Login to devorum',
-  description: 'Login to devorum to participate in largest dev community',
+  title: 'Register an account',
+  description: 'Create your account right now',
 }
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {

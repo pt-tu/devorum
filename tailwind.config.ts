@@ -32,6 +32,8 @@ const config: Config = {
       yellow: {
         8: '#EEA956',
         bg: '#5A4F43',
+        1: '#F6F2EB',
+        '1-dark': '#211b0f',
       },
       blue: {
         8: '#5D95E8',

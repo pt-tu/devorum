@@ -52,5 +52,13 @@ export const createMenuSlice: StateCreator<NavMenuProps> = (set, get) => ({
   items: SAMPLE_MENU,
   defaultSelectedKeys: ["1"],
   defaultOpenKeys: [],
-  clickItem(key) {},
+  onItemClick(key){
+
+  },
+  onExpand(key){
+    set(state=>({
+      items:state.items.map((item)=>
+      item.key === key ? {...item, expand:!item.expand}:item)
+    }))
+  },
 });

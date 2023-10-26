@@ -13,5 +13,6 @@ export type NavMenuProps = {
   items: NavItemProps[];
   defaultSelectedKeys: Key[];
   defaultOpenKeys: Key[];
-  clickItem: (key: Key)=>void
+  onItemClick: (key: Key)=>void;
+  onExpand:(key:Key)=>void;
 };

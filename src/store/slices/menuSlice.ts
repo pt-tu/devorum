@@ -54,9 +54,6 @@ const initialState: NavMenuProps = {
   items: SAMPLE_MENU,
   defaultSelectedKeys: ["1"],
   defaultOpenKeys: [],
-  clickItem: function (key: Key): void {
-    throw new Error("Function not implemented.");
-  }
 };
 
 export const menuSlice = createSlice({

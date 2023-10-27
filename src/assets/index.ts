@@ -5,3 +5,5 @@ export { default as Chat } from "./Chat";
 export { default as Alarm } from "./Alarm";
 export { default as DropDownArrow } from "./DropDownArrow";
 export { default as Logo } from "./Logo";
+export { default as DownArrow } from "./DownArrow";
+export { default as UpArrow } from "./UpArrow";

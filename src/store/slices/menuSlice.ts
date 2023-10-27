@@ -1,11 +1,13 @@
 import { NavItemProps, NavMenuProps } from "@/types/navType";
-import { StateCreator } from "zustand";
+import { createSlice } from "@reduxjs/toolkit";
+import { Key, ReactNode } from "react";
+import { AppState } from "../store";
 
 function getItem(
-  key: React.Key,
-  title?: React.ReactNode,
-  subTitle?: React.ReactNode,
-  icon?: React.ReactNode,
+  key: Key,
+  title?: ReactNode,
+  subTitle?: ReactNode,
+  icon?: ReactNode,
   children?: NavItemProps[],
   expand:boolean = true,
 ): NavItemProps {
@@ -48,9 +50,29 @@ const SAMPLE_MENU = [
   ]),
 ];
 
-export const createMenuSlice: StateCreator<NavMenuProps> = (set, get) => ({
+const initialState: NavMenuProps = {
   items: SAMPLE_MENU,
   defaultSelectedKeys: ["1"],
   defaultOpenKeys: [],
-  clickItem(key) {},
+  clickItem: function (key: Key): void {
+    throw new Error("Function not implemented.");
+  }
+};
+
+export const menuSlice = createSlice({
+  name: "menu",
+  initialState,
+  reducers: {},
+  // extraReducers: {
+  //   [HYDRATE]: (state, action) => {
+  //     return {
+  //       ...state,
+  //       ...action.payload.menu,
+  //     };
+  //   },
+  // },
 });
+
+export const {} = menuSlice.actions;
+export const selectMenuState = (state: AppState) => state.menu;
+export default menuSlice.reducer;

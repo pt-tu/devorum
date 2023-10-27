@@ -1,7 +1,7 @@
 import React, { Key, ReactNode } from "react";
 
 export type NavItemProps = {
-  key: Key;
+  id: string;
   title: ReactNode;
   subTitle?: ReactNode;
   icon?: ReactNode;

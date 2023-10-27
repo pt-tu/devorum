@@ -1,18 +1,18 @@
 import { NavItemProps, NavMenuProps } from "@/types/navType";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Key, ReactNode } from "react";
 import { AppState } from "../store";
 
 function getItem(
-  key: Key,
+  id: string,
   title?: ReactNode,
   subTitle?: ReactNode,
   icon?: ReactNode,
   children?: NavItemProps[],
-  expand:boolean = true,
+  expand: boolean = true
 ): NavItemProps {
   return {
-    key,
+    id,
     title,
     subTitle,
     icon,
@@ -32,22 +32,24 @@ const SAMPLE_MENU = [
     getItem("5", "#design", "51,354 • Trending in Bangladesh"),
     getItem("6", "#tutorial", "51,354 • Trending in Bangladesh"),
   ]),
-  getItem("grp2", "Popular Tags", null, null, [
-    getItem("7", "#javascript", "82,645 Posted by this tag"),
-    getItem("8", "#design", "51,354 • Trending in Bangladesh"),
-    getItem("9", "#tutorial", "51,354 • Trending in Bangladesh"),
-    getItem("7", "#javascript", "82,645 Posted by this tag"),
-    getItem("8", "#design", "51,354 • Trending in Bangladesh"),
-    getItem("9", "#tutorial", "51,354 • Trending in Bangladesh"),
-    getItem("7", "#javascript", "82,645 Posted by this tag"),
-    getItem("8", "#design", "51,354 • Trending in Bangladesh"),
-    getItem("9", "#tutorial", "51,354 • Trending in Bangladesh"),
-  ], false),
-  getItem("grp2", "Popular Tags", null, null, [
-    getItem("7", "#javascript", "82,645 Posted by this tag"),
-    getItem("8", "#design", "51,354 • Trending in Bangladesh"),
-    getItem("9", "#tutorial", "51,354 • Trending in Bangladesh"),
-  ]),
+  getItem(
+    "grp2",
+    "Popular Tags",
+    null,
+    null,
+    [
+      getItem("7", "#javascript", "82,645 Posted by this tag"),
+      getItem("8", "#design", "51,354 • Trending in Bangladesh"),
+      getItem("9", "#tutorial", "51,354 • Trending in Bangladesh"),
+      getItem("10", "#javascript", "82,645 Posted by this tag"),
+      getItem("11", "#design", "51,354 • Trending in Bangladesh"),
+      getItem("12", "#tutorial", "51,354 • Trending in Bangladesh"),
+      getItem("13", "#javascript", "82,645 Posted by this tag"),
+      getItem("14", "#design", "51,354 • Trending in Bangladesh"),
+      getItem("15", "#tutorial", "51,354 • Trending in Bangladesh"),
+    ],
+    false
+  ),
 ];
 
 const initialState: NavMenuProps = {
@@ -59,7 +61,16 @@ const initialState: NavMenuProps = {
 export const menuSlice = createSlice({
   name: "menu",
   initialState,
-  reducers: {},
+  reducers: {
+    onExpand(state, action: PayloadAction<string>) {
+      state.items.map((item, index) => {
+        if (item.id === action.payload) {
+          const prev = state.items[index].expand;
+          state.items[index].expand = !prev;
+        }
+      });
+    },
+  },
   // extraReducers: {
   //   [HYDRATE]: (state, action) => {
   //     return {
@@ -70,6 +81,6 @@ export const menuSlice = createSlice({
   // },
 });
 
-export const {} = menuSlice.actions;
+export const { onExpand } = menuSlice.actions;
 export const selectMenuState = (state: AppState) => state.menu;
 export default menuSlice.reducer;

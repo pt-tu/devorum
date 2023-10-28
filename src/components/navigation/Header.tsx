@@ -10,10 +10,10 @@ import {
 } from "@/assets";
 import React from "react";
 import AppInput from "../common/AppInput";
-import { useTheme } from "next-themes";
+import Link from "next/link";
+import ThemeButton from "../common/ThemeButton";
 
 export default function Header() {
-  const { theme, setTheme } = useTheme();
 
   return (
     <div className="h-20 px-5 flex flex-1 flex-row bg-dark-2 items-center justify-between ">
@@ -22,7 +22,9 @@ export default function Header() {
         <Logo width={30} height={30} />
 
         <div className="flex flex-row items-center w-fit gap-5">
+          <Link href={'/home'}>
           <Home className="w-5 h-5" fill="#F4F6F8" />
+          </Link>
           <Communication className="w-5 h-5" fill="#F4F6F8" />
         </div>
       </div>
@@ -54,14 +56,9 @@ export default function Header() {
             Thanh Tú
           </span>
           <DropDownArrow />
-          {/* Test */}
-          <div className="absolute flex flex-col right-5 bottom-5">
-            The current theme is: {theme}
-            <button onClick={() => setTheme("light")}>Light Mode</button>
-            <button onClick={() => setTheme("dark")}>Dark Mode</button>
-          </div>
         </div>
+        <ThemeButton/>
       </div>
     </div>
-  );
+  )
 }

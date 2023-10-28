@@ -5,7 +5,6 @@ import React from "react";
 
 function ThemeButton() {
   const { theme, setTheme } = useTheme();
-  console.log("🚀 ~ file: ThemeButton.tsx:8 ~ ThemeButton ~ theme:", theme);
   return (
     <button
       aria-label="Toggle Dark Mode"

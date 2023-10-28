@@ -71,14 +71,6 @@ export const menuSlice = createSlice({
       });
     },
   },
-  // extraReducers: {
-  //   [HYDRATE]: (state, action) => {
-  //     return {
-  //       ...state,
-  //       ...action.payload.menu,
-  //     };
-  //   },
-  // },
 });
 
 export const { onExpand } = menuSlice.actions;

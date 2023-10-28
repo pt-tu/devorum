@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
-import { Providers } from "./Providers.1";
+import { Providers } from "./providers";
 import { Header } from "@/components";
 import classnames from "classnames";
 

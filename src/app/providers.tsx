@@ -6,10 +6,10 @@ import { Provider } from "react-redux";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <Provider store={store}>
-      <NextUIProvider>
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
-      </NextUIProvider>
-    </Provider>
+    <ThemeProvider attribute="class">
+      <Provider store={store}>
+        <NextUIProvider>{children}</NextUIProvider>
+      </Provider>
+    </ThemeProvider>
   );
 }

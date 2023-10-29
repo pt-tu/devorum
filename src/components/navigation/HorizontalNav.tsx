@@ -1,9 +1,8 @@
 "use client";
 import React from "react";
 import GroupItemNav from "./GroupItemNav";
-import { useAppSelector } from "@/store";
-import { selectMenuState } from "@/store/slices/menuSlice";
 import classNames from "classnames";
+import { useMenuStore } from "@/store/useMenuStore";
 
 interface Props {
   className?: classNames.Argument;
@@ -11,7 +10,7 @@ interface Props {
 
 export default function HorizontalNav(props: Props) {
   const {className} = props;
-  const menuState = useAppSelector(selectMenuState);
+  const {items} = useMenuStore();
   return (
     <div
       className={classNames(
@@ -20,7 +19,7 @@ export default function HorizontalNav(props: Props) {
       )}
     >
       <div className="flex flex-col gap-y-5 h-full absolute top-0 left-0 overflow-y-scroll -right-[17px]">
-        {menuState.items.map((item) => (
+        {items.map((item) => (
           <GroupItemNav {...item} key={item.id} />
         ))}
       </div>

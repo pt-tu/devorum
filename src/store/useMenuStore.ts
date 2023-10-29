@@ -1,7 +1,6 @@
-import { NavItemProps, NavMenuProps } from "@/types/navType";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Key, ReactNode } from "react";
-import { AppState } from "../store";
+import { ReactNode } from "react";
+import { StateCreator, create } from "zustand";
+import produce from "immer";
 
 function getItem(
   id: string,
@@ -52,27 +51,23 @@ const SAMPLE_MENU = [
   ),
 ];
 
-const initialState: NavMenuProps = {
+export const useMenuStore = create<MenuState>()((set) => ({
   items: SAMPLE_MENU,
-  defaultSelectedKeys: ["1"],
-  defaultOpenKeys: [],
+  toggleExpand: (id) => set((state) => ({
+    items: state.items.map((item)=>item.id === id ? ({...item, expand:!item.expand}) : item) 
+  })),
+}));
+
+export type NavItemProps = {
+  id: string;
+  title: ReactNode;
+  subTitle?: ReactNode;
+  icon?: ReactNode;
+  children?: NavItemProps[];
+  path: string;
+  expand: boolean;
 };
-
-export const menuSlice = createSlice({
-  name: "menu",
-  initialState,
-  reducers: {
-    onExpand(state, action: PayloadAction<string>) {
-      state.items.map((item, index) => {
-        if (item.id === action.payload) {
-          const prev = state.items[index].expand;
-          state.items[index].expand = !prev;
-        }
-      });
-    },
-  },
-});
-
-export const { onExpand } = menuSlice.actions;
-export const selectMenuState = (state: AppState) => state.menu;
-export default menuSlice.reducer;
+interface MenuState {
+  items: NavItemProps[];
+  toggleExpand: (id: string) => void;
+}

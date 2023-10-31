@@ -4,8 +4,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
 
 * {
   font-family: Rubik, Inter, Arial, Helvetica, sans-serif;
+}
+@layer base {
+  :root {
+    --color-0: 2 12 22;
+    --color-1: 30 37 43;
+    --color-2: 38 45 52;
+    --color-4: 44 53 61;
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-0: 211 202 194;
+        --color-1: 217 210 203;
+        --color-2: 225 218 212;
+        --color-4: 253 243 233;
+      }
+    }
+  }
 }

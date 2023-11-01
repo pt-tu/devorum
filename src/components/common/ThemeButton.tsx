@@ -18,6 +18,10 @@ function ThemeButton() {
       type="button"
       className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-gray-bg"
       onClick={() => {
+        console.log(
+          "🚀 ~ file: ThemeButton.tsx:10 ~ ThemeButton ~ theme:",
+          theme
+        );
         setTheme(theme === "dark" ? "light" : "dark");
       }}
     >

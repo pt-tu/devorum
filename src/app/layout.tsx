@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={classnames(rubik.className, "h-screen max-h-screen")}>
         <Header />
         <Providers>{children}</Providers>

@@ -7,7 +7,7 @@ export default function DashboardLayout({
 }) {
   return (
     <section>
-      <div className="grid grid-cols-12 gap-5 px-10 pt-5 dark:bg-dark-1 h-screen">
+      <div className="grid grid-cols-12 gap-5 px-10 pt-5 bg-dark-1">
         <HorizontalNav />
         {children}
         <HorizontalNav className="col-span-3" />

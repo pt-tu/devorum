@@ -9,8 +9,8 @@ interface Props {
 }
 
 export default function HorizontalNav(props: Props) {
-  const {className} = props;
-  const {items} = useMenuStore();
+  const { className } = props;
+  const { items } = useMenuStore();
   return (
     <div
       className={classNames(

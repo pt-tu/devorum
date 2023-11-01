@@ -19,7 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={classnames(rubik.className, "h-screen max-h-screen")}>
+      <body
+        className={classnames(
+          rubik.className,
+          "h-screen max-h-screen overscroll-none"
+        )}
+      >
         <Header />
         <Providers>{children}</Providers>
       </body>

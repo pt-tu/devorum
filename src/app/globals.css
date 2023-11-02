@@ -1,9 +1,47 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap'); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
 
 * {
   font-family: Rubik, Inter, Arial, Helvetica, sans-serif;
+}
+@layer base {
+  :root {
+    --color-0: 211 202 194;
+    --color-1: 250 250 250;
+    --color-2: 255 255 255;
+    --color-4: 252 244 236;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-0: 2 12 22;
+      --color-1: 30 37 43;
+      --color-2: 38 45 52;
+      --color-4: 44 53 61;
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-0: 2 12 22;
+    --color-1: 30 37 43;
+    --color-2: 38 45 52;
+    --color-4: 44 53 61;
+    --color-gray-bg: 247 247 247;
+    --color-gray-6: 244 246 248;
+    --color-gray-5: 160 170 184;
+    --color-gray-3: 247 247 247;
+  }
+  :root[data-theme="light"] {
+    --color-0: 211 202 194;
+    --color-1: 250 250 250;
+    --color-2: 255 255 255;
+    --color-4: 252 244 236;
+    --color-gray-bg: 2 12 22;
+    --color-gray-6: 51 52 57;
+    --color-gray-5: 197 208 230;
+    --color-gray-3: 151 152 157;
+  }
 }

@@ -10,6 +10,7 @@ type Props = {
 const PasswordInput = ({ toggle = () => {}, ...props }: Props) => {
   return (
     <Input
+      {...props}
       label={props.label}
       required
       name={props.name}

@@ -4,14 +4,18 @@ import { Button, Image, Input, Link } from '@nextui-org/react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import ThirdPartiesAuth from '@/components/auth/ThirdPartiesAuth'
+import { PasswordInput } from '@/components/auth'
+import { useState } from 'react'
 
 const Login = () => {
+  const [pwdVisible, setPwdVisible] = useState(false)
+
   const handleSubmit = () => {}
 
   return (
     <div className='text-center bg-white rounded-3xl px-16 py-14 text-base shadow-2xl'>
       <div className='flex justify-center'>
-        <Image as={NextImage} width={150} height={75} src='/static/logo_dark.svg' alt='devorum_logo' />
+        <Image as={NextImage} width={150} height={75} src='/logo_dark.svg' alt='devorum_logo' />
       </div>
 
       <h1 className='font-medium text-3xl mt-6'>Dive into the devorum community</h1>
@@ -19,7 +23,12 @@ const Login = () => {
 
       <form className='mt-10' onSubmit={handleSubmit}>
         <Input name='email' size='lg' label='Email' />
-        <Input name='password' size='lg' label='Passcode' className='mt-4' type='password' />
+        <PasswordInput
+          visible={pwdVisible}
+          toggle={() => setPwdVisible((prev) => !prev)}
+          label='Passcode'
+          name='password'
+        />
         <div className='w-full text-left mt-6'>
           <Link color='foreground' as={NextLink} href='/forget-password' className='text-sm'>
             Forget your password?

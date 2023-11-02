@@ -2,35 +2,40 @@
 import classNames from "classnames";
 import React, { HTMLAttributes } from "react";
 
-interface Props extends HTMLAttributes<HTMLInputElement> {
+interface Props extends HTMLAttributes<HTMLButtonElement> {
   leftIcon?: React.JSX.Element;
   rightIcon?: React.JSX.Element;
   containerClassName?: classNames.Argument;
+  onClick?: () => void;
 }
 
-export default function AppInput({
+export default function AppButton({
   containerClassName,
   className,
   leftIcon,
   rightIcon,
+  title,
+  onClick,
   ...props
 }: Props) {
-
   return (
     <div
       className={classNames(
-        "flex flex-row flex-1 px-5 bg-dark-4 items-center justify-between rounded-[6px]",
+        "flex flex-row px-5 bg-orange-8 items-center justify-between rounded-[6px] hover:cursor-pointer",
         containerClassName
       )}
+      onClick={onClick}
     >
       {leftIcon}
-      <input
+      <button
         className={classNames(
-          "h-[46px] mx-3 text-gray-4 text-sm flex-1 bg-dark-4 outline-none",
+          "text-white text-sm flex-1 bg-transparent outline-none",
           className
         )}
-        {...props }
-      />
+        {...props}
+      >
+        {title}
+      </button>
       {rightIcon}
     </div>
   );

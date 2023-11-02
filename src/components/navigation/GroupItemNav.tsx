@@ -15,9 +15,17 @@ export default function GroupItemNav(items: NavItemProps) {
           </p>
           <div onClick={() => toggleExpand(items.id)}>
             {items.expand ? (
-              <UpArrow fill="#F7F7F7" width={24} height={24} />
+              <UpArrow
+                fill={"rgb(var(--color-gray-bg)"}
+                width={24}
+                height={24}
+              />
             ) : (
-              <DownArrow fill="#F7F7F7" width={24} height={24} />
+              <DownArrow
+                fill={"rgb(var(--color-gray-bg)"}
+                width={24}
+                height={24}
+              />
             )}
           </div>
         </div>

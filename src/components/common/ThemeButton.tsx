@@ -4,24 +4,28 @@ import { SunIcon } from "@heroicons/react/24/solid";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 
+const changeTheme = (theme: string) => {
+  document.querySelector("html")?.setAttribute("data-theme", theme);
+};
+
 function ThemeButton() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const [theme, setTheme] = useState("dark");
   useEffect(() => {
     setMounted(true);
   }, []);
-  if (!mounted) return null;
 
+  useEffect(() => {
+    changeTheme(theme);
+  }, [theme]);
+
+  if (!mounted) return null;
   return (
     <button
       aria-label="Toggle Dark Mode"
       type="button"
       className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-gray-bg"
       onClick={() => {
-        console.log(
-          "🚀 ~ file: ThemeButton.tsx:10 ~ ThemeButton ~ theme:",
-          theme
-        );
         setTheme(theme === "dark" ? "light" : "dark");
       }}
     >

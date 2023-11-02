@@ -7,11 +7,11 @@ function PostItem() {
       <div className="flex flex-row">
         {/* Group button */}
         <div className="mr-4 flex flex-col items-center">
-          <div className="h-10 w-10 rounded-full border-1 flex justify-center items-center bg-gray-bg">
+          <div className="h-10 w-10 rounded-full border-[0.5px] flex justify-center items-center bg-[#F7F7F7] border-gray-3 hover:bg-dark-4">
             <UpTriangle />
           </div>
-          <p className="py-2 font-bold text-lg">1142</p>
-          <div className="h-10 w-10 rounded-full border-1 flex justify-center items-center bg-gray-bg">
+          <p className="py-2 font-bold text-lg text-gray-bg">1142</p>
+          <div className="h-10 w-10 rounded-full border-[0.5px] flex justify-center items-center bg-[#F7F7F7] border-gray-3 hover:bg-dark-4">
             <DownTriangle />
           </div>
         </div>

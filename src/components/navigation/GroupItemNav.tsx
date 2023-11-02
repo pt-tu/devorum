@@ -9,11 +9,14 @@ export default function GroupItemNav(items: NavItemProps) {
   return (
     <div className="p-3 pr-4 rounded-2xl bg-dark-2 gap-y-3">
       {items.title && (
-        <div className="flex flex-row items-center">
+        <div
+          className="flex flex-row items-center"
+          onClick={() => toggleExpand(items.id)}
+        >
           <p className="font-semibold text-base text-gray-bg ml-2 my-2 flex flex-1 pointer-events-none">
             {items.title}
           </p>
-          <div onClick={() => toggleExpand(items.id)}>
+          <div>
             {items.expand ? (
               <UpArrow
                 fill={"rgb(var(--color-gray-bg)"}

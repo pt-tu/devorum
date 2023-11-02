@@ -25,7 +25,7 @@ const config: Config = {
         gray: {
           3: "rgb(var(--color-gray-3) / <alpha-value>)",
           4: "#858EAD",
-          5: "#C5D0E6",
+          5: "rgb(var(--color-gray-5) / <alpha-value>)",
           6: "rgb(var(--color-gray-6) / <alpha-value>)",
           bg: "rgb(var(--color-gray-bg) / <alpha-value>)",
         },
@@ -40,8 +40,8 @@ const config: Config = {
           "1-dark": "#211b0f",
         },
         blue: {
-          8: "#5D95E8",
-          bg: "#444F5F",
+          8: "#155ca2",
+          bg: "#edf5fd",
         },
         green: {
           8: "#3ED6A4",

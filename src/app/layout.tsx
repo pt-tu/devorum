@@ -18,8 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={classnames(rubik.className, "h-screen max-h-screen")}>
+    <html lang="en" suppressHydrationWarning data-theme="light">
+      <body
+        className={classnames(
+          rubik.className,
+          "h-screen max-h-screen overscroll-none"
+        )}
+      >
         <Header />
         <Providers>{children}</Providers>
       </body>

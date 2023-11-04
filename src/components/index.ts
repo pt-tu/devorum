@@ -5,4 +5,4 @@ export { default as HorizontalNav } from "./navigation/HorizontalNav";
 export { default as ItemNav } from "./navigation/ItemNav";
 export { default as PostItem } from "./common/PostItem/PostItem";
 export { default as ItemFooter } from "./common/PostItem/ItemFooter";
-export { default as Tag } from "./common/PostItem/Tag";
+export { default as Tag } from "./common/PostItem/Tag/Tag";

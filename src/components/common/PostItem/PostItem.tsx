@@ -10,13 +10,11 @@ function PostItem() {
       <div className="grid grid-cols-7 gap-5">
         {/* Group button */}
         <ReactButtons />
-
         {/* Content */}
-        <div className="flex flex-col">
+        <div className="col-span-6 flex flex-col">
           <PostContent />
           {/* Tags slider */}
           <Tags />
-
           {/* Footer */}
           <ItemFooter />
         </div>

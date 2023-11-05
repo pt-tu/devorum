@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-const validationSchema = Yup.object().shape({
+const registerValidationSchema = Yup.object().shape({
   email: Yup.string().required('Email is required').email('Email is invalid'),
   username: Yup.string().required('Username is required'),
   password: Yup.string().required().min(8, 'Passcode must be at least 8 chars'),
@@ -10,4 +10,4 @@ const validationSchema = Yup.object().shape({
   acceptTermsandConditions: Yup.bool().oneOf([true], 'You must accept our terms & conditions'),
 })
 
-export default validationSchema
+export default registerValidationSchema

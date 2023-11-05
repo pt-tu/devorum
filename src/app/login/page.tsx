@@ -6,11 +6,45 @@ import NextImage from 'next/image'
 import ThirdPartiesAuth from '@/components/auth/ThirdPartiesAuth'
 import { PasswordInput } from '@/components/auth'
 import { useState } from 'react'
+import { useFormik } from 'formik'
+import loginValidationSchema from '@/validators/loginValidator'
+import { isAxiosError } from 'axios'
+import { toast } from 'react-toastify'
+import { loginService } from '@/services/userService'
+import { useAuthStore } from '@/store/useUserStore'
+import { useRouter } from 'next/navigation'
+
+const initialValues = {
+  email: '',
+  password: '',
+}
 
 const Login = () => {
   const [pwdVisible, setPwdVisible] = useState(false)
+  const setCredentials = useAuthStore((state) => state.setCredentials)
+  const router = useRouter()
 
-  const handleSubmit = () => {}
+  const formik = useFormik({
+    initialValues,
+    validationSchema: loginValidationSchema,
+
+    async onSubmit(values, { resetForm, setErrors }) {
+      try {
+        const response = await loginService(values)
+        const { _id, token } = response.data
+        setCredentials(_id, token)
+        resetForm()
+        router.push('/')
+      } catch (error) {
+        if (isAxiosError(error) && typeof error.response?.data?.msg === 'string') {
+          toast.error(error.response?.data?.msg)
+        } else {
+          toast.error('Logged in failed')
+        }
+        console.log('Register errors:', error)
+      }
+    },
+  })
 
   return (
     <div className='text-center bg-white rounded-3xl px-16 py-14 text-base shadow-2xl'>
@@ -21,9 +55,24 @@ const Login = () => {
       <h1 className='font-medium text-3xl mt-6'>Dive into the devorum community</h1>
       <p className='mt-4'>Hey, Enter your details to get sign in to your account</p>
 
-      <form className='mt-10' onSubmit={handleSubmit}>
-        <Input name='email' size='lg' label='Email' />
+      <form className='mt-10' onSubmit={formik.handleSubmit}>
+        <Input
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          isInvalid={formik.touched.email && Boolean(formik.errors.email)}
+          errorMessage={formik.touched.email && formik.errors.email}
+          label='Email'
+          name='email'
+          required
+          size='lg'
+        />
         <PasswordInput
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          isInvalid={formik.touched.password && Boolean(formik.errors.password)}
+          errorMessage={formik.touched.password && formik.errors.password}
           visible={pwdVisible}
           toggle={() => setPwdVisible((prev) => !prev)}
           label='Passcode'
@@ -34,7 +83,7 @@ const Login = () => {
             Forget your password?
           </Link>
         </div>
-        <Button size='lg' fullWidth className='mt-8 bg-black text-white'>
+        <Button type='submit' size='lg' fullWidth className='mt-8 bg-black text-white'>
           Login
         </Button>
       </form>

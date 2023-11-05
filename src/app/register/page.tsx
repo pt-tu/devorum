@@ -6,24 +6,53 @@ import NextImage from 'next/image'
 import ThirdPartiesAuth from '@/components/auth/ThirdPartiesAuth'
 import { useState } from 'react'
 import { useFormik } from 'formik'
-import validationSchema from './validation'
 import RegisterForm from '@/components/auth/RegisterForm'
+import { registerService } from '@/services/userService'
+import { toast } from 'react-toastify'
+import { isAxiosError } from 'axios'
+import registerValidationSchema from '@/validators/registerValidator'
+
+const initialValues = {
+  email: '',
+  username: '',
+  password: '',
+  confirmPassword: '',
+}
+
+const initialErrors = { ...initialValues }
 
 const Register = () => {
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      console.log(values)
-    },
-  })
   const [pwdVisible, setPwdVisible] = useState(false)
   const [confPwdVisible, setConfPwdVisible] = useState(false)
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: registerValidationSchema,
+
+    async onSubmit(values, { resetForm, setErrors }) {
+      try {
+        await registerService(values)
+        resetForm()
+        toast.success('Registered successfully')
+      } catch (error) {
+        if (isAxiosError(error)) {
+          const errorFields = error.response?.data?.errors
+          if (Array.isArray(errorFields)) {
+            const errors = errorFields.reduce((prev, curr) => {
+              if (['email', 'username', 'password'].includes(curr.path)) {
+                prev[curr.path] = curr.msg
+              }
+              return prev
+            }, {})
+            setErrors({ ...initialErrors, ...errors })
+          }
+        } else {
+          toast.error('Registered failed')
+        }
+        console.log('Register errors:', error)
+      }
+    },
+  })
 
   return (
     <div className='text-center bg-white rounded-3xl px-16 py-14 text-base shadow-2xl'>

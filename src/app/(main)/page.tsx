@@ -1,7 +1,9 @@
 'use client'
 import { AppButton, PostItem } from '@/components'
+import { useUserStore } from '@/store/useUserStore'
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { shallow } from 'zustand/shallow'
 
 const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 
@@ -11,6 +13,12 @@ export default function Page() {
     modified: '8 months ago',
     viewed: '26k times',
   }
+  const [user, getUserProfile] = useUserStore((state) => [state.user, state.getUserProfile], shallow)
+
+  useEffect(() => {
+    getUserProfile()
+  }, [getUserProfile])
+  console.log('user:', user)
 
   return (
     <>

@@ -1,8 +1,9 @@
 import React from "react";
-import { ItemFooter } from "@/components";
 import ReactButtons from "./ReactButtons";
 import PostContent from "./PostContent";
 import { Tags } from "./Tag";
+import PostFooter from "./PostFooter";
+import { Divider } from "antd";
 
 function PostItem() {
   return (
@@ -16,10 +17,10 @@ function PostItem() {
           {/* Tags slider */}
           <Tags />
           {/* Footer */}
-          <ItemFooter />
+          <PostFooter />
         </div>
       </div>
-      <div className="border-t-[0.75px] my-4 border-gray-300" />
+      <Divider />
     </div>
   );
 }

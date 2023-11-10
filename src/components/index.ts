@@ -7,3 +7,4 @@ export { default as PostItem } from "./common/PostItem/PostItem";
 export { default as PostFooter } from "./common/PostItem/PostFooter";
 export { default as Tag } from "./common/PostItem/Tag/Tag";
 export { default as Divider } from "./common/Divider";
+export { default as TopicItem } from "./common/TopicItem";

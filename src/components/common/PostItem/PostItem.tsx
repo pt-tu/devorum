@@ -3,7 +3,7 @@ import ReactButtons from "./ReactButtons";
 import PostContent from "./PostContent";
 import { Tags } from "./Tag";
 import PostFooter from "./PostFooter";
-import { Divider } from "antd";
+import Divider from "../Divider";
 
 function PostItem() {
   return (

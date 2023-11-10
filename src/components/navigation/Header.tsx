@@ -21,7 +21,7 @@ export default function Header() {
         <Logo width={30} height={30} />
 
         <div className="flex flex-row items-center w-fit gap-5">
-          <Link href={"/home"}>
+          <Link href={"/"}>
             <Home className="w-5 h-5" />
           </Link>
           <Communication className="w-5 h-5" />

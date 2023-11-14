@@ -1,3 +1,4 @@
+"use client";
 import {
   ArrowUpOutlined,
   EyeOutlined,
@@ -27,7 +28,6 @@ function TopicItem() {
         </div>
         <MoreOutlined className="text-gray-3 text-2xl" />
       </div>
-
       {/* Body */}
       <div>
         <p className="text-gray-bg font-bold text-base mb-[10px]">
@@ -38,7 +38,6 @@ function TopicItem() {
           vitae etiam lectus amet enim.
         </p>
       </div>
-
       {/* Footer */}
       <div className="flex flex-row gap-4 items-center">
         <Tags />

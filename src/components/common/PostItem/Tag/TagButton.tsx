@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-function Tag({ link, label }: TagProps) {
+function TagButton({ link, label }: TagProps) {
   return (
     <Link href={link} className="px-[6px] py-1 bg-blue-bg rounded-md w-fit">
       <p className="whitespace-nowrap font-thin text-xs text-blue-8">{label}</p>
@@ -9,7 +9,7 @@ function Tag({ link, label }: TagProps) {
   );
 }
 
-export default Tag;
+export default TagButton;
 export interface TagProps {
   link: string;
   label: string;

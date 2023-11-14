@@ -1,5 +1,5 @@
 import { ReactProps } from "@/components/common/PostItem/ReactButtons";
-import { TagProps } from "@/components/common/PostItem/Tag/Tag";
+import { TagProps } from "@/components/common/PostItem/Tag/TagButton";
 import { ReactNode } from "react";
 import { create } from "zustand";
 
@@ -13,7 +13,7 @@ import { create } from "zustand";
 interface PostState {
   postId: string;
   replyFor?: string;
-  isEditing:boolean;
+  isEditing: boolean;
   react: ReactProps;
   content: string;
   comment: string[];

@@ -28,6 +28,8 @@ const config: Config = {
           5: "rgb(var(--color-gray-5) / <alpha-value>)",
           6: "rgb(var(--color-gray-6) / <alpha-value>)",
           bg: "rgb(var(--color-gray-bg) / <alpha-value>)",
+          border: "#EAEAEA",
+          text: "#808080",
         },
         orange: {
           8: "#FF6934",
@@ -41,6 +43,7 @@ const config: Config = {
         },
         blue: {
           8: "#155ca2",
+          primary: "#1682FD",
           bg: "#edf5fd",
         },
         green: {

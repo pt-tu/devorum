@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Tag, { TagProps } from "./Tag";
+import TagButton, { TagProps } from "./TagButton";
 
 const tags: TagProps[] = [
   { link: "/", label: "tailwind-css" },
@@ -17,7 +17,7 @@ function Tags() {
     tags.length && (
       <div className="flex flex-row gap-2 my-3">
         {tags.map(({ link, label }, index) => (
-          <Tag link={link} label={label} key={index} />
+          <TagButton link={link} label={label} key={index} />
         ))}
       </div>
     )

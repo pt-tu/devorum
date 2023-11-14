@@ -5,14 +5,32 @@ import {
   MessageOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Tags } from "./PostItem/Tag";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const tags = [
+  { link: "/", label: "tailwind-css" },
+  { link: "/", label: "javascript" },
+  { link: "/", label: "css" },
+];
 
 function TopicItem() {
+  const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) return null;
+
+  const handleTopicClick = () => {
+    router.push("/1");
+  };
+
   return (
-    <Link
-      href={"/1"}
+    <div
+      onClick={handleTopicClick}
       className="rounded-2xl bg-dark-2 mb-6 flex flex-col gap-6 px-8 py-6 shadow-md"
     >
       {/* Header */}
@@ -40,7 +58,7 @@ function TopicItem() {
       </div>
       {/* Footer */}
       <div className="flex flex-row gap-4 items-center">
-        <Tags />
+        <Tags tags={tags} />
         <div className="flex-1" />
         <div className="flex flex-row gap-1 text-sm text-gray-3 items-center">
           <EyeOutlined />
@@ -55,7 +73,7 @@ function TopicItem() {
           <p>155</p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

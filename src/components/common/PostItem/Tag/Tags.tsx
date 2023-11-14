@@ -1,17 +1,11 @@
-"use client";
 import React from "react";
 import TagButton, { TagProps } from "./TagButton";
 
-const tags: TagProps[] = [
-  { link: "/", label: "tailwind-css" },
-  { link: "/", label: "javascript" },
-  { link: "/", label: "css" },
-];
-// interface Props {
-//   tags: TagProps[];
-// }
+interface Props {
+  tags: TagProps[];
+}
 
-function Tags() {
+function Tags({ tags }: Props) {
   //   const { tags } = props;
   return (
     tags.length && (

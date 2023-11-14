@@ -5,6 +5,12 @@ import { Tags } from "./Tag";
 import PostFooter from "./PostFooter";
 import Divider from "../Divider";
 
+const tags = [
+  { link: "/", label: "tailwind-css" },
+  { link: "/", label: "javascript" },
+  { link: "/", label: "css" },
+];
+
 function PostItem() {
   return (
     <div>
@@ -15,7 +21,7 @@ function PostItem() {
         <div className="col-span-6 flex flex-col">
           <PostContent />
           {/* Tags slider */}
-          <Tags />
+          <Tags tags={tags} />
           {/* Footer */}
           <PostFooter />
         </div>

@@ -6,7 +6,7 @@ interface Props{
 }
 
 function Tabs({tabs}: Props) {
-  //   const { tags } = props;
+
   return (
     tabs.length && (
       <div className="flex flex-row gap-2">

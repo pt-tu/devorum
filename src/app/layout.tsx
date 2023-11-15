@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import { Providers } from "./providers";
 import classnames from "classnames";
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 
 const rubik = Rubik({ subsets: ["latin"], display: "swap" });
 
@@ -25,6 +27,18 @@ export default function RootLayout({
         )}
       >
         <Providers>{children}</Providers>
+        <ToastContainer
+          position='top-right'
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='light'
+        />
       </body>
     </html>
   );

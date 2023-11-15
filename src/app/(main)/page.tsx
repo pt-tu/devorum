@@ -2,14 +2,16 @@
 import { AppButton, Divider, TopicItem } from "@/components";
 import { Tabs } from "@/components/common/Tab";
 import { TabProps } from "@/components/common/Tab/TabButton";
-import Head from "next/head";
-import React from "react";
 import {
   ArrowUpOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
   FireOutlined,
 } from "@ant-design/icons";
+import { useUserStore } from '@/store/useUserStore'
+import Head from 'next/head'
+import React, { useEffect } from 'react'
+import { shallow } from 'zustand/shallow'
 
 const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1];
 const tabs: TabProps[] = [
@@ -26,6 +28,17 @@ const tabs: TabProps[] = [
 ];
 
 export default function Page() {
+  const time = {
+    ask: '2 years, 6 months ago',
+    modified: '8 months ago',
+    viewed: '26k times',
+  }
+  const [user, getUserProfile] = useUserStore((state) => [state.user, state.getUserProfile], shallow)
+
+  useEffect(() => {
+    getUserProfile()
+  }, [getUserProfile])
+
   return (
     <>
       <Head>

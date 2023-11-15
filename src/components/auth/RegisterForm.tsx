@@ -24,8 +24,8 @@ const RegisterForm = ({ formik, pwdVisible, setPwdVisible, confPwdVisible, setCo
         isInvalid={formik.touched.email && Boolean(formik.errors.email)}
         errorMessage={formik.touched.email && formik.errors.email}
         label='Email'
-        required
         name='email'
+        required
         size='lg'
       />
       <Input

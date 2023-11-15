@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning data-theme='light'>
-      <body className={classnames(rubik.className, 'h-screen max-h-screen overscroll-none')}>
+      <body className={classnames(rubik.className, 'bg-dark-1 h-screen max-h-screen overscroll-none')}>
         <Providers>{children}</Providers>
         <ToastContainer
           position='top-right'

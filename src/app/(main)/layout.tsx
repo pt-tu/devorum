@@ -4,10 +4,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <section>
       <Header />
-      <div className='grid grid-cols-12 gap-5 px-10 pt-5 bg-dark-1'>
+      <div className="max-h-screen overflow-y-auto px-10 pt-5">
+        <div className="h-20" />
         <HorizontalNav />
-        {children}
-        <HorizontalNav className='col-span-3' />
+        <div className="m-auto grid max-w-7xl grid-cols-12 gap-5">
+          <HorizontalNav />
+          {children}
+          <HorizontalNav className="col-span-3" />
+        </div>
       </div>
     </section>
   )

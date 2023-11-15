@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-import { StateCreator, create } from "zustand";
-import produce from "immer";
+import { create } from "zustand";
 
 function getItem(
   id: string,

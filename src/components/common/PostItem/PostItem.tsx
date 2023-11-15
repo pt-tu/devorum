@@ -1,8 +1,15 @@
 import React from "react";
-import { ItemFooter } from "@/components";
 import ReactButtons from "./ReactButtons";
 import PostContent from "./PostContent";
 import { Tags } from "./Tag";
+import PostFooter from "./PostFooter";
+import Divider from "../Divider";
+
+const tags = [
+  { link: "/", label: "tailwind-css" },
+  { link: "/", label: "javascript" },
+  { link: "/", label: "css" },
+];
 
 function PostItem() {
   return (
@@ -10,18 +17,16 @@ function PostItem() {
       <div className="grid grid-cols-7 gap-5">
         {/* Group button */}
         <ReactButtons />
-
         {/* Content */}
-        <div className="flex flex-col">
+        <div className="col-span-6 flex flex-col">
           <PostContent />
           {/* Tags slider */}
-          <Tags />
-
+          <Tags tags={tags} />
           {/* Footer */}
-          <ItemFooter />
+          <PostFooter />
         </div>
       </div>
-      <div className="border-t-[0.75px] my-4 border-gray-300" />
+      <Divider />
     </div>
   );
 }

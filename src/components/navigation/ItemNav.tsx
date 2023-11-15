@@ -1,4 +1,4 @@
-import { NavItemProps } from "@/types/navType";
+import { NavItemProps } from "@/store/useMenuStore";
 import Link from "next/link";
 import React from "react";
 

@@ -16,3 +16,7 @@ function ReactButtons() {
 }
 
 export default ReactButtons;
+export type ReactProps = {
+  reactNumber: number;
+  reaction: (postId: string, type: string) => void;
+};

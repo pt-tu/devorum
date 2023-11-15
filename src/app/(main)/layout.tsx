@@ -6,7 +6,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="min-h-screen">
+    <section className="min-h-screen pt-20">
       <Header />
       <div className="grid grid-cols-12 gap-5 px-10 pt-5 bg-dark-1 min-h-screen">
         <HorizontalNav />

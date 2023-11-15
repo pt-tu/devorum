@@ -25,7 +25,7 @@ function TopicItem() {
   if (!mounted) return null;
 
   const handleTopicClick = () => {
-    router.push("/1");
+    router.push("topic/1");
   };
 
   return (

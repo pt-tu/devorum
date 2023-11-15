@@ -12,9 +12,9 @@ export default function Header() {
       <div className="flex w-1/3 flex-row items-center justify-between gap-[10px] pr-7">
         <Logo width={30} height={30} />
 
-        <div className="flex w-fit flex-row items-center gap-5">
-          <Link href={'/home'}>
-            <Home className="h-5 w-5" />
+        <div className="flex flex-row items-center w-fit gap-5">
+          <Link href={"/"}>
+            <Home className="w-5 h-5" />
           </Link>
           <Communication className="h-5 w-5" />
         </div>

@@ -4,7 +4,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <section>
       <Header />
-      <div className="max-h-screen overflow-y-auto pt-5">
+      <div className="max-h-screen overflow-y-auto bg-dark-1 pt-5">
         <div className="h-20" />
         {children}
       </div>

@@ -1,5 +1,5 @@
 'use client'
-import { AppButton, PostItem } from '@/components'
+import { AppButton, HorizontalNav, PostItem } from '@/components'
 import { useUserStore } from '@/store/useUserStore'
 import Head from 'next/head'
 import React, { useEffect } from 'react'
@@ -20,7 +20,8 @@ export default function Page() {
   }, [getUserProfile])
 
   return (
-    <>
+    <div className="m-auto grid max-w-7xl grid-cols-12 gap-5">
+      <HorizontalNav />
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" />
         <main className="relative grid h-full grid-cols-12 flex-col items-center justify-between gap-5 px-10">
@@ -50,7 +51,8 @@ export default function Page() {
         {sample.map((item, index) => (
           <PostItem key={index} />
         ))}
-      </div>
-    </>
+      </div>{' '}
+      <HorizontalNav className="col-span-3" />
+    </div>
   )
 }

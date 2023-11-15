@@ -7,7 +7,7 @@ import ThemeButton from '../common/ThemeButton'
 
 export default function Header() {
   return (
-    <div className="fixed top-0 z-[1] flex h-20 w-full flex-1 flex-row items-center justify-between bg-dark-2/90 px-5 backdrop-blur-md">
+    <div className="fixed top-0 z-10 flex h-20 w-full flex-1 flex-row items-center justify-between border-b border-b-dark-1 bg-dark-2/90 px-5 backdrop-blur-md">
       {/* Left */}
       <div className="flex w-1/3 flex-row items-center justify-between gap-[10px] pr-7">
         <Logo width={30} height={30} />

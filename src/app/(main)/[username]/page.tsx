@@ -1,11 +1,7 @@
 'use client'
-
+import OverviewBar from '@/components/userProfile/OverviewBar'
 import ProfileHeader from '@/components/userProfile/ProfileHeader'
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Tooltip } from '@nextui-org/react'
-import Image from 'next/image'
-import { IoMdAddCircleOutline } from 'react-icons/io'
-import { AiOutlineMessage } from 'react-icons/ai'
-import { HiOutlineDotsHorizontal } from 'react-icons/hi'
+import { Card, CardBody, Tab, Tabs } from '@nextui-org/react'
 
 const page = () => {
   return (
@@ -13,90 +9,37 @@ const page = () => {
       <div className="fixed left-0 top-20 z-0 h-32 w-full bg-[#333]" />
       <ProfileHeader />
       <div className="mt-4 grid grid-cols-12 gap-4">
-        <div className="col-span-4 space-y-4">
-          <div className="rounded-lg bg-black bg-dark-2">
-            <Image
-              alt="cover"
-              className="h-28 rounded-t-lg object-cover"
-              src="https://img.freepik.com/free-vector/abstract-scribble-icons-hand-drawn-doodle-coloring_179234-222.jpg"
-              width={1280}
-              height={384}
-            />
-            <div className="flex gap-2 p-4">
-              <Button startContent={<IoMdAddCircleOutline />} color="primary">
-                Follow
-              </Button>
-              <Button startContent={<AiOutlineMessage />}>Chat</Button>
-
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button className="ml-auto" variant="light" isIconOnly>
-                    <HiOutlineDotsHorizontal />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem key="share">Share link</DropdownItem>
-                  <DropdownItem key="report">Report abuse</DropdownItem>
-                  <DropdownItem key="block" className="text-danger" color="danger">
-                    Block @xptr
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          </div>
-
-          <div className="rounded-lg bg-black bg-dark-2">
-            <h3 className="p-4 font-medium">Trophy</h3>
-
-            {/* Divider */}
-            <div className="w-full border-t border-dark-1" />
-
-            {/* Trophy */}
-            <div className="grid grid-cols-2 gap-7 px-7 py-4">
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-            </div>
-
-            <Button variant="light" className="mx-4 mb-2 w-[calc(100%-32px)]">
-              View all trophies
-            </Button>
-          </div>
+        <OverviewBar />
+        <div className="col-span-8 h-20 rounded-lg">
+          <Tabs aria-label="Options" size="lg">
+            <Tab key="photos" title="Photos">
+              <Card>
+                <CardBody>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                  dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo consequat.
+                </CardBody>
+              </Card>
+            </Tab>
+            <Tab key="music" title="Music">
+              <Card>
+                <CardBody>
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                  consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                  nulla pariatur.
+                </CardBody>
+              </Card>
+            </Tab>
+            <Tab key="videos" title="Videos">
+              <Card>
+                <CardBody>
+                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                  laborum.
+                </CardBody>
+              </Card>
+            </Tab>
+          </Tabs>
         </div>
-        <div className="col-span-8 h-20 rounded-lg bg-dark-2" />
       </div>
     </div>
   )

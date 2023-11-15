@@ -13,7 +13,7 @@
   :root {
     --color-0: 211 202 194;
     --color-2: 255 255 255;
-    --color-1: 245 245 245;
+    --color-1: 247 247 247;
     --color-4: 245 245 245;
   }
   @media (prefers-color-scheme: dark) {
@@ -24,7 +24,7 @@
       --color-4: 44 53 61;
     }
   }
-  :root[data-theme="dark"] {
+  :root[data-theme='dark'] {
     --color-0: 2 12 22;
     --color-1: 29 30 31;
     --color-2: 39 39 39;
@@ -34,10 +34,10 @@
     --color-gray-5: 160 170 184;
     --color-gray-3: 247 247 247;
   }
-  :root[data-theme="light"] {
+  :root[data-theme='light'] {
     --color-0: 211 202 194;
     --color-2: 255 255 255;
-    --color-1: 245 245 245;
+    --color-1: 247 247 247;
     --color-4: 245 245 245;
     --color-gray-bg: 2 12 22;
     --color-gray-6: 51 52 57;

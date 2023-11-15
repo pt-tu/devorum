@@ -51,7 +51,7 @@ export default function Page() {
         {sample.map((item, index) => (
           <PostItem key={index} />
         ))}
-      </div>{' '}
+      </div>
       <HorizontalNav className="col-span-3" />
     </div>
   )

@@ -7,7 +7,7 @@ import { CiLink } from 'react-icons/ci'
 
 const ProfileHeader = () => {
   return (
-    <div className="relative z-[1] mt-12 rounded-lg bg-dark-2 p-4 text-center">
+    <div className="relative col-span-12 mt-12 rounded-lg bg-dark-2 p-4 text-center">
       <div className="absolute -top-1/2 left-1/2 flex aspect-square h-[136px] -translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full bg-[#333]">
         <Image
           alt="user_avatar"
@@ -17,7 +17,7 @@ const ProfileHeader = () => {
           height={120}
         />
       </div>
-      <div className="h-28 text-right"></div>
+      <div className="h-24 text-right"></div>
 
       <h1 className="text-3xl font-semibold">Gabe Romualdo</h1>
       <h2 className="mt-2">Founder, engineer, and technical writer. Top DEV Author in 2019.</h2>

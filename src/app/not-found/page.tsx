@@ -10,8 +10,8 @@ const NotFound = () => {
     <div className="flex h-screen w-screen">
       <div className="m-auto text-center">
         <p>404 | This page could not be found.</p>
-        <Link onClick={() => router.back()} className="cursor-pointer">
-          Go back
+        <Link onClick={() => router.push('/')} className="cursor-pointer">
+          Go back home
         </Link>
       </div>
     </div>

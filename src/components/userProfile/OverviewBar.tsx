@@ -19,6 +19,10 @@ const OverviewBar = ({ setBarHeight }: Props) => {
     }
   }, [setBarHeight])
 
+  const copyLinkToProfile = () => {
+    navigator.clipboard.writeText(window.location.href)
+  }
+
   return (
     <div className="sticky top-24 grid grid-cols-12" ref={ref}>
       <div className="col-span-4 space-y-4">
@@ -43,7 +47,9 @@ const OverviewBar = ({ setBarHeight }: Props) => {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="Static Actions">
-                <DropdownItem key="share">Share link</DropdownItem>
+                <DropdownItem key="share" onClick={copyLinkToProfile}>
+                  Share link
+                </DropdownItem>
                 <DropdownItem key="report">Report abuse</DropdownItem>
                 <DropdownItem key="block" className="text-danger" color="danger">
                   Block @xptr

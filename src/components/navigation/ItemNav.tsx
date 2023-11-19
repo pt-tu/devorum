@@ -1,18 +1,20 @@
-import { NavItemProps } from "@/store/useMenuStore";
-import Link from "next/link";
-import React from "react";
+import { NavItemProps } from '@/store/useMenuStore'
+import Link from 'next/link'
+import React from 'react'
 
 export default function ItemNav(item: NavItemProps) {
   return (
     <Link
       href={item.path}
-      className="flex w-full h-fit hover:bg-dark-4 rounded-md pl-2 py-2 flex-row gap-2 items-center"
+      className="flex h-fit w-full max-w-full flex-row items-center gap-2 rounded-md py-2 pl-2 hover:bg-dark-4"
     >
-      <div className="h-8 w-8 bg-orange-8 rounded-md" />
-      <div className="justify-between">
-        <p className="text-xs font-semibold text-gray-bg">{item.title}</p>
-        <p className="text-gray-3 text-[9px] font-normal">{item.subTitle}</p>
+      <div className="h-8 w-8 rounded-md bg-orange-8" />
+      <div className="w-3/4 justify-between">
+        <p className="text-sm font-semibold text-gray-bg">{item.title}</p>
+        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap text-xs font-normal text-gray-3">
+          {item.subTitle}
+        </p>
       </div>
     </Link>
-  );
+  )
 }

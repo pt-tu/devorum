@@ -9,7 +9,6 @@ function PostContent() {
   const [value, setValue] = useState("**Hello world!!!**");
   const [isEdit, setIsEdit] = useState(true);
   const { theme } = useThemeStore();
-  const comments = [1, 1, 1];
 
   return (
     <div className="col-span-full">
@@ -19,9 +18,6 @@ function PostContent() {
         <Markdown source={value} />
       )}
       {/* <EditorMarkdown source={value} /> */}
-      {comments.map((item, index) => (
-        <Comment />
-      ))}
     </div>
   );
 }

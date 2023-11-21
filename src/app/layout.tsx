@@ -1,34 +1,25 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
-import { Providers } from "./providers";
-import classnames from "classnames";
+import './globals.css'
+import type { Metadata } from 'next'
+import { Rubik } from 'next/font/google'
+import { Providers } from './providers'
+import classnames from 'classnames'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 
-const rubik = Rubik({ subsets: ["latin"], display: "swap" });
+const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
-  title: "Devorum",
-  description: "Forum for Developer",
-};
+  title: 'Devorum',
+  description: 'Forum for Developer',
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning data-theme="light">
-      <body
-        className={classnames(
-          rubik.className,
-          "h-screen max-h-screen overscroll-none"
-        )}
-      >
+    <html lang="en" suppressHydrationWarning data-theme="light" className="bg-dark-1">
+      <body className={classnames(rubik.className, 'min-h-full')}>
         <Providers>{children}</Providers>
         <ToastContainer
-          position='top-right'
+          position="top-right"
           autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
@@ -37,9 +28,9 @@ export default function RootLayout({
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme='light'
+          theme="light"
         />
       </body>
     </html>
-  );
+  )
 }

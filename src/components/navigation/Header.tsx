@@ -7,14 +7,14 @@ import ThemeButton from '../common/ThemeButton'
 
 export default function Header() {
   return (
-    <div className="fixed top-0 z-[1] flex h-20 w-full flex-1 flex-row items-center justify-between bg-dark-2/90 px-5 backdrop-blur-md">
+    <div className="fixed -right-4 left-0 top-0 z-50 flex h-20 flex-1 flex-row items-center justify-between border-b border-b-dark-1 bg-dark-2/90 px-5 backdrop-blur-md">
       {/* Left */}
       <div className="flex w-1/3 flex-row items-center justify-between gap-[10px] pr-7">
         <Logo width={30} height={30} />
 
-        <div className="flex flex-row items-center w-fit gap-5">
-          <Link href={"/"}>
-            <Home className="w-5 h-5" />
+        <div className="flex w-fit flex-row items-center gap-5">
+          <Link href={'/'}>
+            <Home className="h-5 w-5" />
           </Link>
           <Communication className="h-5 w-5" />
         </div>

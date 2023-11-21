@@ -8,6 +8,8 @@ type User = {
   about?: string
   role: string
   points: number
+  createdAt: Date
+  updatedAt: Date
 }
 
 type UserRegister = Omit<User, 'role' | 'points'>

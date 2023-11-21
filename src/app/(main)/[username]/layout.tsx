@@ -1,10 +1,33 @@
-import type { Metadata } from 'next'
+import { getProfileService } from '@/services/userService'
+import { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Cherry Ramatis',
-  description: 'User profile',
+type MetadataProps = {
+  params: { username: string }
 }
 
+export async function generateMetadata({ params }: MetadataProps): Promise<Metadata> {
+  const username = params.username
+
+  try {
+    if (!username) {
+      console.log('No username in url')
+      return {}
+    }
+
+    const response = await getProfileService(username)
+    return {
+      title: response.data.fullName,
+      description: 'User profile page',
+    }
+  } catch (err) {
+    console.log(err)
+    return {}
+  }
+}
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <section>{children}</section>
+  return (
+    <section>
+      <div className="m-auto max-w-6xl">{children}</div>
+    </section>
+  )
 }

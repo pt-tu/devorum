@@ -1,105 +1,63 @@
 'use client'
-
+import ContentSection from '@/components/userProfile/ContentSection'
+import OverviewBar from '@/components/userProfile/OverviewBar'
 import ProfileHeader from '@/components/userProfile/ProfileHeader'
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Tooltip } from '@nextui-org/react'
-import Image from 'next/image'
-import { IoMdAddCircleOutline } from 'react-icons/io'
-import { AiOutlineMessage } from 'react-icons/ai'
-import { HiOutlineDotsHorizontal } from 'react-icons/hi'
+import { useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { getProfileService } from '@/services/userService'
+import { isAxiosError } from 'axios'
+import { Spinner } from '@nextui-org/react'
+import { User } from '@/types/user.type'
 
-const page = () => {
+export default function UserProfile() {
+  const [barHeight, setBarHeight] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [userProfile, setUserProfile] = useState<User | undefined>()
+  const { username } = useParams()
+  const router = useRouter()
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        if (!username) {
+          return console.log('No username in url')
+        }
+
+        if (typeof username !== 'string') {
+          return console.log('Invalid type of username')
+        }
+
+        const response = await getProfileService(username)
+        setUserProfile(response.data)
+      } catch (err) {
+        console.log(err)
+        if (isAxiosError(err)) {
+          if (err.response?.status === 404) {
+            router.push('/not-found')
+          }
+        }
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [router, username])
+
+  if (loading || !userProfile)
+    return (
+      <div className="flex h-[calc(100vh-80px)] items-center justify-center">
+        <Spinner />
+      </div>
+    )
+
   return (
     <div>
-      <div className="fixed left-0 top-20 z-0 h-32 w-full bg-[#333]" />
-      <ProfileHeader />
-      <div className="mt-4 grid grid-cols-12 gap-4">
-        <div className="col-span-4 space-y-4">
-          <div className="rounded-lg bg-black bg-dark-2">
-            <Image
-              alt="cover"
-              className="h-28 rounded-t-lg object-cover"
-              src="https://img.freepik.com/free-vector/abstract-scribble-icons-hand-drawn-doodle-coloring_179234-222.jpg"
-              width={1280}
-              height={384}
-            />
-            <div className="flex gap-2 p-4">
-              <Button startContent={<IoMdAddCircleOutline />} color="primary">
-                Follow
-              </Button>
-              <Button startContent={<AiOutlineMessage />}>Chat</Button>
-
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button className="ml-auto" variant="light" isIconOnly>
-                    <HiOutlineDotsHorizontal />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem key="share">Share link</DropdownItem>
-                  <DropdownItem key="report">Report abuse</DropdownItem>
-                  <DropdownItem key="block" className="text-danger" color="danger">
-                    Block @xptr
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          </div>
-
-          <div className="rounded-lg bg-black bg-dark-2">
-            <h3 className="p-4 font-medium">Trophy</h3>
-
-            {/* Divider */}
-            <div className="w-full border-t border-dark-1" />
-
-            {/* Trophy */}
-            <div className="grid grid-cols-2 gap-7 px-7 py-4">
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-              <Tooltip content="Badge 1">
-                <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--NpIq4Uy3--/c_limit,f_auto,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/badge/badge_image/91/Version2-04.png"
-                  alt="badge_1"
-                  width={120}
-                  height={120}
-                  className="h-full w-full rounded-full"
-                />
-              </Tooltip>
-            </div>
-
-            <Button variant="light" className="mx-4 mb-2 w-[calc(100%-32px)]">
-              View all trophies
-            </Button>
-          </div>
-        </div>
-        <div className="col-span-8 h-20 rounded-lg bg-dark-2" />
+      <div className="absolute left-0 right-0 top-20 h-32 w-full bg-[#333]" />
+      <div className="relative z-[1]">
+        <ProfileHeader userProfile={userProfile} />
+        <div className="h-4" />
+        <OverviewBar setBarHeight={setBarHeight} />
+        <ContentSection barHeight={barHeight} />
       </div>
     </div>
   )
 }
-
-export default page

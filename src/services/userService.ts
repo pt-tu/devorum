@@ -15,4 +15,7 @@ const getCurrentProfileService = async () => {
   return baseAxios.get<User>(`${path}/current`)
 }
 
-export { registerService, loginService, getCurrentProfileService }
+const getProfileService = async (username: string) => {
+  return baseAxios.get<User>(`${path}/${username}`)
+}
+export { registerService, loginService, getCurrentProfileService, getProfileService }

@@ -3,10 +3,8 @@ import { AppButton, HorizontalNav, PostItem, Divider, TopicItem } from '@/compon
 import { Tabs } from '@/components/common/Tab'
 import { TabProps } from '@/components/common/Tab/TabButton'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
-import { useUserStore } from '@/store/useUserStore'
 import Head from 'next/head'
 import React, { useEffect } from 'react'
-import { shallow } from 'zustand/shallow'
 
 const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 const tabs: TabProps[] = [
@@ -28,14 +26,10 @@ export default function Page() {
     modified: '8 months ago',
     viewed: '26k times',
   }
-  const [user, getUserProfile] = useUserStore((state) => [state.user, state.getUserProfile], shallow)
-
-  useEffect(() => {
-    getUserProfile()
-  }, [getUserProfile])
 
   return (
     <div className="m-auto grid max-w-7xl grid-cols-12 gap-5">
+      <title>Devorum</title>
       <HorizontalNav />
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" />

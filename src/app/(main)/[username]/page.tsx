@@ -55,7 +55,7 @@ export default function UserProfile() {
       <div className="relative z-[1]">
         <ProfileHeader userProfile={userProfile} />
         <div className="h-4" />
-        <OverviewBar setBarHeight={setBarHeight} />
+        <OverviewBar userProfile={userProfile} setBarHeight={setBarHeight} />
         <ContentSection barHeight={barHeight} />
       </div>
     </div>

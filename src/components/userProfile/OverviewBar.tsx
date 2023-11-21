@@ -5,13 +5,17 @@ import Image from 'next/image'
 import { IoMdAddCircleOutline } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
+import { useUserStore } from '@/store/useUserStore'
+import { User } from '@/types/user.type'
 
 type Props = {
   setBarHeight: (v: number) => void
+  userProfile: User
 }
 
-const OverviewBar = ({ setBarHeight }: Props) => {
+const OverviewBar = ({ setBarHeight, userProfile }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null)
+  const user = useUserStore((state) => state.user)
 
   useEffect(() => {
     if (ref.current?.clientHeight) {
@@ -34,29 +38,46 @@ const OverviewBar = ({ setBarHeight }: Props) => {
             width={1280}
             height={384}
           />
-          <div className="flex gap-2 p-4">
-            <Button startContent={<IoMdAddCircleOutline />} color="primary">
-              Follow
-            </Button>
-            <Button startContent={<AiOutlineMessage />}>Chat</Button>
+          {user?._id !== userProfile._id ? (
+            <div className="flex gap-2 p-4">
+              <Button startContent={<IoMdAddCircleOutline />} color="primary">
+                Follow
+              </Button>
+              <Button startContent={<AiOutlineMessage />}>Chat</Button>
 
-            <Dropdown>
-              <DropdownTrigger>
-                <Button className="ml-auto" variant="light" isIconOnly>
-                  <HiOutlineDotsHorizontal />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Static Actions">
-                <DropdownItem key="share" onClick={copyLinkToProfile}>
-                  Share link
-                </DropdownItem>
-                <DropdownItem key="report">Report abuse</DropdownItem>
-                <DropdownItem key="block" className="text-danger" color="danger">
-                  Block @xptr
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button className="ml-auto" variant="light" isIconOnly>
+                    <HiOutlineDotsHorizontal />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Static Actions">
+                  <DropdownItem key="share" onClick={copyLinkToProfile}>
+                    Share link
+                  </DropdownItem>
+                  <DropdownItem key="report">Report abuse</DropdownItem>
+                  <DropdownItem key="block" className="text-danger" color="danger">
+                    Block @xptr
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          ) : (
+            <div className="flex gap-2 p-4">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button className="ml-auto" variant="light" isIconOnly>
+                    <HiOutlineDotsHorizontal />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Static Actions">
+                  <DropdownItem key="share" onClick={copyLinkToProfile}>
+                    Share link
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          )}
         </div>
 
         <div className="rounded-lg bg-dark-2">

@@ -13,6 +13,7 @@ type User = {
   website?: string
   createdAt: Date
   updatedAt: Date
+  _id: string
 }
 
 type UserRegister = Omit<User, 'role' | 'points'>

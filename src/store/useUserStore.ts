@@ -1,9 +1,10 @@
-import { create } from 'zustand'
+import { createWithEqualityFn } from 'zustand/traditional'
 import { immer } from 'zustand/middleware/immer'
 import { persist } from 'zustand/middleware'
 import { mountStoreDevtool } from 'simple-zustand-devtools'
 import { User } from '@/types/user.type'
 import { getCurrentProfileService } from '@/services/userService'
+import { shallow } from 'zustand/shallow'
 
 type AuthState = {
   token: string
@@ -22,7 +23,7 @@ type UserActions = {
   getUserProfile: () => Promise<void>
 }
 
-export const useAuthStore = create<AuthState & AuthActions>()(
+export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
   immer(
     persist(
       (set) => ({
@@ -37,12 +38,13 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       }),
       {
         name: 'user-store',
-      }
-    )
-  )
+      },
+    ),
+  ),
+  shallow,
 )
 
-export const useUserStore = create<UserState & UserActions>()(
+export const useUserStore = createWithEqualityFn<UserState & UserActions>()(
   immer((set) => ({
     user: null,
     async getUserProfile() {
@@ -55,7 +57,8 @@ export const useUserStore = create<UserState & UserActions>()(
         console.log('Get current profile:', error)
       }
     },
-  }))
+  })),
+  shallow,
 )
 
 if (process.env.NODE_ENV === 'development') {

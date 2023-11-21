@@ -17,7 +17,7 @@ const ProfileHeader = ({ userProfile }: Props) => {
 
   return (
     <div className="relative col-span-12 mt-12 rounded-lg bg-dark-2 p-4 text-center">
-      <div className="absolute -top-1/2 left-1/2 flex aspect-square h-[136px] -translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full bg-[#333]">
+      <div className="absolute -top-1/2 left-1/2 mt-2 flex aspect-square h-[136px] -translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full bg-[#333]">
         <Image
           alt="user_avatar"
           className="h-32 w-32 overflow-hidden rounded-full object-cover"

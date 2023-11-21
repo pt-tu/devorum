@@ -2,7 +2,8 @@
 import { Link } from '@nextui-org/react'
 import Image from 'next/image'
 import { FaBirthdayCake, FaGithub } from 'react-icons/fa'
-import { MdEmail } from 'react-icons/md'
+import { FaXTwitter } from 'react-icons/fa6'
+
 import { CiLink } from 'react-icons/ci'
 import { User } from '@/types/user.type'
 import moment from 'moment'
@@ -31,19 +32,24 @@ const ProfileHeader = ({ userProfile }: Props) => {
       <div className="mt-4 flex items-center justify-center gap-4 text-sm text-gray-3">
         <p className="flex items-center gap-2">
           <FaBirthdayCake className="mb-1" />
-          <span>Joined at {moment(userProfile.createdAt).format('MMM DD, YYYY')}</span>
+          <span>Cake date {moment(userProfile.createdAt).format('MMM DD, YYYY')}</span>
         </p>
-        <Link href="mailto:gabe@gmail.com" className="flex items-center gap-2">
-          <MdEmail className="text-xl" />
-          <span>{userProfile.email}</span>
-        </Link>
-        <Link href="link.com" className="flex items-center gap-2">
-          <CiLink className="text-xl" />
-          <span>github.com</span>
-        </Link>
-        <Link href="link.com" className="flex items-center gap-2 text-xl">
-          <FaGithub />
-        </Link>
+        {userProfile.website && (
+          <Link href={userProfile.website} className="flex items-center gap-2 text-sm">
+            <CiLink className="text-xl" />
+            <span>{userProfile.website}</span>
+          </Link>
+        )}
+        {userProfile.github && (
+          <Link href={userProfile.github} className="flex items-center gap-2 text-xl">
+            <FaGithub />
+          </Link>
+        )}
+        {userProfile.x && (
+          <Link href={userProfile.x} className="flex items-center gap-2 text-xl">
+            <FaXTwitter />
+          </Link>
+        )}
       </div>
     </div>
   )

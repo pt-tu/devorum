@@ -8,6 +8,9 @@ type User = {
   about?: string
   role: string
   points: number
+  github?: string
+  x?: string
+  website?: string
   createdAt: Date
   updatedAt: Date
 }

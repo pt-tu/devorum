@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import { useUserStore } from '@/store/useUserStore'
 import { useEffect } from 'react'
+import { Header } from '@/components'
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
@@ -26,7 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning data-theme="light" className="bg-dark-1">
       <body className={classnames(rubik.className, 'min-h-full')}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          <div className="h-20" />
+          {children}
+        </Providers>
         <ToastContainer
           position="top-right"
           autoClose={5000}

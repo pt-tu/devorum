@@ -1,9 +1,8 @@
-import { ReactProps } from '@/components/common/CommentItem/ReactButtons'
-import { TagProps } from '@/components/common/CommentItem/Tag/TagButton'
 import { PostProps } from '@/components/common/PostItem'
-import { ReactNode } from 'react'
-import { create } from 'zustand'
-
+import { persist } from 'zustand/middleware'
+import { immer } from 'zustand/middleware/immer'
+import { shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional'
 
 const SAMPLE_POST = [
   {
@@ -33,9 +32,9 @@ const SAMPLE_POST = [
     time: '55 min ago',
     title: `Can't get proper value of variable from suspend function`,
     content:
-    'I am using the shrinkFab function to change the isFabExtended state in Compose. The isFabExtended affects the size of the ExtendableFloatingActionButton.' +
-    `I want to call shrinkFab anytime the button is clicked. This action should expand the button and shrink it back after 1.5 seconds. Unfortunately this doesn't work because shrinkFabJob is equal to null outside the function for some reason. However, by calling the function three times, on the third time the cancellation of the first or second Job will indeed happen.` +
-    `At this point, you can press the button many times and it will shrink not 1.5 seconds after the last press, but at any time with visual glitching. What am I doing wrong?`,
+      'I am using the shrinkFab function to change the isFabExtended state in Compose. The isFabExtended affects the size of the ExtendableFloatingActionButton.' +
+      `I want to call shrinkFab anytime the button is clicked. This action should expand the button and shrink it back after 1.5 seconds. Unfortunately this doesn't work because shrinkFabJob is equal to null outside the function for some reason. However, by calling the function three times, on the third time the cancellation of the first or second Job will indeed happen.` +
+      `At this point, you can press the button many times and it will shrink not 1.5 seconds after the last press, but at any time with visual glitching. What am I doing wrong?`,
     react: {
       views: 25,
       comments: 15,
@@ -55,15 +54,32 @@ const SAMPLE_POST = [
 
 interface PostState {
   posts: PostProps[]
+  selectedPost: PostProps | undefined
 }
 
 interface PostActions {
   setIsEditing: () => void
+  setSelectedPost: (id: string) => void
 }
 
-export const usePostStore = create<PostState & PostActions>()((set) => ({
-  posts: SAMPLE_POST,
-  setIsEditing() {
-    
-  },
-}));
+export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
+  immer(
+    persist(
+      (set) => ({
+        posts: SAMPLE_POST,
+        selectedPost: undefined,
+        setIsEditing: () => {},
+        setSelectedPost: (id) => {
+          set((state) => {
+            const post = state.posts.find((item) => item.postId === id)
+            if (post) state.selectedPost = post
+          })
+        },
+      }),
+      {
+        name: 'post-store',
+      },
+    ),
+  ),
+  shallow,
+)

@@ -5,12 +5,6 @@ import { Tags } from './CommentItem/Tag'
 import { useRouter } from 'next/navigation'
 import { TagProps } from './CommentItem/Tag/TagButton'
 
-const tags = [
-  { link: '/', label: 'tailwind-css' },
-  { link: '/', label: 'javascript' },
-  { link: '/', label: 'css' },
-]
-
 function PostItem(props: PostProps) {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()

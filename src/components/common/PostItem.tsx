@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react'
 import { Tags } from './CommentItem/Tag'
 import { useRouter } from 'next/navigation'
 import { TagProps } from './CommentItem/Tag/TagButton'
+import { usePostStore } from '@/store/usePostStore'
 
 function PostItem(props: PostProps) {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
+  const { increaseVote } = usePostStore()
 
   useEffect(() => {
     setMounted(true)
@@ -19,7 +21,7 @@ function PostItem(props: PostProps) {
   }
 
   return (
-    <div onClick={handleTopicClick} className="mb-6 flex flex-col gap-6 rounded-2xl bg-dark-2 px-8 py-6">
+    <div className="mb-6 flex flex-col gap-6 rounded-2xl bg-dark-2 px-8 py-6">
       {/* Header */}
       <div className="flex max-h-min flex-row">
         <img className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.url} />
@@ -30,7 +32,7 @@ function PostItem(props: PostProps) {
         <MoreOutlined className="text-2xl text-gray-3" />
       </div>
       {/* Body */}
-      <div>
+      <div onClick={handleTopicClick} className="cursor-pointer">
         <p className="mb-[10px] text-base font-medium text-gray-bg">{props.title}</p>
         <p className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-sm font-light text-gray-3">
           {props.content}
@@ -44,11 +46,14 @@ function PostItem(props: PostProps) {
           <EyeOutlined />
           <p>{props.react.views}</p>
         </div>
-        <div className="flex flex-row items-center gap-1 text-sm text-gray-3">
+        <div className="flex cursor-pointer flex-row items-center gap-1 text-sm text-gray-3" onClick={handleTopicClick}>
           <MessageOutlined />
           <p>{props.react.comments}</p>
         </div>
-        <div className="flex flex-row items-center gap-1 text-sm text-gray-3">
+        <div
+          className="flex cursor-pointer flex-row items-center gap-1 text-sm text-gray-3"
+          onClick={() => increaseVote(props.postId)}
+        >
           <ArrowUpOutlined />
           <p>{props.react.votes}</p>
         </div>

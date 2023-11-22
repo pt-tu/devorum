@@ -24,16 +24,15 @@ export default function Page() {
   const { posts } = usePostStore()
 
   return (
-    <div className="m-auto grid max-w-7xl grid-cols-12 gap-5">
+    <div className="col-span-7 col-start-3 ">
       <title>Devorum</title>
-      <HorizontalNav />
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" />
         <main className="relative grid h-full grid-cols-12 flex-col items-center justify-between gap-5 px-10">
           <p className="text-gray-bg">main</p>
         </main>
       </Head>
-      <div className="col-span-7 col-start-3 flex h-full flex-col">
+      <div className="flex h-full flex-col">
         {/* Question */}
         <div className="mb-2 flex flex-row justify-center">
           <p className="flex-1 text-3xl font-normal text-gray-bg">Top Questions</p>
@@ -46,7 +45,6 @@ export default function Page() {
           <PostItem {...item} key={item.postId} />
         ))}
       </div>
-      <HorizontalNav className="col-span-3" />
     </div>
   )
 }

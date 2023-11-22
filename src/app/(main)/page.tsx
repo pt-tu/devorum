@@ -1,12 +1,12 @@
 'use client'
-import { AppButton, HorizontalNav, PostItem, Divider, TopicItem } from '@/components'
+import { AppButton, HorizontalNav, PostItem, Divider } from '@/components'
 import { Tabs } from '@/components/common/Tab'
 import { TabProps } from '@/components/common/Tab/TabButton'
+import { usePostStore } from '@/store/usePostStore'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
 import Head from 'next/head'
 import React, { useEffect } from 'react'
 
-const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 const tabs: TabProps[] = [
   { icon: <ClockCircleOutlined />, label: 'New', isSelected: true },
   {
@@ -21,11 +21,7 @@ const tabs: TabProps[] = [
 ]
 
 export default function Page() {
-  const time = {
-    ask: '2 years, 6 months ago',
-    modified: '8 months ago',
-    viewed: '26k times',
-  }
+  const { posts } = usePostStore()
 
   return (
     <div className="m-auto grid max-w-7xl grid-cols-12 gap-5">
@@ -46,8 +42,8 @@ export default function Page() {
         <Tabs tabs={tabs} />
 
         <Divider className="my-5" />
-        {sample.map((item, index) => (
-          <TopicItem key={index} />
+        {posts.map((item) => (
+          <PostItem {...item} key={item.postId} />
         ))}
       </div>
       <HorizontalNav className="col-span-3" />

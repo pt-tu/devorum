@@ -27,11 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning data-theme="light" className="bg-dark-1">
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
-        <Providers>
-          <Header />
-          <div className="h-20" />
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
         <ToastContainer
           position="top-right"
           autoClose={5000}

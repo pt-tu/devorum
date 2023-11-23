@@ -12,22 +12,22 @@
 @layer base {
   :root {
     --color-0: 211 202 194;
-    --color-2: 255 255 255;
     --color-1: 247 247 247;
+    --color-2: 255 255 255;
     --color-4: 245 245 245;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --color-0: 2 12 22;
       --color-1: 29 30 31;
-      --color-2: 39 39 39;
+      --color-2: 45 45 45;
       --color-4: 44 53 61;
     }
   }
   :root[data-theme='dark'] {
     --color-0: 2 12 22;
     --color-1: 29 30 31;
-    --color-2: 39 39 39;
+    --color-2: 45 45 45;
     --color-4: 44 53 61;
     --color-gray-bg: 247 247 247;
     --color-gray-6: 244 246 248;
@@ -36,8 +36,8 @@
   }
   :root[data-theme='light'] {
     --color-0: 211 202 194;
-    --color-2: 255 255 255;
     --color-1: 247 247 247;
+    --color-2: 255 255 255;
     --color-4: 245 245 245;
     --color-gray-bg: 2 12 22;
     --color-gray-6: 51 52 57;

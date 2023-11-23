@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import NextImage from 'next/image'
 import ThirdPartiesAuth from '@/components/auth/ThirdPartiesAuth'
 import { PasswordInput } from '@/components/auth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import loginValidationSchema from '@/validators/loginValidator'
 import { isAxiosError } from 'axios'
@@ -47,7 +47,7 @@ const Login = () => {
   })
 
   return (
-    <div className="rounded-3xl bg-white px-16 py-14 text-center text-base shadow-2xl">
+    <div className="rounded-3xl bg-dark-2 px-16 py-14 text-center text-base shadow-2xl">
       <div className="flex justify-center">
         <Image as={NextImage} width={150} height={75} src="/logo_dark.svg" alt="devorum_logo" />
       </div>

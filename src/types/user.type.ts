@@ -13,6 +13,9 @@ type User = {
   website?: string
   createdAt: Date
   updatedAt: Date
+  work?: string
+  education?: string
+  position?: string
   _id: string
 }
 

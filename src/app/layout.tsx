@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
         <Providers>
           <Header />
-          <div className="h-20  " />
+          <div className="h-20" />
           {children}
         </Providers>
         <ToastContainer

@@ -7,8 +7,8 @@ export const metadata: Metadata = {
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <section className='w-screen h-screen flex bg-yellow-1 overflow-auto p-4'>
-      <div className='w-full max-w-xl m-auto'>{children}</div>
+    <section className="flex h-screen overflow-auto bg-yellow-1 p-4">
+      <div className="m-auto w-full max-w-xl">{children}</div>
     </section>
   )
   // return (

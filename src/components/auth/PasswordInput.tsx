@@ -14,14 +14,15 @@ const PasswordInput = ({ toggle = () => {}, ...props }: Props) => {
       label={props.label}
       required
       name={props.name}
-      size='lg'
-      className='mt-4'
+      size="lg"
+      labelPlacement="outside"
+      className="mt-4"
       endContent={
-        <button className='focus:outline-none' type='button' onClick={toggle}>
+        <button className="focus:outline-none" type="button" onClick={toggle}>
           {props.visible ? (
-            <AiFillEyeInvisible className='text-2xl text-default-400 pointer-events-none' />
+            <AiFillEyeInvisible className="pointer-events-none text-2xl text-default-400" />
           ) : (
-            <AiFillEye className='text-2xl text-default-400 pointer-events-none' />
+            <AiFillEye className="pointer-events-none text-2xl text-default-400" />
           )}
         </button>
       }

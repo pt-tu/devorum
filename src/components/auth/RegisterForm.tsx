@@ -16,31 +16,36 @@ const RegisterForm = ({ formik, pwdVisible, setPwdVisible, confPwdVisible, setCo
   }
 
   return (
-    <form className='mt-10' onSubmit={formik.handleSubmit}>
+    <form className="mt-10 text-left" onSubmit={formik.handleSubmit}>
       <Input
+        placeholder="Enter your email"
+        labelPlacement="outside"
         value={formik.values.email}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         isInvalid={formik.touched.email && Boolean(formik.errors.email)}
         errorMessage={formik.touched.email && formik.errors.email}
-        label='Email'
-        name='email'
+        label="Email"
+        name="email"
         required
-        size='lg'
+        size="lg"
       />
       <Input
+        placeholder="Enter your username"
+        labelPlacement="outside"
         value={formik.values.username}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         isInvalid={formik.touched.username && Boolean(formik.errors.username)}
         errorMessage={formik.touched.username && formik.errors.username}
-        label='Username'
+        label="Username"
         required
-        name='username'
-        size='lg'
-        className='mt-4'
+        name="username"
+        size="lg"
+        className="mt-4"
       />
       <PasswordInput
+        placeholder="Enter a secure passcode"
         value={formik.values.password}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -48,10 +53,11 @@ const RegisterForm = ({ formik, pwdVisible, setPwdVisible, confPwdVisible, setCo
         errorMessage={formik.touched.password && formik.errors.password}
         visible={pwdVisible}
         toggle={toggleVisibility(setPwdVisible)}
-        label='Passcode'
-        name='password'
+        label="Passcode"
+        name="password"
       />
       <PasswordInput
+        placeholder="Enter passcode again"
         value={formik.values.confirmPassword}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -59,11 +65,11 @@ const RegisterForm = ({ formik, pwdVisible, setPwdVisible, confPwdVisible, setCo
         errorMessage={formik.touched.confirmPassword && formik.errors.confirmPassword}
         visible={confPwdVisible}
         toggle={toggleVisibility(setConfPwdVisible)}
-        label='Passcode Confirm'
-        name='confirmPassword'
+        label="Passcode Confirm"
+        name="confirmPassword"
       />
 
-      <Button type='submit' size='lg' fullWidth className='mt-8 bg-black text-white'>
+      <Button type="submit" size="lg" fullWidth className="mt-8 bg-black text-white">
         Register
       </Button>
     </form>

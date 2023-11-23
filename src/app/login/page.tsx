@@ -47,27 +47,30 @@ const Login = () => {
   })
 
   return (
-    <div className='text-center bg-white rounded-3xl px-16 py-14 text-base shadow-2xl'>
-      <div className='flex justify-center'>
-        <Image as={NextImage} width={150} height={75} src='/logo_dark.svg' alt='devorum_logo' />
+    <div className="rounded-3xl bg-white px-16 py-14 text-center text-base shadow-2xl">
+      <div className="flex justify-center">
+        <Image as={NextImage} width={150} height={75} src="/logo_dark.svg" alt="devorum_logo" />
       </div>
 
-      <h1 className='font-medium text-3xl mt-6'>Dive into the devorum community</h1>
-      <p className='mt-4'>Hey, Enter your details to get sign in to your account</p>
+      <h1 className="mt-6 text-3xl font-medium">Dive into the devorum community</h1>
+      <p className="mt-4">Hey, Enter your details to get sign in to your account</p>
 
-      <form className='mt-10' onSubmit={formik.handleSubmit}>
+      <form className="mt-10 text-left" onSubmit={formik.handleSubmit}>
         <Input
+          labelPlacement="outside"
+          placeholder="Your email"
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           isInvalid={formik.touched.email && Boolean(formik.errors.email)}
           errorMessage={formik.touched.email && formik.errors.email}
-          label='Email'
-          name='email'
+          label="Email"
+          name="email"
           required
-          size='lg'
+          size="lg"
         />
         <PasswordInput
+          placeholder="Your password"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -75,30 +78,30 @@ const Login = () => {
           errorMessage={formik.touched.password && formik.errors.password}
           visible={pwdVisible}
           toggle={() => setPwdVisible((prev) => !prev)}
-          label='Passcode'
-          name='password'
+          label="Passcode"
+          name="password"
         />
-        <div className='w-full text-left mt-6'>
-          <Link color='foreground' as={NextLink} href='/forget-password' className='text-sm'>
+        <div className="mt-6 w-full text-left">
+          <Link color="foreground" as={NextLink} href="/forget-password" className="text-sm">
             Forget your password?
           </Link>
         </div>
-        <Button type='submit' size='lg' fullWidth className='mt-8 bg-black text-white'>
+        <Button type="submit" size="lg" fullWidth className="mt-8 bg-black text-white">
           Login
         </Button>
       </form>
 
-      <div className='flex justify-center items-center gap-4 mt-6 text-sm'>
-        <p className='w-6 border-t'></p>
+      <div className="mt-6 flex items-center justify-center gap-4 text-sm">
+        <p className="w-6 border-t"></p>
         Or Login With
-        <p className='w-6 border-t'></p>
+        <p className="w-6 border-t"></p>
       </div>
 
       <ThirdPartiesAuth />
 
-      <p className='text-sm mt-8'>
+      <p className="mt-8 text-sm">
         Don&#39;t have an account?{' '}
-        <Link as={NextLink} href='/register' color='foreground' className='font-medium text-sm'>
+        <Link as={NextLink} href="/register" color="foreground" className="text-sm font-medium">
           Register Now
         </Link>
       </p>

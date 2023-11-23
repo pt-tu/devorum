@@ -16,6 +16,11 @@ type User = {
   _id: string
 }
 
-type UserRegister = Omit<User, 'role' | 'points'>
+type UserRegister = {
+  email: string
+  username: string
+  password: string
+  confirmPassword: string
+}
 
 export type { User, UserRegister }

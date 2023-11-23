@@ -1,6 +1,6 @@
 'use client'
 import { ArrowUpOutlined, EyeOutlined, MessageOutlined, MoreOutlined, SmileOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tags } from './CommentItem/Tag'
 import { useRouter } from 'next/navigation'
 import { TagProps } from './CommentItem/Tag/TagButton'
@@ -31,6 +31,11 @@ function PostItem(props: PostProps) {
   const [title, setTitle] = useState(props.title)
   const [content, setContent] = useState(props.content)
 
+  useEffect(() => {
+    setTitle(props.title)
+    setContent(props.content)
+  }, [props])
+
   const handlePostClick = () => {
     if (!props.isEditing) router.push('topic/1')
   }
@@ -50,7 +55,7 @@ function PostItem(props: PostProps) {
       ...props,
       title,
       content,
-      time: new Date().toDateString(),
+      time: new Date().toLocaleDateString(),
     })
     setIsEditing(props.postId)
   }

@@ -8,7 +8,7 @@ const SAMPLE_POST = [
   {
     postId: '001',
     isEditing: true,
-    time: new Date(2022, 11, 22).toDateString(),
+    time: new Date(2022, 11, 22).toLocaleDateString(),
     title: 'What is a difference between Java nad JavaScript?',
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum vitae etiam lectus amet enim.',
     react: {
@@ -29,7 +29,7 @@ const SAMPLE_POST = [
   {
     postId: '002',
     isEditing: false,
-    time: new Date(2023, 2, 22).toDateString(),
+    time: new Date(2023, 2, 22).toLocaleDateString(),
     title: `Can't get proper value of variable from suspend function`,
     content:
       'I am using the shrinkFab function to change the isFabExtended state in Compose. The isFabExtended affects the size of the ExtendableFloatingActionButton.' +
@@ -53,7 +53,7 @@ const SAMPLE_POST = [
   {
     postId: '003',
     isEditing: false,
-    time: new Date(2020, 1, 22).toDateString(),
+    time: new Date(2020, 1, 22).toLocaleDateString(),
     title: 'What is a difference between Java nad JavaScript?',
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum vitae etiam lectus amet enim.',
     react: {
@@ -74,7 +74,7 @@ const SAMPLE_POST = [
   {
     postId: '004',
     isEditing: false,
-    time: new Date(2023, 11, 22).toDateString(),
+    time: new Date(2023, 11, 22).toLocaleDateString(),
     title: `Can't get proper value of variable from suspend function`,
     content:
       'I am using the shrinkFab function to change the isFabExtended state in Compose. The isFabExtended affects the size of the ExtendableFloatingActionButton.' +
@@ -98,7 +98,7 @@ const SAMPLE_POST = [
   {
     postId: '005',
     isEditing: false,
-    time: new Date(2023, 2, 22).toDateString(),
+    time: new Date(2023, 2, 22).toLocaleDateString(),
     title: 'What is a difference between Java nad JavaScript?',
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum vitae etiam lectus amet enim.',
     react: {
@@ -119,7 +119,7 @@ const SAMPLE_POST = [
   {
     postId: '006',
     isEditing: false,
-    time: new Date(2019, 11, 22).toDateString(),
+    time: new Date(2019, 11, 22).toLocaleDateString(),
     title: `Can't get proper value of variable from suspend function`,
     content:
       'I am using the shrinkFab function to change the isFabExtended state in Compose. The isFabExtended affects the size of the ExtendableFloatingActionButton.' +
@@ -143,7 +143,7 @@ const SAMPLE_POST = [
   {
     postId: '007',
     isEditing: false,
-    time: new Date(2010, 11, 22).toDateString(),
+    time: new Date(2010, 11, 22).toLocaleDateString(),
     title: 'What is a difference between Java nad JavaScript?',
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum vitae etiam lectus amet enim.',
     react: {
@@ -164,7 +164,7 @@ const SAMPLE_POST = [
   {
     postId: '008',
     isEditing: false,
-    time: new Date(2002, 11, 22).toDateString(),
+    time: new Date(2002, 11, 22).toLocaleDateString(),
     title: `Can't get proper value of variable from suspend function`,
     content:
       'I am using the shrinkFab function to change the isFabExtended state in Compose. The isFabExtended affects the size of the ExtendableFloatingActionButton.' +

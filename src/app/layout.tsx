@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }, [getUserProfile])
 
   return (
-    <html lang="en" suppressHydrationWarning data-theme="light" className="bg-dark-1">
+    <html lang="en" suppressHydrationWarning className="bg-dark-1 light">
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
         <Providers>{children}</Providers>
         <ToastContainer

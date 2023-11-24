@@ -72,7 +72,7 @@ function PostItem(props: PostProps) {
           <img className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.url} />
           <div className="ml-4 h-full flex-1">
             <p className="text-sm font-normal text-gray-bg">{props.user.name}</p>
-            <p className="text-[10px] font-light text-gray-400">{'moment(props.time).fromNow()'}</p>
+            <p className="text-[10px] font-light text-gray-400">{moment(props.time).fromNow()}</p>
           </div>
           <Dropdown menu={{ items, onClick }} placement="bottomRight">
             <a onClick={(e) => e.preventDefault()}>

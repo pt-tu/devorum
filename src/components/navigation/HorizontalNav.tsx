@@ -12,10 +12,9 @@ export default function HorizontalNav(props: Props) {
   const { className } = props
   const { items } = useMenuStore()
   return (
-    <div className={classNames('sticky col-span-2 h-full', className)}>
-      {/* <div className="absolute -right-[17px] left-0 top-0 flex h-full flex-col gap-y-5 overflow-y-scroll"> */}
-      <div className="flex h-full flex-col gap-y-5 overflow-hidden bg-dark-1">
-        {items.map((item) => (
+    <div className="sticky w-full">
+      <div>
+        {items.map((item, index) => (
           <GroupItemNav {...item} key={item.id} />
         ))}
       </div>

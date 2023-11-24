@@ -64,3 +64,6 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+[data-color-mode*='dark'] .wmde-markdown{
+  background-color: #2D2D2D;
+}

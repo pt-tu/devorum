@@ -7,6 +7,7 @@ import { CiLink } from 'react-icons/ci'
 import { User } from '@/types/user.type'
 import moment from 'moment'
 import { useUserStore } from '@/store/useUserStore'
+import { defaultAvatar } from '@/configs/defaultValues'
 
 type Props = {
   userProfile: User
@@ -21,7 +22,7 @@ const ProfileHeader = ({ userProfile }: Props) => {
         <Image
           alt="user_avatar"
           className="h-32 w-32 overflow-hidden rounded-full object-cover"
-          src={userProfile.avatar || 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'}
+          src={userProfile.avatar || defaultAvatar}
           width={128}
           height={128}
         />

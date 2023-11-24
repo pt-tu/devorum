@@ -11,7 +11,7 @@ import loginValidationSchema from '@/validators/loginValidator'
 import { isAxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { loginService } from '@/services/userService'
-import { useAuthStore } from '@/store/useUserStore'
+import { useAuthStore, useUserStore } from '@/store/useUserStore'
 import { useRouter } from 'next/navigation'
 
 const initialValues = {
@@ -22,6 +22,7 @@ const initialValues = {
 const Login = () => {
   const [pwdVisible, setPwdVisible] = useState(false)
   const setCredentials = useAuthStore((state) => state.setCredentials)
+  const getUserProfile = useUserStore((state) => state.getUserProfile)
   const router = useRouter()
 
   const formik = useFormik({
@@ -33,6 +34,7 @@ const Login = () => {
         const response = await loginService(values)
         const { _id, token } = response.data
         setCredentials(_id, token)
+        getUserProfile()
         resetForm()
         router.push('/')
       } catch (error) {

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
 
     const response = await getProfileService(username)
     return {
-      title: response.data.fullName,
+      title: response.data.fullName || response.data.username,
       description: 'User profile page',
     }
   } catch (err) {

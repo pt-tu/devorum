@@ -13,6 +13,7 @@ type AuthState = {
 
 type AuthActions = {
   setCredentials: (_id: string, token: string) => void
+  logOut: () => void
 }
 
 type UserState = {
@@ -21,6 +22,7 @@ type UserState = {
 
 type UserActions = {
   getUserProfile: () => Promise<void>
+  clearUserProfile: () => void
 }
 
 export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
@@ -34,6 +36,13 @@ export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
             state.token = token
             state._id = _id
           })
+        },
+        logOut: () => {
+          set((state) => {
+            state.token = ''
+            state._id = ''
+          })
+          useUserStore.getState().clearUserProfile()
         },
       }),
       {
@@ -59,6 +68,11 @@ export const useUserStore = createWithEqualityFn<UserState & UserActions>()(
         })
         console.log('Get current profile:', error)
       }
+    },
+    clearUserProfile() {
+      set((state) => {
+        state.user = null
+      })
     },
   })),
   shallow,

@@ -1,13 +1,15 @@
-import { Header, HorizontalNav } from '@/components'
+import { Header } from '@/components'
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section>
-      <div className="relative m-auto grid max-w-7xl grid-cols-12 gap-5 pt-5">
-        <HorizontalNav />
+      <Header />
+      <div className="relative">
+        <div className="h-20" />
         {children}
-        <HorizontalNav className="col-span-3" />
       </div>
     </section>
   )
 }
+
+export default MainLayout

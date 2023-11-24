@@ -41,7 +41,7 @@ function PostItem(props: PostProps) {
   }, [props])
 
   const handlePostClick = () => {
-    if (!props.isEditing) router.push('topic/1')
+    if (!props.isEditing) router.push('post/1')
   }
   const onClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
@@ -83,7 +83,7 @@ function PostItem(props: PostProps) {
           </Dropdown>
         </div>
         {/* Body */}
-        <div onClick={handlePostClick} className={classNames(!props.isEditing && 'cursor-pointer')}>
+        <div>
           {props.isEditing ? (
             <>
               <Input value={title} className="mb-5" onChange={(e) => setTitle(e.target.value)} />

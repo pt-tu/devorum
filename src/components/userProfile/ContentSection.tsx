@@ -1,5 +1,6 @@
 import { Tab, Tabs } from '@nextui-org/react'
-import { TopicItem } from '..'
+import { PostItem } from '..'
+import { usePostStore } from '@/store/usePostStore'
 
 type Props = {
   barHeight: number
@@ -7,6 +8,7 @@ type Props = {
 
 const ContentSection = ({ barHeight }: Props) => {
   if (!barHeight) return null
+  const { posts } = usePostStore()
 
   return (
     <div
@@ -19,18 +21,18 @@ const ContentSection = ({ barHeight }: Props) => {
       <div className="col-span-8 rounded-lg">
         <Tabs aria-label="Options" size="lg">
           <Tab key="overview" title="Overview">
-            {[1, 1, 1, 1, 1, 1, 1].map((item, index) => (
-              <TopicItem key={index} />
+            {posts.slice(0, 2).map((item, index) => (
+              <PostItem {...item} key={index} />
             ))}
           </Tab>
           <Tab key="posts" title="Posts">
-            {[1, 1, 1, 1].map((item, index) => (
-              <TopicItem key={index} />
+            {posts.slice(1, 3).map((item, index) => (
+              <PostItem {...item} key={index} />
             ))}
           </Tab>
           <Tab key="comments" title="Comments">
-            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((item, index) => (
-              <TopicItem key={index} />
+            {posts.slice(0, 3).map((item, index) => (
+              <PostItem {...item} key={index} />
             ))}
           </Tab>
         </Tabs>

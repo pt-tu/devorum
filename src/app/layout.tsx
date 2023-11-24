@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import { useUserStore } from '@/store/useUserStore'
 import { useEffect } from 'react'
-import { Header } from '@/components'
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 

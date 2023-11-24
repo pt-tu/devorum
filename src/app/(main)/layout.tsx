@@ -1,9 +1,14 @@
 import { Header } from '@/components'
+import React from 'react'
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section>
-      <div className="relative pt-5">{children}</div>
+      <Header />
+      <div className="h-20" />
+      {children}
     </section>
   )
 }
+
+export default MainLayout

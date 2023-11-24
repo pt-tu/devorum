@@ -55,13 +55,13 @@ const Register = () => {
   })
 
   return (
-    <div className='text-center bg-white rounded-3xl px-16 py-14 text-base shadow-2xl'>
-      <div className='flex justify-center'>
-        <Image as={NextImage} width={150} height={75} src='/logo_dark.svg' alt='devorum_logo' />
+    <div className="rounded-3xl bg-dark-2 px-16 py-14 text-center text-base shadow-2xl">
+      <div className="flex justify-center">
+        <Image as={NextImage} width={150} height={75} src="/logo_dark.svg" alt="devorum_logo" />
       </div>
 
-      <h1 className='font-medium text-3xl mt-6'>Join the devorum community</h1>
-      <p className='mt-4'>You give us some texts, we give you the whole community. Best deal ever!</p>
+      <h1 className="mt-6 text-3xl font-medium">Join the devorum community</h1>
+      <p className="mt-4">You give us some texts, we give you the whole community. Best deal ever!</p>
 
       <RegisterForm
         formik={formik}
@@ -71,17 +71,17 @@ const Register = () => {
         setConfPwdVisible={setConfPwdVisible}
       />
 
-      <div className='flex justify-center items-center gap-4 mt-6 text-sm'>
-        <p className='w-6 border-t'></p>
+      <div className="mt-6 flex items-center justify-center gap-4 text-sm">
+        <p className="w-6 border-t"></p>
         Or Register With
-        <p className='w-6 border-t'></p>
+        <p className="w-6 border-t"></p>
       </div>
 
       <ThirdPartiesAuth />
 
-      <p className='text-sm mt-8'>
+      <p className="mt-8 text-sm">
         Already have an account?{' '}
-        <Link as={NextLink} href='/login' color='foreground' className='font-medium text-sm'>
+        <Link as={NextLink} href="/login" color="foreground" className="text-sm font-medium">
           Login
         </Link>
       </p>

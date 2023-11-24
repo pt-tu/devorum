@@ -16,7 +16,7 @@ type AuthActions = {
 }
 
 type UserState = {
-  user: User | null
+  user: User | null | undefined
 }
 
 type UserActions = {
@@ -46,7 +46,7 @@ export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
 
 export const useUserStore = createWithEqualityFn<UserState & UserActions>()(
   immer((set) => ({
-    user: null,
+    user: undefined,
     async getUserProfile() {
       try {
         const response = await getCurrentProfileService()
@@ -54,6 +54,9 @@ export const useUserStore = createWithEqualityFn<UserState & UserActions>()(
           state.user = response.data
         })
       } catch (error) {
+        set((state) => {
+          state.user = null
+        })
         console.log('Get current profile:', error)
       }
     },

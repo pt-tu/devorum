@@ -2,6 +2,7 @@
 import { useThemeStore } from '@/store/useThemeStore'
 import { MoonIcon } from '@heroicons/react/24/outline'
 import { SunIcon } from '@heroicons/react/24/solid'
+import { Button } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -21,16 +22,11 @@ function ThemeButton() {
     changeTheme(theme)
   }, [theme, changeTheme])
 
-  if (!mounted) return null
+  if (!mounted) return <div className="h-5 w-5"></div>
   return (
-    <button
-      aria-label="Toggle Dark Mode"
-      type="button"
-      className="flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-gray-bg"
-      onClick={() => toggleTheme()}
-    >
+    <Button isIconOnly onClick={toggleTheme} variant="light">
       {theme === 'dark' ? <SunIcon className="h-5 w-5 text-orange-8" /> : <MoonIcon className="h-5 w-5 text-dark-0" />}
-    </button>
+    </Button>
   )
 }
 

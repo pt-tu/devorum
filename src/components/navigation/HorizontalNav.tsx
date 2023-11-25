@@ -1,23 +1,30 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import GroupItemNav from './GroupItemNav'
 import classNames from 'classnames'
-import { useMenuStore } from '@/store/useMenuStore'
+import { NavItemProps, useMenuStore } from '@/store/useMenuStore'
 
 interface Props {
   className?: classNames.Argument
+  items: NavItemProps[]
 }
 
 export default function HorizontalNav(props: Props) {
-  const { className } = props
-  const { items } = useMenuStore()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const { className, items } = props
   return (
-    <div className="sticky w-full">
-      <div>
-        {items.map((item, index) => (
-          <GroupItemNav {...item} key={item.id} />
-        ))}
+    mounted && (
+      <div className="sticky w-full">
+        <div>
+          {items.map((item, index) => (
+            <GroupItemNav {...item} key={item.id} />
+          ))}
+        </div>
       </div>
-    </div>
+    )
   )
 }

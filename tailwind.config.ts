@@ -33,7 +33,7 @@ const config: Config = {
         },
         orange: {
           8: "#FF6934",
-          bg: "#473E3B",
+          bg: "#FF8F67",
         },
         yellow: {
           8: "#EEA956",

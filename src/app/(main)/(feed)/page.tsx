@@ -24,7 +24,7 @@ export default function Page() {
   const { posts } = usePostStore()
 
   return (
-    <div className="col-span-7 col-start-3 ">
+    <div className="col-span-6 col-start-4">
       <title>Devorum</title>
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" />

@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import { useUserStore } from '@/store/useUserStore'
 import { useEffect } from 'react'
+import 'react-toastify/dist/ReactToastify.css'
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
         <Providers>{children}</Providers>
         <ToastContainer
-          position="top-right"
+          position="bottom-center"
           autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
@@ -37,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"
+          theme="dark"
         />
       </body>
     </html>

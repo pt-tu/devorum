@@ -1,3 +1,5 @@
+import { Block, Follow } from './follow.type'
+
 type User = {
   email: string
   username: string
@@ -17,6 +19,8 @@ type User = {
   education?: string
   position?: string
   _id: string
+  followStatus?: Follow
+  blockStatus?: Block
 }
 
 type UserRegister = {
@@ -25,5 +29,7 @@ type UserRegister = {
   password: string
   confirmPassword: string
 }
+
+export type QuicksortOverview = { follows: number; followings: number; blocks: number }
 
 export type { User, UserRegister }

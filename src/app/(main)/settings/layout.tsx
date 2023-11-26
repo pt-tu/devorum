@@ -1,4 +1,4 @@
-import Sidebar from '@/components/userProfile/Sidebar'
+import Sidebar from '@/components/common/Sidebar'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,10 +6,25 @@ export const metadata: Metadata = {
   description: 'Customize your experience',
 }
 
+const settingMenus = [
+  {
+    name: 'Settings',
+    path: '/settings',
+  },
+  {
+    name: 'Profile',
+    path: '/settings/profile',
+  },
+  {
+    name: 'Notifications',
+    path: '/quicksort/notifications',
+  },
+]
+
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="m-auto mt-4 grid max-w-6xl grid-cols-12 gap-4">
-      <Sidebar />
+      <Sidebar list={settingMenus} />
       {children}
     </div>
   )

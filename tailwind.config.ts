@@ -1,65 +1,66 @@
-import type { Config } from "tailwindcss";
-const { nextui } = require("@nextui-org/react");
+import type { Config } from 'tailwindcss'
+const { nextui } = require('@nextui-org/react')
 /** @type {import('tailwindcss').Config} */
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     fontFamily: {},
     extend: {
       colors: {
-        transparent: "transparent",
-        white: "#FFFFFF",
-        black: "#000000",
+        transparent: 'transparent',
+        white: '#FFFFFF',
+        black: '#000000',
         dark: {
-          0: "rgb(var(--color-0) / <alpha-value>)",
-          1: "rgb(var(--color-1) / <alpha-value>)",
-          2: "rgb(var(--color-2) / <alpha-value>)",
-          4: "rgb(var(--color-4) / <alpha-value>)",
+          0: 'rgb(var(--color-0) / <alpha-value>)',
+          1: 'rgb(var(--color-1) / <alpha-value>)',
+          2: 'rgb(var(--color-2) / <alpha-value>)',
+          4: 'rgb(var(--color-4) / <alpha-value>)',
+          5: 'rgb(var(--color-dark-5) / <alpha-value>)',
         },
         gray: {
-          3: "rgb(var(--color-gray-3) / <alpha-value>)",
-          4: "#858EAD",
-          5: "rgb(var(--color-gray-5) / <alpha-value>)",
-          6: "rgb(var(--color-gray-6) / <alpha-value>)",
-          bg: "rgb(var(--color-gray-bg) / <alpha-value>)",
-          border: "#EAEAEA",
-          text: "#808080",
+          3: 'rgb(var(--color-gray-3) / <alpha-value>)',
+          4: '#858EAD',
+          5: 'rgb(var(--color-gray-5) / <alpha-value>)',
+          6: 'rgb(var(--color-gray-6) / <alpha-value>)',
+          bg: 'rgb(var(--color-gray-bg) / <alpha-value>)',
+          border: '#EAEAEA',
+          text: '#808080',
         },
         orange: {
           8: "#FF6934",
           bg: "#FF8F67",
         },
         yellow: {
-          8: "#EEA956",
-          bg: "#5A4F43",
-          1: "#F6F2EB",
-          "1-dark": "#211b0f",
+          8: '#EEA956',
+          bg: '#5A4F43',
+          1: '#F6F2EB',
+          '1-dark': '#211b0f',
         },
         blue: {
-          8: "#155ca2",
-          primary: "#1682FD",
-          bg: "#edf5fd",
+          8: '#155ca2',
+          primary: '#1682FD',
+          bg: '#edf5fd',
         },
         green: {
-          8: "#3ED6A4",
-          bg: "#335248",
+          8: '#3ED6A4',
+          bg: '#335248',
         },
         purple: {
-          8: "#848DF9",
-          bg: "#46475B",
+          8: '#848DF9',
+          bg: '#46475B',
         },
       },
       spacing: {},
       borderRadius: {},
     },
   },
-  darkMode: "class",
+  darkMode: 'class',
   plugins: [
     nextui(),
     // {
@@ -121,5 +122,5 @@ const config: Config = {
     //   },
     // },
   ],
-};
-export default config;
+}
+export default config

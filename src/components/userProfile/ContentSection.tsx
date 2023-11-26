@@ -7,8 +7,8 @@ type Props = {
 }
 
 const ContentSection = ({ barHeight }: Props) => {
-  if (!barHeight) return null
   const { posts } = usePostStore()
+  if (!barHeight) return null
 
   return (
     <div

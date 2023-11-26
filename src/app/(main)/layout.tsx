@@ -8,6 +8,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="h-20" />
         {children}
       </div>
+      <div className="h-16" />
     </section>
   )
 }

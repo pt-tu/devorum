@@ -106,17 +106,25 @@ export const useMenuStore = createWithEqualityFn<MenuState & MenuActions>()(
       (set) => ({
         items: [defaulf, communities, tags],
         users: SAMPLE_RIGHT,
+        filterUsers: SAMPLE_RIGHT,
         isSelected: 'defaulf0',
         toggleExpand: (id) =>
           set((state) => ({
-            items: state.items.map((item) =>
-              item.id === id ? { ...item, expand: !item.expand } : item,
-            ),
+            items: state.items.map((item) => (item.id === id ? { ...item, expand: !item.expand } : item)),
           })),
         setIsSelected: (id) =>
           set((state) => {
             state.isSelected = id
           }),
+        setFilterUsers: (searchText) => {
+          set((state) => {
+            if (searchText === '') state.filterUsers[0].children = state.users[0].children
+            else
+              state.filterUsers[0].children = state.users[0].children?.filter(
+                (user) => user.title?.toString().toLowerCase().includes(searchText.trim().toLowerCase()),
+              )
+          })
+        },
       }),
       {
         name: 'menu-store',
@@ -139,9 +147,11 @@ export type NavItemProps = {
 interface MenuState {
   items: NavItemProps[]
   users: NavItemProps[]
+  filterUsers: NavItemProps[]
   isSelected: string
 }
 interface MenuActions {
   toggleExpand: (id: string) => void
   setIsSelected: (id: string) => void
+  setFilterUsers: (userName: string) => void
 }

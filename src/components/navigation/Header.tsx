@@ -7,7 +7,7 @@ import ThemeButton from '../common/ThemeButton'
 import { useAuthStore, useUserStore } from '@/store/useUserStore'
 import Image from 'next/image'
 import { defaultAvatar } from '@/configs/defaultValues'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 
 export default function Header() {
@@ -29,15 +29,22 @@ export default function Header() {
         </Button>
 
         <div className="flex w-fit flex-row items-center gap-5">
-          <Link href={'/'}>
+          <Button variant="light" isIconOnly onPress={() => router.push('/')}>
             <Home className="h-5 w-5" />
-          </Link>
-          <Communication className="h-5 w-5" />
+          </Button>
+          <Button variant="light" isIconOnly>
+            <Communication className="h-5 w-5" />
+          </Button>
         </div>
       </div>
 
       {/* Middle */}
-      <AppInput placeholder="Type here to search..." rightIcon={<Search />} className="flex-2" />
+      <Input
+        placeholder="Type here to search..."
+        endContent={<Search className="mr-2" />}
+        className="flex-1"
+        classNames={{ inputWrapper: ['pl-5'] }}
+      />
 
       {/* Right */}
       <div className="flex flex-1 flex-row items-center justify-center gap-6">

@@ -1,14 +1,13 @@
 'use client'
-import React, { useRef } from 'react'
+import React from 'react'
 import { HorizontalNav } from '..'
 import { useMenuStore } from '@/store/useMenuStore'
-import { Input, InputRef } from 'antd'
-import { SearchProps } from 'antd/es/input/Search'
+import { Input } from '@nextui-org/react'
+import { Search } from '@/assets'
 
 function RightMenu() {
-  const { users } = useMenuStore()
-  const { Search } = Input
-  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value)
+  const { filterUsers, setFilterUsers } = useMenuStore()
+  const onSearch = (input: string) => setFilterUsers(input)
 
   return (
     <div className="fixed bottom-0 right-0 top-24 w-1/5 overflow-y-scroll">
@@ -17,10 +16,16 @@ function RightMenu() {
           {'Recent users'}
         </p>
         <div className="mx-5">
-          <Search placeholder="Find user" onSearch={onSearch} allowClear size="middle" className="max-w-full" />
+          <Input
+            placeholder="Find user"
+            onChange={(e) => onSearch(e.target.value)}
+            isClearable
+            onClear={() => onSearch('')}
+            className="max-w-full"
+          />
         </div>
 
-        <HorizontalNav items={users} />
+        <HorizontalNav items={filterUsers} />
       </div>
     </div>
   )

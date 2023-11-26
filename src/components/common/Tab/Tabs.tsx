@@ -14,7 +14,7 @@ function Tabs({ tabs }: Props) {
 
   return (
     tabs.length && (
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row flex-wrap gap-2">
         {newTabs.map((props, index) => (
           <TabButton {...props} key={index} onClick={() => setSelected(index)} />
         ))}

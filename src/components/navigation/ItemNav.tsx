@@ -2,7 +2,6 @@
 import { NavItemProps, useMenuStore } from '@/store/useMenuStore'
 import { Image } from '@nextui-org/react'
 import classNames from 'classnames'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 

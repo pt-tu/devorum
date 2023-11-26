@@ -1,27 +1,58 @@
 'use client'
 import { AppButton, HorizontalNav, PostItem, Divider } from '@/components'
-import { Tabs } from '@/components/common/Tab'
 import { TabProps } from '@/components/common/Tab/TabButton'
 import { usePostStore } from '@/store/usePostStore'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
+import { Tab, Tabs } from '@nextui-org/react'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React, { Key, useEffect, useState } from 'react'
 
 const tabs: TabProps[] = [
-  { icon: <ClockCircleOutlined />, label: 'New', isSelected: true },
   {
+    key: 'new',
+    icon: <ClockCircleOutlined />,
+    label: 'New',
+  },
+  {
+    key: 'top',
     icon: <ArrowUpOutlined rotate={45} className="text-[14px]" />,
     label: 'Top',
   },
   {
+    key: 'hot',
     icon: <FireOutlined />,
     label: 'Hot',
   },
-  { icon: <CheckCircleOutlined />, label: 'Closed' },
+  { key: 'closed', icon: <CheckCircleOutlined />, label: 'Closed' },
 ]
 
 export default function Page() {
   const { posts } = usePostStore()
+  const [selectedTab, setSelectedTab] = useState(tabs[0].key)
+  const [currentPosts, setCurrentPosts] = useState(posts)
+
+  const onSelectionChange = (key: Key) => {
+    setSelectedTab(key)
+    switch (key) {
+      case 'top':
+        setCurrentPosts(posts.slice(0, 1))
+        break
+      case 'hot':
+        setCurrentPosts(posts.slice(1.3))
+        break
+      case 'closed':
+        setCurrentPosts(posts.slice(2, 6))
+        break
+      case 'new':
+      default:
+        setCurrentPosts(posts)
+        break
+    }
+  }
+
+  useEffect(() => {
+    setCurrentPosts(posts)
+  }, [posts])
 
   return (
     <div className="col-span-6 col-start-4">
@@ -38,10 +69,27 @@ export default function Page() {
           <p className="flex-1 text-3xl font-normal text-gray-bg">Top Questions</p>
           <AppButton title="Post" onClick={() => console.log('Click')} />
         </div>
-        <Tabs tabs={tabs} />
+        <Tabs
+          aria-label="Options"
+          variant="light"
+          selectedKey={selectedTab}
+          onSelectionChange={(key) => onSelectionChange(key)}
+        >
+          {tabs.map((tab) => (
+            <Tab
+              key={tab.key}
+              title={
+                <div className="flex items-center space-x-2">
+                  {tab.icon}
+                  <span>{tab.label}</span>
+                </div>
+              }
+            />
+          ))}
+        </Tabs>
 
         <Divider className="my-5" />
-        {posts.map((item) => (
+        {currentPosts.map((item) => (
           <PostItem {...item} key={item.postId} />
         ))}
       </div>

@@ -12,7 +12,7 @@ export default function Page() {
   }
 
   return (
-    <div className="col-span-7 col-start-3 flex flex-col">
+    <div className="col-span-6 col-start-4">
       {/* Question */}
       <div className="mb-2 flex flex-1 flex-row justify-center">
         <p className="flex-1 text-2xl font-normal text-gray-bg">Can tailwind colors be referenced from CSS?</p>

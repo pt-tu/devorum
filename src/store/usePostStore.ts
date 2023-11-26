@@ -197,6 +197,7 @@ interface PostActions {
   setSelectedPost: (id: string) => void
   increaseVote: (id: string) => void
   updatePost: (payload: PostProps) => void
+  setPosts:(posts: PostProps[])=>void
 }
 
 export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
@@ -229,6 +230,11 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
             if (postIndex !== -1) state.posts[postIndex] = payload
           })
         },
+        setPosts:(posts)=>{
+          set(state=>{
+            state.posts = posts
+          })
+        }
       }),
       {
         name: 'post-store',

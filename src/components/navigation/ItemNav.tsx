@@ -1,19 +1,24 @@
+'use client'
 import { NavItemProps, useMenuStore } from '@/store/useMenuStore'
 import { Image } from '@nextui-org/react'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function ItemNav(props: NavItemProps) {
   const { isSelected, setIsSelected } = useMenuStore()
   const router = useRouter()
+  const [checkSelected, setCheckSelected] = useState(props.id === isSelected)
+  useEffect(() => {
+    setCheckSelected(props.id === isSelected)
+  }, [isSelected])
 
-  const checkSelected = props.id === isSelected
   const handleOnClick = () => {
-    console.log(isSelected)
-    setIsSelected(props.id)
-    router.push(props.path)
+    if (props.canSelected) {
+      setIsSelected(props.id)
+      router.push(props.path)
+    }
   }
 
   return (

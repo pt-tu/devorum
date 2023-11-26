@@ -18,12 +18,10 @@ export default function HorizontalNav(props: Props) {
   const { className, items } = props
   return (
     mounted && (
-      <div className="sticky w-full">
-        <div>
-          {items.map((item, index) => (
-            <GroupItemNav {...item} key={item.id} />
-          ))}
-        </div>
+      <div className={classNames(className)}>
+        {items.map((item, index) => (
+          <GroupItemNav {...item} key={item.id} />
+        ))}
       </div>
     )
   )

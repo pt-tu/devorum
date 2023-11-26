@@ -13,15 +13,13 @@ export default function GroupItemNav(items: NavItemProps) {
           <p className="pointer-events-none my-2 ml-2 flex flex-1 text-base font-semibold text-gray-bg">
             {items.title}
           </p>
-          {items.iconExpand && (
-            <div>
-              {items.expand ? (
-                <UpArrow fill={'rgb(var(--color-gray-bg)'} width={24} height={24} />
-              ) : (
-                <DownArrow fill={'rgb(var(--color-gray-bg)'} width={24} height={24} />
-              )}
-            </div>
-          )}
+          <div>
+            {items.expand ? (
+              <UpArrow fill={'rgb(var(--color-gray-bg)'} width={24} height={24} />
+            ) : (
+              <DownArrow fill={'rgb(var(--color-gray-bg)'} width={24} height={24} />
+            )}
+          </div>
         </div>
       )}
       {items.expand && items.children?.map((item) => <ItemNav {...item} key={item.id} />)}

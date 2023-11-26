@@ -11,7 +11,6 @@ function getItem(
   icon?: ReactNode,
   children?: NavItemProps[],
   expand: boolean = true,
-  iconExpand: boolean = true,
 ): NavItemProps {
   return {
     id,
@@ -21,7 +20,7 @@ function getItem(
     children,
     path: '/',
     expand,
-    iconExpand,
+    canSelected: true,
   } as NavItemProps
 }
 function getUser(id: string, title?: ReactNode, icon?: ReactNode): NavItemProps {
@@ -30,7 +29,6 @@ function getUser(id: string, title?: ReactNode, icon?: ReactNode): NavItemProps 
     title,
     icon,
     path: '/',
-    iconExpand: false,
   } as NavItemProps
 }
 
@@ -39,26 +37,26 @@ const defaulf = getItem('defaulf', null, null, null, [
   getItem('defaulf1', 'Popular', 'Shots featured today by curators'),
   getItem('defaulf2', 'Following', 'Explore from your favorite person'),
 ])
-const communities = getItem('grp1', 'Communities', null, null, [
-  getItem('4', '#javascript', '82,645 Posted by this tag'),
-  getItem('5', '#design', '51,354 • Trending in Bangladesh'),
-  getItem('6', '#tutorial', '51,354 • Trending in Bangladesh'),
+const communities = getItem('communities', 'Communities', null, null, [
+  getItem('community0', '#javascript', '82,645 Posted by this tag'),
+  getItem('community1', '#design', '51,354 • Trending in Bangladesh'),
+  getItem('community2', '#tutorial', '51,354 • Trending in Bangladesh'),
 ])
 const tags = getItem(
-  'grp2',
+  'tags',
   'Popular Tags',
   null,
   null,
   [
-    getItem('7', '#javascript', '82,645 Posted by this tag'),
-    getItem('8', '#design', '51,354 • Trending in Bangladesh'),
-    getItem('9', '#tutorial', '51,354 • Trending in Bangladesh'),
-    getItem('10', '#javascript', '82,645 Posted by this tag'),
-    getItem('11', '#design', '51,354 • Trending in Bangladesh'),
-    getItem('12', '#tutorial', '51,354 • Trending in Bangladesh'),
-    getItem('13', '#javascript', '82,645 Posted by this tag'),
-    getItem('14', '#design', '51,354 • Trending in Bangladesh'),
-    getItem('15', '#tutorial', '51,354 • Trending in Bangladesh'),
+    getItem('tag0', '#javascript', '82,645 Posted by this tag'),
+    getItem('tag1', '#design', '51,354 • Trending in Bangladesh'),
+    getItem('tag2', '#tutorial', '51,354 • Trending in Bangladesh'),
+    getItem('tag3', '#javascript', '82,645 Posted by this tag'),
+    getItem('tag4', '#design', '51,354 • Trending in Bangladesh'),
+    getItem('tag5', '#tutorial', '51,354 • Trending in Bangladesh'),
+    getItem('tag6', '#javascript', '82,645 Posted by this tag'),
+    getItem('tag8', '#design', '51,354 • Trending in Bangladesh'),
+    getItem('tag9', '#tutorial', '51,354 • Trending in Bangladesh'),
   ],
   false,
 )
@@ -66,7 +64,7 @@ const tags = getItem(
 const SAMPLE_RIGHT = [
   getItem(
     'right',
-    'Recent users',
+    null,
     null,
     null,
     [
@@ -99,7 +97,6 @@ const SAMPLE_RIGHT = [
       getUser('15', 'Sak', 'https://i.pinimg.com/564x/df/1a/af/df1aaf42142a28b911993720a6c82e65.jpg'),
     ],
     true,
-    false,
   ),
 ]
 
@@ -109,16 +106,17 @@ export const useMenuStore = createWithEqualityFn<MenuState & MenuActions>()(
       (set) => ({
         items: [defaulf, communities, tags],
         users: SAMPLE_RIGHT,
-        isSelected: 'default0',
+        isSelected: 'defaulf0',
         toggleExpand: (id) =>
           set((state) => ({
             items: state.items.map((item) =>
-              item.id === id && item.iconExpand ? { ...item, expand: !item.expand } : item,
+              item.id === id ? { ...item, expand: !item.expand } : item,
             ),
           })),
-        setIsSelected: (id) => set((state) => {
-          state.isSelected = id
-        }),
+        setIsSelected: (id) =>
+          set((state) => {
+            state.isSelected = id
+          }),
       }),
       {
         name: 'menu-store',
@@ -136,7 +134,7 @@ export type NavItemProps = {
   children?: NavItemProps[]
   path: string
   expand: boolean
-  iconExpand: boolean
+  canSelected: boolean
 }
 interface MenuState {
   items: NavItemProps[]

@@ -64,6 +64,7 @@ export default function UserProfile({ searchParams }: Props) {
         <div className="m-auto flex flex-col items-center space-y-3">
           <h1 className="text-2xl font-medium">/{userProfile.username} is blocked</h1>
           <p className="opacity-70">Are you sure you want to continue to their profile?</p>
+          <div className="flex items-center gap-4">
             <Button as={Link} href={'?consent=true'} variant="flat">
               Yes, Continue
             </Button>

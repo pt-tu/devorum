@@ -11,9 +11,11 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { User } from '@/types/user.type'
 import { updateProfileService } from '@/services/userService'
 import { useRouter } from 'next/navigation'
+import { uploadFileService } from '@/services/uploadService'
 
 const EditProfile = () => {
   const [data, setData] = useState<User>()
+  const [uploadedFile, setUploadedFile] = useState<File>()
   const [contentHasChanged, setContentHasChanged] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -42,10 +44,31 @@ const EditProfile = () => {
     setContentHasChanged(true)
   }
 
+  const uploadImage = async (file: File) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const response = await uploadFileService(formData)
+      return response.data.url
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
   const updateProfile = async () => {
     setLoading(true)
     try {
-      await updateProfileService(data)
+      const updatedData = { ...data }
+      if (data.avatar?.startsWith('blob:') && uploadedFile) {
+        const url = await uploadImage(uploadedFile)
+        updatedData.avatar = url
+      }
+      if (data.banner?.startsWith('blob:') && uploadedFile) {
+        const url = await uploadImage(uploadedFile)
+        updatedData.banner = url
+      }
+      await updateProfileService(updatedData)
       setContentHasChanged(false)
       router.refresh()
     } catch (error) {
@@ -59,6 +82,7 @@ const EditProfile = () => {
     <div className="col-span-9">
       <div className=" columns-2 space-y-4">
         <YourPicture
+          setUploadedFile={setUploadedFile}
           setUserProfile={(user: User) => {
             setData(user)
             setContentHasChanged(true)

@@ -7,9 +7,10 @@ import { TbEditCircle } from 'react-icons/tb'
 type Props = {
   userProfile: User
   setUserProfile: (user: User) => void
+  setUploadedFile: Dispatch<SetStateAction<File | undefined>>
 }
 
-const YourPicture = ({ userProfile, setUserProfile }: Props) => {
+const YourPicture = ({ userProfile, setUserProfile, setUploadedFile }: Props) => {
   const ref = useRef<HTMLInputElement | null>(null)
   const bannerRef = useRef<HTMLInputElement | null>(null)
 
@@ -21,6 +22,8 @@ const YourPicture = ({ userProfile, setUserProfile }: Props) => {
         ...userProfile,
         [target]: URL.createObjectURL(files[0]),
       })
+
+      setUploadedFile(files[0])
     }
   }
 

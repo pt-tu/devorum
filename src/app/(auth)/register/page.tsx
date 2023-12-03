@@ -11,6 +11,7 @@ import { registerService } from '@/services/userService'
 import { toast } from 'react-toastify'
 import { isAxiosError } from 'axios'
 import registerValidationSchema from '@/validators/registerValidator'
+import { useRouter } from 'next/navigation'
 
 const initialValues = {
   email: '',
@@ -23,6 +24,7 @@ const initialErrors = { ...initialValues }
 
 const Register = () => {
   const [pwdVisible, setPwdVisible] = useState(false)
+  const router = useRouter()
   const [confPwdVisible, setConfPwdVisible] = useState(false)
 
   const formik = useFormik({
@@ -34,6 +36,7 @@ const Register = () => {
         await registerService(values)
         resetForm()
         toast.success('Registered successfully')
+        router.push('/login')
       } catch (error) {
         if (isAxiosError(error)) {
           const errorFields = error.response?.data?.errors

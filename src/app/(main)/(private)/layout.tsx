@@ -12,7 +12,7 @@ export default function PrivateLayout({ children }: { children: React.ReactNode 
   }
 
   if (user === null) {
-    router.push('/')
+    router.push('/register')
   }
 
   return <>{children}</>

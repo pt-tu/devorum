@@ -18,11 +18,11 @@ const PasswordInput = ({ toggle = () => {}, ...props }: Props) => {
       labelPlacement="outside"
       className="mt-4"
       endContent={
-        <button className="focus:outline-none" type="button" onClick={toggle}>
+        <button tabIndex={-1} className="focus:outline-none" type="button" onClick={toggle}>
           {props.visible ? (
-            <AiFillEyeInvisible className="pointer-events-none text-2xl text-default-400" />
+            <AiFillEyeInvisible tabIndex={-1} className="pointer-events-none text-2xl text-default-400" />
           ) : (
-            <AiFillEye className="pointer-events-none text-2xl text-default-400" />
+            <AiFillEye tabIndex={-1} className="pointer-events-none text-2xl text-default-400" />
           )}
         </button>
       }

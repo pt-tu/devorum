@@ -10,7 +10,7 @@ type Props = {
 
 const UserCard = ({ user }: Props) => {
   return (
-    <Card as={Link} href={`/profile/${user.username}`} isPressable>
+    <Card as={Link} href={`/p/${user.username}`} isPressable>
       <CardBody className="flex flex-col items-center">
         <Avatar src={user.avatar || defaultAvatar} alt="user_avatar" />
         <p className="mt-2">{user.fullName || user.username}</p>

@@ -17,7 +17,7 @@ export default function Header() {
 
   const handleLogOut = useCallback(() => {
     logOut()
-    router.refresh()
+    router.push('/login')
   }, [logOut, router])
 
   return (
@@ -79,7 +79,7 @@ export default function Header() {
               </Button>
             </DropdownTrigger>
             <DropdownMenu closeOnSelect aria-label="Static Actions">
-              <DropdownItem showDivider as={Link} href={`/profile/${user.username}`} key="profile">
+              <DropdownItem showDivider as={Link} href={`/p/${user.username}`} key="profile">
                 {user.fullName || user.username}
                 <p className="text-xs font-normal opacity-70">/{user.username}</p>
               </DropdownItem>

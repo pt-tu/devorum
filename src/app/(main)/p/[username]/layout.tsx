@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
     return {}
   }
 }
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   return (
     <section>
       <div className="m-auto max-w-6xl">{children}</div>

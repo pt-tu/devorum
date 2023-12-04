@@ -17,7 +17,6 @@ type Props = {
 }
 
 export default function UserProfile({ searchParams }: Props) {
-  const [barHeight, setBarHeight] = useState(0)
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<User | undefined>()
   const { username } = useParams()
@@ -83,8 +82,10 @@ export default function UserProfile({ searchParams }: Props) {
       <div className="relative z-[1]">
         <ProfileHeader userProfile={userProfile} />
         <div className="h-4" />
-        <OverviewBar fetchUserProfile={fetchUserProfile} userProfile={userProfile} setBarHeight={setBarHeight} />
-        <ContentSection barHeight={barHeight} />
+        <div className="grid grid-cols-12 gap-4">
+          <OverviewBar fetchUserProfile={fetchUserProfile} userProfile={userProfile} />
+          <ContentSection />
+        </div>
       </div>
     </>
   )

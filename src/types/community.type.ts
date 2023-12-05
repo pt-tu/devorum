@@ -5,11 +5,14 @@ export type NewCommunity = {
 }
 
 export type Community = NewCommunity & {
-  "numMembers": number
-  "numPosts": number
-  "rules": [],
-  "createdBy": string
-  "_id": string
-  "createdAt": Date
-  "updatedAt": Date
+  numMembers: number
+  numPosts: number
+  title?: string
+  description?: string
+  rules?: [string]
+  resources?: [string]
+  moderators: [string]
+  createdBy: string
+  banner?: string
+  photo?: string
 }

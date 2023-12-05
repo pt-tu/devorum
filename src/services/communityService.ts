@@ -8,3 +8,5 @@ export const createCommunityService = (data: NewCommunity) => baseAxios.post<Com
 export const checkValidityCommunityNameService = (name:string) => baseAxios.get<{ isValid: boolean }>(`${path}/validity`, { params: {
   name: name
 } })
+
+export const getCommunityService = (name:string) => baseAxios.get<Community>(`${path}/${name}`)

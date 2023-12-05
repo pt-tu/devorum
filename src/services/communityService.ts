@@ -1,6 +1,10 @@
 import { baseAxios } from '@/configs/axiosConfig'
-import { NewCommunity } from '@/types/community.type'
+import { NewCommunity,Community } from '@/types/community.type'
 
 const path = 'community'
 
-export const createCommunityService = (data: NewCommunity) => baseAxios.post<{ url: string }>(`${path}/`, data)
+export const createCommunityService = (data: NewCommunity) => baseAxios.post<Community>(`${path}/`, data)
+
+export const checkValidityCommunityNameService = (name:string) => baseAxios.get<{ isValid: boolean }>(`${path}/validity`, { params: {
+  name: name
+} })

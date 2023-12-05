@@ -86,3 +86,16 @@
   border-radius: 20px;
   border: 1px solid transparent;
 }
+
+.fadeIn {
+  animation: fadeInAnimation 0.3s;
+}
+
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

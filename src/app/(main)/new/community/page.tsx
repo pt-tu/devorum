@@ -1,51 +1,74 @@
 'use client'
 
-import { createCommunityService } from '@/services/communityService'
+import { checkValidityCommunityNameService, createCommunityService } from '@/services/communityService'
 import { NewCommunity } from '@/types/community.type'
 import { Button, Checkbox, Input, Radio, RadioGroup, Spinner } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { FaCheck } from 'react-icons/fa6'
 import { RxCross2 } from 'react-icons/rx'
+import _ from 'lodash'
 
 const NewCommunity = () => {
+  const router = useRouter()
+
   const [communityData, setCommunityData] = useState<NewCommunity>({
     name: '',
     visibility: 'public',
     scrutinizeToPost: false,
   })
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [valid, setValid] = useState<boolean | null>(true)
+  const [validLoading, setValidLoading] = useState(false)
+  const [valid, setValid] = useState<boolean | null>(null)
 
   const getStatusIndicator = () => {
-    if (loading) {
-      return <Spinner className="scale-75" />
+    if (validLoading) {
+      return <Spinner className="fadeIn scale-75" />
     }
     if (valid === true) {
-      return <FaCheck className="text-green-500" />
+      return <FaCheck className="fadeIn text-green-500" />
     }
     if (valid === false) {
-      return <RxCross2 className="text-red-500" />
+      return <RxCross2 className="fadeIn text-red-500" />
     }
     return null
   }
 
   const createCommunityHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
+    setLoading(true)
     try {
       await createCommunityService(communityData)
       router.push('/c/' + communityData.name)
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
+  const checkValidity = useMemo(
+    () =>
+      _.debounce(async (name: string) => {
+        setValidLoading(true)
+        try {
+          const response = await checkValidityCommunityNameService(name)
+          setValid(response.data?.isValid)
+        } catch (error) {
+          console.log(error)
+        } finally {
+          setValidLoading(false)
+        }
+      }, 300),
+    [],
+  )
+
   const onChangeHandler = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (name === 'name') {
+      checkValidity(e.target.value)
+    }
     setCommunityData((prev) => ({ ...prev, [name]: e.target.value }))
   }
-
-  console.log(communityData)
 
   return (
     <>
@@ -54,6 +77,8 @@ const NewCommunity = () => {
         <div className="mt-6 space-y-8 rounded-xl bg-dark-2 p-8">
           <Input
             value={communityData.name}
+            errorMessage={valid === false ? 'Community name is already taken.' : null}
+            isInvalid={valid === false}
             onChange={onChangeHandler('name')}
             endContent={getStatusIndicator()}
             size="lg"
@@ -82,7 +107,13 @@ const NewCommunity = () => {
           </div>
         </div>
         <div className="mt-6 flex gap-4">
-          <Button isDisabled={!valid || !communityData.name} type="submit" size="lg" color="primary">
+          <Button
+            isLoading={loading}
+            isDisabled={!valid || !communityData.name}
+            type="submit"
+            size="lg"
+            color="primary"
+          >
             Create Community
           </Button>
           <Button size="lg" variant="flat">

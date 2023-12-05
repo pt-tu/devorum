@@ -14,9 +14,11 @@ const CommunityOverviewBar = ({ data }: Props) => {
   return (
     <div className="small-scrollbar sticky top-20 col-span-3 h-full max-h-[calc(100vh-80px)] space-y-4 self-start overflow-auto pr-4">
       <div />
-      <Button color="primary">
-        <p className="text-base">Create Post</p>
-      </Button>
+      {user && (
+        <Button color="primary">
+          <p className="text-base">Create Post</p>
+        </Button>
+      )}
       <div className="space-y-4 rounded-xl bg-dark-2 p-4">
         {(data.title || data.description) && (
           <div>
@@ -40,51 +42,58 @@ const CommunityOverviewBar = ({ data }: Props) => {
           </div>
         </div>
 
-        <Divider className="-ml-4 mt-4 w-[calc(100%+32px)]" />
+        {user && (
+          <>
+            <Divider className="-ml-4 mt-4 w-[calc(100%+32px)]" />
 
-        <div>
-          <h2 className="font-medium">User role/title</h2>
-          <div className="group mt-2 flex items-center justify-between transition">
-            <div className="flex items-center gap-4 text-sm font-light">
-              <Avatar size="lg" src={user?.avatar ?? '/gray.png'} />
-              {user?.username}
+            <div>
+              <h2 className="font-medium">User role/title</h2>
+              <div className="group mt-2 flex items-center justify-between transition">
+                <div className="flex items-center gap-4 text-sm font-light">
+                  <Avatar size="lg" src={user?.avatar ?? '/gray.png'} />
+                  {user?.username}
+                </div>
+                <Button className="opacity-0 transition group-hover:opacity-100" variant="light" isIconOnly>
+                  <FiEdit2 />
+                </Button>
+              </div>
             </div>
-            <Button className="opacity-0 transition group-hover:opacity-100" variant="light" isIconOnly>
-              <FiEdit2 />
-            </Button>
-          </div>
-        </div>
-
-        <Divider className="-ml-4 mt-4 w-[calc(100%+32px)]" />
-
-        {Array.isArray(data.rules) && data.rules.length > 0 && (
-          <div>
-            <h2 className="font-medium">Rules</h2>
-            <ul className="mt-2 text-sm font-light">
-              <li>Be nice.</li>
-              <li>Be respectful.</li>
-              <li>Assume best intentions.</li>
-              <li>Be kind, rewind.</li>
-            </ul>
-          </div>
+          </>
         )}
 
-        <Divider className="-ml-4 mt-4 w-[calc(100%+32px)]" />
+        {Array.isArray(data.rules) && data.rules.length > 0 && (
+          <>
+            <Divider className="-ml-4 mt-4 w-[calc(100%+32px)]" />
+            <div>
+              <h2 className="font-medium">Rules</h2>
+              <ul className="mt-2 text-sm font-light">
+                <li>Be nice.</li>
+                <li>Be respectful.</li>
+                <li>Assume best intentions.</li>
+                <li>Be kind, rewind.</li>
+              </ul>
+            </div>
+          </>
+        )}
+
         {Array.isArray(data.resources) && data.resources.length > 0 && (
-          <div>
-            <h2 className="font-medium">Resources</h2>
-            <ul className="mt-2 space-y-3 text-sm font-light">
-              <Button fullWidth variant="flat" radius="full" as={Link} href="#">
-                Official website
-              </Button>
-              <Button fullWidth variant="flat" radius="full" as={Link} href="#">
-                Swift Docs
-              </Button>
-              <Button fullWidth variant="flat" radius="full" as={Link} href="#">
-                Swift Book
-              </Button>
-            </ul>
-          </div>
+          <>
+            <Divider className="-ml-4 mt-4 w-[calc(100%+32px)]" />
+            <div>
+              <h2 className="font-medium">Resources</h2>
+              <ul className="mt-2 space-y-3 text-sm font-light">
+                <Button fullWidth variant="flat" radius="full" as={Link} href="#">
+                  Official website
+                </Button>
+                <Button fullWidth variant="flat" radius="full" as={Link} href="#">
+                  Swift Docs
+                </Button>
+                <Button fullWidth variant="flat" radius="full" as={Link} href="#">
+                  Swift Book
+                </Button>
+              </ul>
+            </div>
+          </>
         )}
 
         <Divider className="-ml-4 mt-4 w-[calc(100%+32px)]" />

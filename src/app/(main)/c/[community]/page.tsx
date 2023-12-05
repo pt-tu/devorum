@@ -1,29 +1,14 @@
 'use client'
 import { Spinner } from '@nextui-org/react'
-import { getCommunityService } from '@/services/communityService'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
-import { useQuery } from 'react-query'
-import { AxiosError, isAxiosError } from 'axios'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { Community } from '@/types/community.type'
 import CommunityHeader from '@/components/community/CommunityHeader'
 import CommunityOverviewBar from '@/components/community/CommunityOverviewBar'
 import CommunityContent from '@/components/community/CommunityContent'
+import useCommunityData from '@/hooks/useCommunityData'
 
 const Community = ({ params }: { params: Params }) => {
   const { community } = params
-  const router = useRouter()
-  const { isLoading, error, data } = useQuery<Community, AxiosError>('getCommunityData', () =>
-    getCommunityService(community).then((res) => res.data),
-  )
-
-  useEffect(() => {
-    console.log('error', error)
-    if (isAxiosError(error) && error.response?.status === 404) {
-      router.push('/not-found')
-    }
-  }, [error, router])
+  const { isLoading, data } = useCommunityData(community)
 
   if (isLoading || !data)
     return (

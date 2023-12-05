@@ -4,6 +4,7 @@ import { Community } from '@/types/community.type'
 import copyCurrentLink from '@/utils/copyCurrentLink'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 import { BsThreeDots } from 'react-icons/bs'
 import { IoIosNotifications } from 'react-icons/io'
@@ -49,26 +50,35 @@ const CommunityHeader = ({ community, data }: Props) => {
         <h1 className="ml-28 mt-4 text-3xl font-semibold">{community}</h1>
 
         <div className="flex items-center gap-4">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly variant="bordered">
-                <BsThreeDots />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="mute">Mute community</DropdownItem>
-              <DropdownItem key="share" onClick={copyCurrentLink}>
-                Share link
-              </DropdownItem>
-              {data.createdBy === user?._id ? <DropdownItem key="leave">Leave community</DropdownItem> : (null as any)}
-            </DropdownMenu>
-          </Dropdown>
+          {user && (
+            <>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button isIconOnly variant="bordered">
+                    <BsThreeDots />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Static Actions">
+                  <DropdownItem key="mute">Mute community</DropdownItem>
+                  <DropdownItem key="share" onClick={copyCurrentLink}>
+                    Share link
+                  </DropdownItem>
+                  {data.createdBy === user?._id ? (
+                    <DropdownItem key="leave">Leave community</DropdownItem>
+                  ) : (
+                    (null as any)
+                  )}
+                </DropdownMenu>
+              </Dropdown>
 
-          <Button isIconOnly variant="bordered">
-            <IoIosNotifications className="text-xl" />
-          </Button>
+              <Button isIconOnly variant="bordered">
+                <IoIosNotifications className="text-xl" />
+              </Button>
+            </>
+          )}
+
           {data.createdBy === user?._id ? (
-            <Button color="primary">
+            <Button color="primary" as={Link} href={`${community}/configure`}>
               <p className="text-base">Configure Community</p>
             </Button>
           ) : (

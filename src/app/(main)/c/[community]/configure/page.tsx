@@ -18,7 +18,7 @@ const ConfigureCommunity = ({ params }: { params: Params }) => {
 
   if (isLoading || !data || !communityData)
     return (
-      <div className="flex h-[calc(100vh-80px)] w-full items-center justify-center">
+      <div className="col-span-9 flex h-[calc(100vh-80px)] w-full items-center justify-center">
         <Spinner />
       </div>
     )

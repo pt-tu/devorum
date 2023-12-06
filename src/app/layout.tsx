@@ -10,9 +10,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
-import { QueryClient, QueryClientProvider } from 'react-query'
-
-const queryClient = new QueryClient()
+import { SWRConfig } from 'swr'
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
@@ -32,9 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning className="bg-dark-1 light">
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
         <Providers>
-          <QueryClientProvider client={queryClient}>
+          <SWRConfig value={{ keepPreviousData: true }}>
             <ErrorBoundary>{children}</ErrorBoundary>
-          </QueryClientProvider>
+          </SWRConfig>
         </Providers>
         <ToastContainer
           position="bottom-center"

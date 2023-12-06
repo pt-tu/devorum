@@ -12,14 +12,15 @@ import { IoIosNotifications } from 'react-icons/io'
 type Props = {
   community: string
   data: Community
+  isTheming?: boolean
 }
 
-const CommunityHeader = ({ community, data }: Props) => {
+const CommunityHeader = ({ community, data, isTheming }: Props) => {
   const user = useUserStore((state) => state.user)
 
   return (
     <>
-      <div className="h-4"></div>
+      {!isTheming && <div className="h-4"></div>}
       <div className="relative">
         {/* Banner */}
         <div className="h-13 aspect-[9] w-full overflow-hidden rounded-xl bg-white">
@@ -40,7 +41,7 @@ const CommunityHeader = ({ community, data }: Props) => {
             src={data.photo ?? 'https://www.ledr.com/colours/white.jpg'}
             height={80}
             width={80}
-            className="h-full w-full rounded-full"
+            className="h-full w-full rounded-full object-cover"
           />
         </div>
       </div>
@@ -49,44 +50,46 @@ const CommunityHeader = ({ community, data }: Props) => {
       <div className="flex items-end justify-between">
         <h1 className="ml-28 mt-4 text-3xl font-semibold">{community}</h1>
 
-        <div className="flex items-center gap-4">
-          {user && (
-            <>
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button isIconOnly variant="bordered">
-                    <BsThreeDots />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem key="mute">Mute community</DropdownItem>
-                  <DropdownItem key="share" onClick={copyCurrentLink}>
-                    Share link
-                  </DropdownItem>
-                  {data.createdBy === user?._id ? (
-                    <DropdownItem key="leave">Leave community</DropdownItem>
-                  ) : (
-                    (null as any)
-                  )}
-                </DropdownMenu>
-              </Dropdown>
+        {!isTheming && (
+          <div className="flex items-center gap-4">
+            {user && (
+              <>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button isIconOnly variant="bordered">
+                      <BsThreeDots />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Static Actions">
+                    <DropdownItem key="mute">Mute community</DropdownItem>
+                    <DropdownItem key="share" onClick={copyCurrentLink}>
+                      Share link
+                    </DropdownItem>
+                    {data.createdBy === user?._id ? (
+                      <DropdownItem key="leave">Leave community</DropdownItem>
+                    ) : (
+                      (null as any)
+                    )}
+                  </DropdownMenu>
+                </Dropdown>
 
-              <Button isIconOnly variant="bordered">
-                <IoIosNotifications className="text-xl" />
+                <Button isIconOnly variant="bordered">
+                  <IoIosNotifications className="text-xl" />
+                </Button>
+              </>
+            )}
+
+            {data.createdBy === user?._id ? (
+              <Button color="primary" as={Link} href={`${community}/configure`}>
+                <p className="text-base">Configure Community</p>
               </Button>
-            </>
-          )}
-
-          {data.createdBy === user?._id ? (
-            <Button color="primary" as={Link} href={`${community}/configure`}>
-              <p className="text-base">Configure Community</p>
-            </Button>
-          ) : (
-            <Button color="primary">
-              <p className="text-base">Join</p>
-            </Button>
-          )}
-        </div>
+            ) : (
+              <Button color="primary">
+                <p className="text-base">Join</p>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </>
   )

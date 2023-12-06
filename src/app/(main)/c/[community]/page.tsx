@@ -19,6 +19,7 @@ const Community = ({ params }: { params: Params }) => {
 
   return (
     <>
+      <title>{community}</title>
       <CommunityHeader data={data} community={community} />
 
       {/* Content */}

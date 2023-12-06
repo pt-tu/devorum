@@ -23,6 +23,7 @@
     "moment": "^2.29.4",
     "next": "latest",
     "next-remove-imports": "^1.0.12",
+    "next-seo": "^6.4.0",
     "next-themes": "^0.2.1",
     "react": "latest",
     "react-dom": "latest",

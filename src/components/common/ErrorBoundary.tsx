@@ -28,7 +28,7 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="flex h-[95vh] w-full overflow-hidden">
           <div className="m-auto">
-            <Card className="space-y-6 p-8">
+            <Card className="space-y-6 p-12">
               <p>Oops, there is an error!</p>
               <Button onClick={() => this.setState({ hasError: false })}>Try again?</Button>
             </Card>

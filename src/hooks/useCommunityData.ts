@@ -7,8 +7,12 @@ import { useQuery } from 'react-query'
 
 const useCommunityData = (community: string) => {
   const router = useRouter()
-  const { isLoading, error, data } = useQuery<Community, AxiosError>('getCommunityData', () =>
-    getCommunityService(community).then((res) => res.data),
+  const { isLoading, error, data } = useQuery<Community, AxiosError>(
+    'getCommunityData',
+    () => getCommunityService(community).then((res) => res.data),
+    {
+      keepPreviousData: true,
+    },
   )
 
   useEffect(() => {

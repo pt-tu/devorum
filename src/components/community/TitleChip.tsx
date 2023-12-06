@@ -10,7 +10,7 @@ const TitleChip = () => {
         isIconOnly
         size="sm"
         radius="full"
-        className="absolute -right-2 -top-2 opacity-0 transition duration-300 group-hover:opacity-100"
+        className="absolute -right-2 -top-2 opacity-0 transition duration-300 group-hover:opacity-80"
       >
         <IoClose />
       </Button>

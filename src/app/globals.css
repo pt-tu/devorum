@@ -87,8 +87,25 @@
   border: 1px solid transparent;
 }
 
-.fadeIn {
-  animation: fadeInAnimation 0.3s;
+/* .group:hover .hoverFadeIn {
+  opacity: 0.8;
+}
+
+.hoverFadeIn {
+  opacity: 0;
+  -webkit-transition: opacity 0.15s ease-in-out;
+  -moz-transition: opacity 0.15s ease-in-out;
+  -ms-transition: opacity 0.15s ease-in-out;
+  -o-transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-in-out;
+} */
+
+.transition {
+  -webkit-transition: opacity 0.15s ease-in-out;
+  -moz-transition: opacity 0.15s ease-in-out;
+  -ms-transition: opacity 0.15s ease-in-out;
+  -o-transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-in-out;
 }
 
 @keyframes fadeInAnimation {
@@ -96,6 +113,6 @@
     opacity: 0;
   }
   to {
-    opacity: 1;
+    opacity: 0.8;
   }
 }

@@ -3,16 +3,12 @@ import { Community } from '@/types/community.type'
 import { AxiosError, isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { useQuery } from 'react-query'
+import useSWR from 'swr'
 
 const useCommunityData = (community: string) => {
   const router = useRouter()
-  const { isLoading, error, data } = useQuery<Community, AxiosError>(
-    'getCommunityData',
-    () => getCommunityService(community).then((res) => res.data),
-    {
-      keepPreviousData: true,
-    },
+  const { isLoading, error, data } = useSWR<Community, AxiosError>('getCommunityData', () =>
+    getCommunityService(community).then((res) => res.data),
   )
 
   useEffect(() => {

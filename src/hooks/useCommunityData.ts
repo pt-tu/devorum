@@ -7,18 +7,18 @@ import useSWR from 'swr'
 
 const useCommunityData = (community: string) => {
   const router = useRouter()
-  const { isLoading, error, data } = useSWR<Community, AxiosError>('getCommunityData', () =>
+  const { isLoading, error, data, mutate } = useSWR<Community, AxiosError>('getCommunityData', () =>
     getCommunityService(community).then((res) => res.data),
   )
 
   useEffect(() => {
-    console.log('error', error)
+    if (error) console.log('error', error)
     if (isAxiosError(error) && error.response?.status === 404) {
       router.push('/not-found')
     }
   }, [error, router])
 
-  return { isLoading, error, data }
+  return { isLoading, error, data, mutate }
 }
 
 export default useCommunityData

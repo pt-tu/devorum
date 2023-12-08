@@ -1,6 +1,7 @@
 'use client'
 import CommunityHeader from '@/components/community/CommunityHeader'
 import useCommunityData from '@/hooks/useCommunityData'
+import { updateCommunityService } from '@/services/communityService'
 import { uploadFileService } from '@/services/uploadService'
 import { Community } from '@/types/community.type'
 import { Button, Divider, Spinner } from '@nextui-org/react'
@@ -9,14 +10,13 @@ import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 
 const ConfigureTheme = ({ params }: { params: Params }) => {
   const community = params.community
+  const { isLoading, data, mutate } = useCommunityData(community)
+  const [updateLoading, setUpdateLoading] = useState(false)
 
   const ref = useRef<HTMLInputElement | null>(null)
   const bannerRef = useRef<HTMLInputElement | null>(null)
   const [uploadPhoto, setUploadPhoto] = useState<File>()
   const [uploadBanner, setUploadBanner] = useState<File>()
-
-  const { isLoading, data } = useCommunityData(community)
-  const [loading, setLoading] = useState(false)
 
   const communityData: Community = useMemo(() => {
     const newData = { ...data }
@@ -59,16 +59,26 @@ const ConfigureTheme = ({ params }: { params: Params }) => {
   }
 
   const onSaveHandler = async () => {
-    setLoading(true)
+    setUpdateLoading(true)
 
-    if (uploadPhoto) {
-      await uploadImage(uploadPhoto)
+    try {
+      let photoUrl = communityData.photo
+      let bannerUrl = communityData.banner
+      if (uploadPhoto) {
+        photoUrl = await uploadImage(uploadPhoto)
+      }
+      if (uploadBanner) {
+        bannerUrl = await uploadImage(uploadBanner)
+      }
+      await updateCommunityService(community, { ...communityData, photo: photoUrl, banner: bannerUrl })
+      setUploadPhoto(undefined)
+      setUploadBanner(undefined)
+      mutate()
+    } catch (error) {
+      console.log('updateTheme', error)
+    } finally {
+      setUpdateLoading(false)
     }
-    if (uploadBanner) {
-      await uploadImage(uploadBanner)
-    }
-
-    setLoading(false)
   }
 
   return (
@@ -92,7 +102,7 @@ const ConfigureTheme = ({ params }: { params: Params }) => {
       </div>
 
       <Button
-        isLoading={loading}
+        isLoading={updateLoading}
         isDisabled={!uploadPhoto && !uploadBanner}
         onClick={onSaveHandler}
         size="lg"

@@ -3,14 +3,19 @@ import useCommunityData from '@/hooks/useCommunityData'
 import { Community } from '@/types/community.type'
 import { Button, Checkbox, Divider, Input, Radio, RadioGroup, Spinner, Textarea } from '@nextui-org/react'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { NextSeo } from 'next-seo'
-import Head from 'next/head'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import _ from 'lodash'
+import { updateCommunityService } from '@/services/communityService'
 
 const ConfigureCommunity = ({ params }: { params: Params }) => {
   const community = params.community
-  const { isLoading, data } = useCommunityData(community)
+  const { isLoading, data, mutate } = useCommunityData(community)
   const [communityData, setCommunityData] = useState<Community>()
+  const [updateLoading, setUpdateLoading] = useState(false)
+
+  const isDisabled = useMemo(() => {
+    return _.isEqual(communityData, data)
+  }, [communityData, data])
 
   useEffect(() => {
     setCommunityData(data)
@@ -24,6 +29,8 @@ const ConfigureCommunity = ({ params }: { params: Params }) => {
     )
 
   const onChangeHandler = (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    if (name === 'description' && e.target.value.length > 500) return
+
     setCommunityData(
       (prev) =>
         ({
@@ -33,13 +40,27 @@ const ConfigureCommunity = ({ params }: { params: Params }) => {
     )
   }
 
+  const updateHandler = async () => {
+    try {
+      setUpdateLoading(true)
+      await updateCommunityService(community, communityData)
+      mutate()
+    } catch (error) {
+      console.log('updateHandler', error)
+    } finally {
+      setUpdateLoading(false)
+    }
+  }
+
   return (
     <>
       <title>Configure community</title>
       <div className="col-span-9">
         <div className="w-full space-y-6 rounded-xl bg-dark-2 px-8 py-7">
           <h1 className="text-2xl font-medium">Configure `{data.name}` container</h1>
+
           <Divider />
+          <div className="h-0.5"></div>
 
           <div>
             <Input
@@ -89,7 +110,7 @@ const ConfigureCommunity = ({ params }: { params: Params }) => {
             <p className="font-medium">Other</p>
             <Checkbox
               className="mt-0"
-              checked={communityData.scrutinizeToPost}
+              isSelected={communityData.scrutinizeToPost}
               onChange={(e) =>
                 setCommunityData((prev) => ({ ...prev, scrutinizeToPost: e.target.checked }) as Community)
               }
@@ -98,7 +119,14 @@ const ConfigureCommunity = ({ params }: { params: Params }) => {
             </Checkbox>
           </div>
         </div>
-        <Button size="lg" color="primary" className="mt-6">
+        <Button
+          isLoading={updateLoading}
+          onClick={updateHandler}
+          isDisabled={isDisabled}
+          size="lg"
+          color="primary"
+          className="mt-6"
+        >
           Save Changes
         </Button>
       </div>

@@ -1,3 +1,5 @@
+import { User } from './user.type'
+
 export type NewCommunity = {
   name: string
   visibility: 'public' | 'private'
@@ -11,11 +13,12 @@ export type Community = NewCommunity & {
   description?: string
   rules?: [string]
   resources?: [string]
-  moderators: [string]
+  moderators: [User]
   createdBy: string
   banner?: string
   photo?: string
   allowAligningTitle: boolean
+  joinedStatus?: JoinedStatus
 }
 
 export type CreateUserTitle = {
@@ -27,4 +30,15 @@ export type CreateUserTitle = {
 
 export type UserTitle = CreateUserTitle & {
   _id: string
+}
+
+export type JoinedStatus = {
+  _id: string
+  userId: string
+  communityId: string
+  role: string
+  mute: boolean
+  title?: string
+  createdAt: string
+  updatedAt: string
 }

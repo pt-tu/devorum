@@ -1,3 +1,4 @@
+import useUserTitlesData from '@/hooks/useUserTitlesData'
 import { createUserTitleService } from '@/services/communityService'
 import { CreateUserTitle } from '@/types/community.type'
 import newUserTitleSchema from '@/validators/newUserTitleValidator'
@@ -20,6 +21,8 @@ type Props = {
 }
 
 const TitleForm = ({ community, onCancel }: Props) => {
+  const { mutate } = useUserTitlesData(community)
+
   const formik = useFormik({
     initialValues,
     validationSchema: newUserTitleSchema,
@@ -27,6 +30,7 @@ const TitleForm = ({ community, onCancel }: Props) => {
     async onSubmit(values, { resetForm, setErrors }) {
       try {
         await createUserTitleService(community, values as CreateUserTitle)
+        mutate()
         resetForm()
       } catch (error) {
         if (isAxiosError(error)) {

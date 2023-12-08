@@ -1,5 +1,6 @@
 'use client'
 import Sidebar from '@/components/common/Sidebar'
+import PrivateLayout from '@/components/layouts/PrivateLayout'
 import { useParams } from 'next/navigation'
 
 export default function ConfigureCommunityLayout({ children }: { children: React.ReactNode }) {
@@ -13,13 +14,15 @@ export default function ConfigureCommunityLayout({ children }: { children: React
   ]
 
   return (
-    <section>
-      <div className="mt-6 grid grid-cols-12 gap-6">
-        <div className="col-span-3">
-          <Sidebar list={list} />
+    <PrivateLayout>
+      <section>
+        <div className="mt-6 grid grid-cols-12 gap-6">
+          <div className="col-span-3">
+            <Sidebar list={list} />
+          </div>
+          {children}
         </div>
-        {children}
-      </div>
-    </section>
+      </section>
+    </PrivateLayout>
   )
 }

@@ -1,6 +1,6 @@
 import { useUserStore } from '@/store/useUserStore'
 import { Community } from '@/types/community.type'
-import { Avatar, Button, Divider, Link } from '@nextui-org/react'
+import { Avatar, Button, Chip, Divider, Link, Tooltip } from '@nextui-org/react'
 import React from 'react'
 import { FiEdit2 } from 'react-icons/fi'
 
@@ -22,13 +22,8 @@ const CommunityOverviewBar = ({ data }: Props) => {
       <div className="space-y-4 rounded-xl bg-dark-2 p-4">
         {(data.title || data.description) && (
           <div>
-            {data.title && <h2 className="font-medium">The Swift Programming Language</h2>}
-            {data.description && (
-              <p className="mt-2 text-sm font-light">
-                Swift is a general-purpose programming language built using a modern approach to safety, performance,
-                and software design patterns.
-              </p>
-            )}
+            {data.title && <h2 className="font-medium">{data.title}</h2>}
+            {data.description && <p className="mt-2 text-sm font-light">{data.description}</p>}
           </div>
         )}
         <div className="flex items-center gap-4">
@@ -51,7 +46,10 @@ const CommunityOverviewBar = ({ data }: Props) => {
               <div className="group mt-2 flex items-center justify-between transition">
                 <div className="flex items-center gap-4 text-sm font-light">
                   <Avatar size="lg" src={user?.avatar ?? '/gray.png'} />
-                  {user?.username}
+                  <div>
+                    {data.joinedStatus?.title && <Chip>{data.joinedStatus?.title}</Chip>}
+                    <p>{user?.username}</p>
+                  </div>
                 </div>
                 <Button className="opacity-0 transition group-hover:opacity-100" variant="light" isIconOnly>
                   <FiEdit2 />
@@ -67,10 +65,9 @@ const CommunityOverviewBar = ({ data }: Props) => {
             <div>
               <h2 className="font-medium">Rules</h2>
               <ul className="mt-2 text-sm font-light">
-                <li>Be nice.</li>
-                <li>Be respectful.</li>
-                <li>Assume best intentions.</li>
-                <li>Be kind, rewind.</li>
+                {data.rules.map((rule, index) => (
+                  <li key={index}>{rule}</li>
+                ))}
               </ul>
             </div>
           </>
@@ -82,15 +79,19 @@ const CommunityOverviewBar = ({ data }: Props) => {
             <div>
               <h2 className="font-medium">Resources</h2>
               <ul className="mt-2 space-y-3 text-sm font-light">
-                <Button fullWidth variant="flat" radius="full" as={Link} href="#">
-                  Official website
-                </Button>
-                <Button fullWidth variant="flat" radius="full" as={Link} href="#">
-                  Swift Docs
-                </Button>
-                <Button fullWidth variant="flat" radius="full" as={Link} href="#">
-                  Swift Book
-                </Button>
+                {data.resources.map((resource, index) => (
+                  <Button
+                    key={index}
+                    fullWidth
+                    variant="flat"
+                    radius="full"
+                    as={Link}
+                    href={resource.split('](')[1].replace(')', '') || '#'}
+                    target="_blank"
+                  >
+                    {resource.split('](')[0].replace('[', '')}
+                  </Button>
+                ))}
               </ul>
             </div>
           </>
@@ -100,15 +101,14 @@ const CommunityOverviewBar = ({ data }: Props) => {
         <div>
           <h2 className="font-medium">Moderators</h2>
           <ul className="mt-2 grid grid-cols-4 text-sm font-light">
-            {data.moderators.map((mod) => (
-              <Link key={mod} href="#">
-                <Avatar
-                  size="lg"
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--Iv24f4-g--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/18254/c3e65d32-bfe2-48ed-93b3-f2caf9c60dd7.png"
-                  alt="mod_avatar"
-                />
-              </Link>
-            ))}
+            {Array.isArray(data.moderators) &&
+              data.moderators.map((mod) => (
+                <Tooltip content={mod.username} key={mod._id}>
+                  <Link key={mod._id} href={`/p/${mod.username}`}>
+                    <Avatar size="lg" src={mod.avatar ?? '/gray.png'} alt="mod_avatar" />
+                  </Link>
+                </Tooltip>
+              ))}
           </ul>
         </div>
       </div>

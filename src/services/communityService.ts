@@ -1,5 +1,5 @@
 import { baseAxios } from '@/configs/axiosConfig'
-import { NewCommunity, Community } from '@/types/community.type'
+import { NewCommunity, Community, CreateUserTitle, UserTitle } from '@/types/community.type'
 
 const path = 'community'
 
@@ -14,3 +14,8 @@ export const checkValidityCommunityNameService = (name: string) =>
 
 export const getCommunityService = (name: string) => baseAxios.get<Community>(`${path}/${name}`)
 export const updateCommunityService = (name: string, data: Community) => baseAxios.put(`${path}/${name}`, data)
+
+// title
+export const createUserTitleService = (community: string, data: CreateUserTitle) =>
+  baseAxios.post<UserTitle>(`${path}/${community}/user-titles`, data)
+export const listUserTitlesService = (name: string) => baseAxios.get<UserTitle[]>(`${path}/${name}/user-titles`)

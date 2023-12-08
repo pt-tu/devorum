@@ -30,9 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning className="bg-dark-1 light">
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
         <Providers>
-          <SWRConfig value={{ keepPreviousData: true }}>
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </SWRConfig>
+          {/* <SWRConfig value={{ keepPreviousData: true }}> */}
+          <ErrorBoundary>{children}</ErrorBoundary>
+          {/* </SWRConfig> */}
         </Providers>
         <ToastContainer
           position="bottom-center"

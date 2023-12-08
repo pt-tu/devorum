@@ -75,7 +75,19 @@ const ConfigureCommunity = ({ params }: { params: Params }) => {
             <p className="mt-2 text-sm font-light text-gray-6/60">You cannot change community name.</p>
           </div>
 
-          <Divider />
+          <Divider className="mb-6" />
+
+          <div className="h-[1px]" />
+          <Input
+            value={communityData.title}
+            onChange={onChangeHandler('title')}
+            size="lg"
+            type="text"
+            placeholder="Set a title"
+            label={<p className="text-base">Community Title</p>}
+            labelPlacement="outside"
+            className="block"
+          />
 
           <div>
             <Textarea

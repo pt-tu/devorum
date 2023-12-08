@@ -80,7 +80,7 @@ const ConfigureTheme = ({ params }: { params: Params }) => {
             type="text"
             value={displayText(communityData.resources)}
             onChange={onChangeHandler('resources')}
-            placeholder="Each resource on each line"
+            placeholder="Each resource on each line, each resource should be in format: [name](url)"
             label={<p className="text-base">Resources</p>}
             labelPlacement="outside"
           />

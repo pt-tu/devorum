@@ -1,4 +1,6 @@
 'use client'
+import useCommunityData from '@/hooks/useCommunityData'
+import { joinCommunityService, leaveCommunityService } from '@/services/communityService'
 import { useUserStore } from '@/store/useUserStore'
 import { Community } from '@/types/community.type'
 import copyCurrentLink from '@/utils/copyCurrentLink'
@@ -15,8 +17,25 @@ type Props = {
   isTheming?: boolean
 }
 
-const CommunityHeader = ({ community, data, isTheming }: Props) => {
+const CommunityHeader = ({ community, isTheming }: Props) => {
+  const { data, mutate } = useCommunityData(community)
   const user = useUserStore((state) => state.user)
+  const joinHandler = async () => {
+    try {
+      if (data?.joinedStatus) {
+        await leaveCommunityService(community)
+      } else {
+        await joinCommunityService(community)
+      }
+      mutate()
+    } catch (error) {
+      console.log('joinCommunityService error', error)
+    }
+  }
+
+  if (!data) {
+    return null
+  }
 
   return (
     <>
@@ -84,8 +103,12 @@ const CommunityHeader = ({ community, data, isTheming }: Props) => {
                 <p className="text-base">Configure Community</p>
               </Button>
             ) : (
-              <Button color="primary">
-                <p className="text-base">Join</p>
+              <Button
+                onClick={joinHandler}
+                color={data.joinedStatus ? 'default' : 'primary'}
+                variant={data.joinedStatus ? 'flat' : 'solid'}
+              >
+                <p className="text-base">{data.joinedStatus ? 'Joined' : 'Join'}</p>
               </Button>
             )}
           </div>

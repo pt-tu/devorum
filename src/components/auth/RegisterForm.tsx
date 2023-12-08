@@ -30,6 +30,7 @@ const RegisterForm = ({ formik, pwdVisible, setPwdVisible, confPwdVisible, setCo
         required
         size="lg"
       />
+      <div className="h-4" />
       <Input
         placeholder="Enter your username"
         labelPlacement="outside"
@@ -41,9 +42,11 @@ const RegisterForm = ({ formik, pwdVisible, setPwdVisible, confPwdVisible, setCo
         label="Username"
         required
         name="username"
-        size="lg"
         className="mt-4"
+        size="lg"
       />
+      <div className="h-4" />
+
       <PasswordInput
         placeholder="Enter a secure passcode"
         value={formik.values.password}
@@ -56,6 +59,8 @@ const RegisterForm = ({ formik, pwdVisible, setPwdVisible, confPwdVisible, setCo
         label="Passcode"
         name="password"
       />
+      <div className="h-4" />
+
       <PasswordInput
         placeholder="Enter passcode again"
         value={formik.values.confirmPassword}

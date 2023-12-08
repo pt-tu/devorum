@@ -19,3 +19,7 @@ export const updateCommunityService = (name: string, data: Community) => baseAxi
 export const createUserTitleService = (community: string, data: CreateUserTitle) =>
   baseAxios.post<UserTitle>(`${path}/${community}/user-titles`, data)
 export const listUserTitlesService = (name: string) => baseAxios.get<UserTitle[]>(`${path}/${name}/user-titles`)
+
+// Join
+export const joinCommunityService = (community: string) => baseAxios.post(`${path}/${community}/members`)
+export const leaveCommunityService = (community: string) => baseAxios.delete(`${path}/${community}/members`)

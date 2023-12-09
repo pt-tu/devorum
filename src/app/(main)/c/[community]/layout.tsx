@@ -7,7 +7,7 @@ import { Fragment, useEffect } from 'react'
 export default function CommunityDetailLayout({ children, params }: { children: React.ReactNode; params: any }) {
   const { data } = useCommunityData(params.community)
 
-  const Wrapper = data?.visibility === 'public' ? Fragment : PrivateLayout
+  const Wrapper = !data || data.visibility === 'public' ? Fragment : PrivateLayout
 
   return (
     <Wrapper>

@@ -1,25 +1,48 @@
 import useCommunityData from '@/hooks/useCommunityData'
+import useCommunityMembersData from '@/hooks/useCommunityMembersData'
+import useUserTitlesData from '@/hooks/useUserTitlesData'
+import { updateCommunityMemberStatusService } from '@/services/communityService'
 import {
   Pagination,
   Select,
   SelectItem,
+  Selection,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
+  useTable,
 } from '@nextui-org/react'
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
 type Props = {
   community: string
 }
 
 const AssignTitles = ({ community }: Props) => {
-  const { isLoading, data, mutate } = useCommunityData(community)
+  const { isLoading, data, mutate } = useCommunityMembersData(community)
+  const { data: userTitles } = useUserTitlesData(community)
   const [page, setPage] = useState(0)
-  const pages = 5
+
+  if (!data || !userTitles) {
+    return null
+  }
+
+  const pages = Math.ceil(data?.length / 10)
+  const selectionChangeHandler = (member: string) => async (keys: Selection) => {
+    try {
+      const newTitleId = (keys as Set<string>).keys().next().value
+      await updateCommunityMemberStatusService(community, member, {
+        title: newTitleId,
+      })
+      mutate()
+    } catch (error) {
+      toast.error('Something went wrong')
+    }
+  }
 
   return (
     <Table
@@ -32,7 +55,7 @@ const AssignTitles = ({ community }: Props) => {
               showControls
               showShadow
               color="primary"
-              page={1}
+              page={page}
               total={pages}
               onChange={(page) => setPage(page)}
             />
@@ -45,58 +68,28 @@ const AssignTitles = ({ community }: Props) => {
         <TableColumn>USERNAME</TableColumn>
         <TableColumn>TITLE</TableColumn>
       </TableHeader>
-      <TableBody>
-        <TableRow key="1">
-          <TableCell>Tony Reichert</TableCell>
-          <TableCell>CEO</TableCell>
-          <TableCell>
-            <Select
-              items={[
-                { label: 'Heo', key: 'Heo' },
-                { label: 'Cho', key: 'Cho' },
-              ]}
-              size="sm"
-              placeholder="Select an animal"
-              className="max-w-xs"
-            >
-              {(animal) => <SelectItem key={animal.key}>{animal.label}</SelectItem>}
-            </Select>
-          </TableCell>
-        </TableRow>
-        <TableRow key="2">
-          <TableCell>Zoey Lang</TableCell>
-          <TableCell>Technical Lead</TableCell>
-          <TableCell>
-            <Select
-              items={[
-                { label: 'Heo', key: 'Heo' },
-                { label: 'Cho', key: 'Cho' },
-              ]}
-              size="sm"
-              placeholder="Select an animal"
-              className="max-w-xs"
-            >
-              {(animal) => <SelectItem key={animal.key}>{animal.label}</SelectItem>}
-            </Select>
-          </TableCell>
-        </TableRow>
-        <TableRow key="3">
-          <TableCell>Jane Fisher</TableCell>
-          <TableCell>Senior Developer</TableCell>
-          <TableCell>
-            <Select
-              items={[
-                { label: 'Heo', key: 'Heo' },
-                { label: 'Cho', key: 'Cho' },
-              ]}
-              size="sm"
-              placeholder="Select an animal"
-              className="max-w-xs"
-            >
-              {(animal) => <SelectItem key={animal.key}>{animal.label}</SelectItem>}
-            </Select>
-          </TableCell>
-        </TableRow>
+      <TableBody isLoading={isLoading}>
+        {data.map((member) => (
+          <TableRow key={member._id}>
+            <TableCell>{member.user.fullName}</TableCell>
+            <TableCell>{member.user.username}</TableCell>
+            <TableCell>
+              <Select
+                selectedKeys={new Set(member.title ? [member.title] : [])}
+                onSelectionChange={selectionChangeHandler(member.user.username)}
+                aria-label="Select a title"
+                items={userTitles}
+                placeholder="Select a title"
+              >
+                {(title) => (
+                  <SelectItem aria-label={title.name} key={title._id}>
+                    <p className="text-base">{title.name}</p>
+                  </SelectItem>
+                )}
+              </Select>
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   )

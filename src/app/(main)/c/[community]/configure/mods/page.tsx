@@ -1,5 +1,8 @@
 'use client'
 import ModCard from '@/components/community/ModCard'
+import useCommunityData from '@/hooks/useCommunityData'
+import useCommunityMembersData from '@/hooks/useCommunityMembersData'
+import { addModService, deleteModService } from '@/services/communityService'
 import {
   Button,
   Autocomplete,
@@ -9,13 +12,63 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Spinner,
+  Selection,
 } from '@nextui-org/react'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
-import React, { useState } from 'react'
+import React, { Key, useMemo, useState } from 'react'
 
 const ConfigureTheme = ({ params }: { params: Params }) => {
   const community = params.community
+  const { data, isLoading, mutate } = useCommunityData(community)
+  const { data: membersData } = useCommunityMembersData(community)
   const [isOpen, setIsOpen] = useState(false)
+  const [currentMod, setCurrentMod] = useState<string | null>(null)
+
+  const filteredMembersData = useMemo(() => {
+    if (!membersData) return []
+    return membersData.filter((member) => {
+      const isMod = data?.moderators.find((mod) => mod._id === member.user._id)
+      return !isMod
+    })
+  }, [data?.moderators, membersData])
+
+  const addModHandler = async () => {
+    try {
+      if (currentMod) {
+        await addModService(community, currentMod)
+        setIsOpen(false)
+        mutate()
+      }
+    } catch (error) {
+      console.log('addModHandler error', error)
+    }
+  }
+
+  const onSelectionChange = (key: Key) => {
+    setCurrentMod(key as string)
+  }
+
+  const closeHandler = (onClose: () => void) => () => {
+    onClose()
+    setCurrentMod(null)
+  }
+
+  const deleteModHandler = (username: string) => async () => {
+    try {
+      await deleteModService(community, username)
+      mutate()
+    } catch (error) {
+      console.log('deleteModHandler error', error)
+    }
+  }
+
+  if (isLoading || !data || !membersData)
+    return (
+      <div className="col-span-9 flex h-[calc(100vh-80px)] w-full items-center justify-center">
+        <Spinner />
+      </div>
+    )
 
   return (
     <>
@@ -26,11 +79,15 @@ const ConfigureTheme = ({ params }: { params: Params }) => {
           Add Mod
         </Button>
         <div className="grid grid-cols-3 gap-6">
-          <ModCard username="tuan-hda" isOwner />
-          <ModCard username="tuan-hd" />
-          <ModCard username="tuan-ha" />
-          <ModCard username="tuan-da" />
-          <ModCard username="tuan-da" />
+          {data.moderators.map((mod) => (
+            <ModCard
+              key={mod._id}
+              data={mod}
+              isOwner={mod._id === data.createdBy}
+              onDelete={deleteModHandler(mod.username)}
+              username={mod.username}
+            />
+          ))}
         </div>
       </div>
 
@@ -40,45 +97,26 @@ const ConfigureTheme = ({ params }: { params: Params }) => {
             <>
               <ModalHeader className="flex flex-col gap-1">Add Mod</ModalHeader>
               <ModalBody className="font-light">
-                <Autocomplete fullWidth size="lg" label="Select a user" placeholder="Select" labelPlacement="outside">
-                  {[
-                    { label: 'Cat', value: 'cat', description: 'The second most popular pet in the world' },
-                    { label: 'Dog', value: 'dog', description: 'The most popular pet in the world' },
-                    { label: 'Elephant', value: 'elephant', description: 'The largest land animal' },
-                    { label: 'Lion', value: 'lion', description: 'The king of the jungle' },
-                    { label: 'Tiger', value: 'tiger', description: 'The largest cat species' },
-                    { label: 'Giraffe', value: 'giraffe', description: 'The tallest land animal' },
-                    {
-                      label: 'Dolphin',
-                      value: 'dolphin',
-                      description: 'A widely distributed and diverse group of aquatic mammals',
-                    },
-                    { label: 'Penguin', value: 'penguin', description: 'A group of aquatic flightless birds' },
-                    { label: 'Zebra', value: 'zebra', description: 'A several species of African equids' },
-                    {
-                      label: 'Shark',
-                      value: 'shark',
-                      description: 'A group of elasmobranch fish characterized by a cartilaginous skeleton',
-                    },
-                    {
-                      label: 'Whale',
-                      value: 'whale',
-                      description: 'Diverse group of fully aquatic placental marine mammals',
-                    },
-                    { label: 'Otter', value: 'otter', description: 'A carnivorous mammal in the subfamily Lutrinae' },
-                    { label: 'Crocodile', value: 'crocodile', description: 'A large semiaquatic reptile' },
-                  ].map((animal) => (
-                    <AutocompleteItem key={animal.value} value={animal.value}>
-                      {animal.label}
+                <Autocomplete
+                  onSelectionChange={onSelectionChange}
+                  fullWidth
+                  size="lg"
+                  label="Select a user"
+                  placeholder="Select"
+                  labelPlacement="outside"
+                >
+                  {filteredMembersData.map((member) => (
+                    <AutocompleteItem key={member.user.username} value={member.user.username}>
+                      {member.user.username}
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button color="danger" variant="light" onPress={closeHandler(onClose)}>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button color="primary" onPress={addModHandler}>
                   Add
                 </Button>
               </ModalFooter>

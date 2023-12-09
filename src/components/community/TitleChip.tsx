@@ -5,11 +5,12 @@ import { IoClose } from 'react-icons/io5'
 
 type Props = {
   data: UserTitle
-}
+  onDelete: () => void
+} & React.HTMLAttributes<HTMLDivElement>
 
-const TitleChip = ({ data }: Props) => {
+const TitleChip = ({ data, onDelete, ...props }: Props) => {
   return (
-    <div className="group relative transition">
+    <div className="group relative transition" {...props}>
       <div
         className="cursor-pointer rounded-full bg-green-500 px-8 py-4 text-black"
         style={{
@@ -20,6 +21,7 @@ const TitleChip = ({ data }: Props) => {
         {data.name}
       </div>
       <Button
+        onClick={onDelete}
         isIconOnly
         size="sm"
         radius="full"

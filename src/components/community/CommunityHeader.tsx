@@ -1,15 +1,21 @@
 'use client'
 import useCommunityData from '@/hooks/useCommunityData'
-import { joinCommunityService, leaveCommunityService } from '@/services/communityService'
+import {
+  joinCommunityService,
+  leaveCommunityService,
+  selfUpdateCommunityStatusService,
+} from '@/services/communityService'
 import { useUserStore } from '@/store/useUserStore'
 import { Community } from '@/types/community.type'
 import copyCurrentLink from '@/utils/copyCurrentLink'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { BsThreeDots } from 'react-icons/bs'
-import { IoIosNotifications } from 'react-icons/io'
+import { IoIosNotifications, IoIosNotificationsOff } from 'react-icons/io'
+import { toast } from 'react-toastify'
 
 type Props = {
   community: string
@@ -20,8 +26,15 @@ type Props = {
 const CommunityHeader = ({ community, isTheming }: Props) => {
   const { data, mutate } = useCommunityData(community)
   const user = useUserStore((state) => state.user)
+  const router = useRouter()
+
   const joinHandler = async () => {
     try {
+      if (!user) {
+        router.push('/register')
+        return
+      }
+
       if (data?.joinedStatus) {
         await leaveCommunityService(community)
       } else {
@@ -30,6 +43,18 @@ const CommunityHeader = ({ community, isTheming }: Props) => {
       mutate()
     } catch (error) {
       console.log('joinCommunityService error', error)
+    }
+  }
+
+  const toggleMute = async () => {
+    try {
+      await selfUpdateCommunityStatusService(community, {
+        mute: !data?.joinedStatus?.mute,
+      })
+      toast.info(`${data?.joinedStatus?.mute ? 'Unmute' : 'Mute'} ${community} community`)
+      mutate()
+    } catch (error) {
+      console.log('toggleMute community error', error)
     }
   }
 
@@ -92,8 +117,12 @@ const CommunityHeader = ({ community, isTheming }: Props) => {
                   </DropdownMenu>
                 </Dropdown>
 
-                <Button isIconOnly variant="bordered">
-                  <IoIosNotifications className="text-xl" />
+                <Button isIconOnly onClick={toggleMute} variant="bordered">
+                  {data.joinedStatus?.mute ? (
+                    <IoIosNotificationsOff className="text-xl" />
+                  ) : (
+                    <IoIosNotifications className="text-xl" />
+                  )}
                 </Button>
               </>
             )}

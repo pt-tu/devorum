@@ -4,6 +4,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import ForbiddenModal from '../common/ForbiddenModal'
 
 export default function PrivateLayout({ children }: { children: React.ReactNode }) {
   const user = useUserStore((state) => state.user)
@@ -20,14 +21,19 @@ export default function PrivateLayout({ children }: { children: React.ReactNode 
     return null
   }
 
-  const onOpenChange = () => {
-    setOpen(!isOpen)
-  }
-
   return (
     <>
       {children}
-      {!user && <div className="fixed left-0 top-0 z-50 h-screen w-screen bg-white/30 backdrop-blur-md"></div>}
+      <ForbiddenModal
+        isOpen={isOpen}
+        header="Private Section Ahead"
+        primary="Register"
+        onPrimary={() => router.push('/register')}
+        onSecondary={() => router.back()}
+        secondary="Back"
+        body="You need permissions to access this section. Please login or register to continue."
+      />
+      {/* {!user && <div className="fixed left-0 top-0 z-50 h-screen w-screen bg-white/30 backdrop-blur-md"></div>}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -47,7 +53,7 @@ export default function PrivateLayout({ children }: { children: React.ReactNode 
             </>
           )}
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

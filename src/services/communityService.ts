@@ -1,5 +1,14 @@
 import { baseAxios } from '@/configs/axiosConfig'
-import { NewCommunity, Community, CreateUserTitle, UserTitle } from '@/types/community.type'
+import {
+  NewCommunity,
+  Community,
+  CreateUserTitle,
+  UserTitle,
+  JoinedStatus,
+  UpdateJoinedStatus,
+  JoinedUser,
+} from '@/types/community.type'
+import { User } from '@/types/user.type'
 
 const path = 'community'
 
@@ -19,7 +28,23 @@ export const updateCommunityService = (name: string, data: Community) => baseAxi
 export const createUserTitleService = (community: string, data: CreateUserTitle) =>
   baseAxios.post<UserTitle>(`${path}/${community}/user-titles`, data)
 export const listUserTitlesService = (name: string) => baseAxios.get<UserTitle[]>(`${path}/${name}/user-titles`)
+export const updateUserTitleService = (name: string, userTitleId: string, data: CreateUserTitle) =>
+  baseAxios.put(`${path}/${name}/user-titles/${userTitleId}`, data)
+export const deleteUserTitleService = (name: string, userTitleId: string) =>
+  baseAxios.delete(`${path}/${name}/user-titles/${userTitleId}`)
 
-// Join
+// Members
+export const getCommunityMembersService = (community: string) =>
+  baseAxios.get<JoinedUser[]>(`${path}/${community}/members`)
 export const joinCommunityService = (community: string) => baseAxios.post(`${path}/${community}/members`)
 export const leaveCommunityService = (community: string) => baseAxios.delete(`${path}/${community}/members`)
+export const updateCommunityMemberStatusService = (community: string, username: string, data: UpdateJoinedStatus) =>
+  baseAxios.put(`${path}/${community}/members/${username}`, data)
+export const selfUpdateCommunityStatusService = (community: string, data: Omit<UpdateJoinedStatus, 'role'>) =>
+  baseAxios.put(`${path}/${community}/members/self-update`, data)
+
+// Mods
+export const addModService = (community: string, username: string) =>
+  baseAxios.post(`${path}/${community}/mods`, { username })
+export const deleteModService = (community: string, username: string) =>
+  baseAxios.delete(`${path}/${community}/mods/${username}`)

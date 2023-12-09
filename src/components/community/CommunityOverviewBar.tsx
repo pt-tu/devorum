@@ -1,8 +1,10 @@
+import useUserTitlesData from '@/hooks/useUserTitlesData'
 import { useUserStore } from '@/store/useUserStore'
 import { Community } from '@/types/community.type'
 import { Avatar, Button, Chip, Divider, Link, Tooltip } from '@nextui-org/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { FiEdit2 } from 'react-icons/fi'
+import EditTitle from './EditTitle'
 
 type Props = {
   data: Community
@@ -10,9 +12,14 @@ type Props = {
 
 const CommunityOverviewBar = ({ data }: Props) => {
   const user = useUserStore((state) => state.user)
+  const [showEditTitle, setShowEditTitle] = useState(false)
+
+  const editTitleHandler = () => {
+    setShowEditTitle((prev) => !prev)
+  }
 
   return (
-    <div className="small-scrollbar sticky top-20 col-span-3 h-full max-h-[calc(100vh-80px)] space-y-4 self-start overflow-auto pr-4">
+    <div className="small-scrollbar sticky top-20 col-span-3 h-full max-h-[calc(100vh-80px)] space-y-4 self-start overflow-y-auto pr-4">
       <div />
       {user && (
         <Button color="primary">
@@ -47,14 +54,32 @@ const CommunityOverviewBar = ({ data }: Props) => {
                 <div className="flex items-center gap-4 text-sm font-light">
                   <Avatar size="lg" src={user?.avatar ?? '/gray.png'} />
                   <div>
-                    {data.joinedStatus?.title && <Chip>{data.joinedStatus?.title}</Chip>}
+                    {data.joinedStatus?.title && (
+                      <Chip
+                        size="sm"
+                        style={{
+                          backgroundColor: data.joinedStatus?.title?.backgroundColor,
+                          color: data.joinedStatus.title.textColor,
+                        }}
+                      >
+                        {data.joinedStatus?.title?.name}
+                      </Chip>
+                    )}
                     <p>{user?.username}</p>
                   </div>
                 </div>
-                <Button className="opacity-0 transition group-hover:opacity-100" variant="light" isIconOnly>
-                  <FiEdit2 />
-                </Button>
+                {data.allowAligningTitle && (
+                  <Button
+                    onClick={editTitleHandler}
+                    className="opacity-0 transition group-hover:opacity-100"
+                    variant="light"
+                    isIconOnly
+                  >
+                    <FiEdit2 />
+                  </Button>
+                )}
               </div>
+              {showEditTitle && <EditTitle community={data.name} onClose={() => setShowEditTitle(false)} />}
             </div>
           </>
         )}

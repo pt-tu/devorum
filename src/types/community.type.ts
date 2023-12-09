@@ -32,9 +32,27 @@ export type UserTitle = CreateUserTitle & {
   _id: string
 }
 
+export type UpdateJoinedStatus = {
+  mute?: boolean
+  role?: string
+  title?: string
+}
+
 export type JoinedStatus = {
   _id: string
   userId: string
+  communityId: string
+  role: string
+  mute: boolean
+  title?: UserTitle
+  createdAt: string
+  updatedAt: string
+}
+
+export type JoinedUser = {
+  _id: string
+  userId: string
+  user: User
   communityId: string
   role: string
   mute: boolean

@@ -1,11 +1,11 @@
 import useUserTitlesData from '@/hooks/useUserTitlesData'
-import { createUserTitleService } from '@/services/communityService'
-import { CreateUserTitle } from '@/types/community.type'
+import { createUserTitleService, updateUserTitleService } from '@/services/communityService'
+import { CreateUserTitle, UserTitle } from '@/types/community.type'
 import newUserTitleSchema from '@/validators/newUserTitleValidator'
 import { Button, Card, CardBody, Input } from '@nextui-org/react'
 import { isAxiosError } from 'axios'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 const initialValues = {
@@ -13,23 +13,29 @@ const initialValues = {
   description: '',
   backgroundColor: '',
   textColor: '',
+  _id: '',
 }
 
 type Props = {
   community: string
   onCancel: () => void
+  data?: UserTitle | false
 }
 
-const TitleForm = ({ community, onCancel }: Props) => {
+const TitleForm = ({ community, onCancel, data }: Props) => {
   const { mutate } = useUserTitlesData(community)
 
-  const formik = useFormik({
+  const formik = useFormik<CreateUserTitle>({
     initialValues,
     validationSchema: newUserTitleSchema,
 
     async onSubmit(values, { resetForm, setErrors }) {
       try {
-        await createUserTitleService(community, values as CreateUserTitle)
+        if (data) {
+          await updateUserTitleService(community, data._id, values)
+        } else {
+          await createUserTitleService(community, values as CreateUserTitle)
+        }
         mutate()
         resetForm()
       } catch (error) {
@@ -41,11 +47,17 @@ const TitleForm = ({ community, onCancel }: Props) => {
     },
   })
 
+  useEffect(() => {
+    if (data) formik.setValues(data)
+    else formik.setValues(initialValues)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
   return (
     <Card className="mt-10">
       <CardBody>
         <form className="flex flex-col gap-7 p-6" onSubmit={formik.handleSubmit}>
-          <h2 className="text-2xl font-medium">Create new title</h2>
+          <h2 className="text-2xl font-medium">{data ? `Edit '${data.name}'` : 'Create new title'}</h2>
           <div>
             <Input
               value={formik.values.name}

@@ -3,6 +3,8 @@ import { Avatar, Button, Input } from '@nextui-org/react'
 import React from 'react'
 import { IoSend } from 'react-icons/io5'
 import Message from './Message'
+import { MdOutlinePermMedia } from 'react-icons/md'
+import MessageBox from './MessageBox'
 
 const MessageRoom = () => {
   return (
@@ -34,14 +36,7 @@ const MessageRoom = () => {
           <Message />
         </div>
       </div>
-      <div className="m-auto flex h-20 max-w-2xl gap-6 pb-2 pt-2">
-        <Input size="lg" className="h-full w-full rounded-xl"></Input>
-        <div className="aspect-square h-full">
-          <Button isIconOnly radius="full" size="lg" color="primary" className="h-full w-full">
-            <IoSend className="text-xl" />
-          </Button>
-        </div>
-      </div>
+      <MessageBox />
     </div>
   )
 }

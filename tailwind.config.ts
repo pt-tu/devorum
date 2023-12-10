@@ -10,7 +10,9 @@ const config: Config = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    fontFamily: {},
+    fontFamily: {
+      mono: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    },
     extend: {
       colors: {
         transparent: 'transparent',
@@ -33,8 +35,8 @@ const config: Config = {
           text: '#808080',
         },
         orange: {
-          8: "#FF6934",
-          bg: "#FF8F67",
+          8: '#FF6934',
+          bg: '#FF8F67',
         },
         yellow: {
           8: '#EEA956',

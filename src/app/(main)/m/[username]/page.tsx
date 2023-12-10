@@ -33,7 +33,7 @@ const MessageRoom = () => {
           <Message /> <Message />
           <Message />
           <Message isSelf />
-          <Message />
+          <Message language="javascript" />
         </div>
       </div>
       <MessageBox />

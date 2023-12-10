@@ -9,6 +9,8 @@ import { ToastContainer } from 'react-toastify'
 import { useUserStore } from '@/store/useUserStore'
 import { useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
+import ErrorBoundary from '@/components/common/ErrorBoundary'
+import { SWRConfig } from 'swr'
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
@@ -27,7 +29,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className="bg-dark-1 light">
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* <SWRConfig value={{ keepPreviousData: true }}> */}
+          <ErrorBoundary>{children}</ErrorBoundary>
+          {/* </SWRConfig> */}
+        </Providers>
         <ToastContainer
           position="bottom-center"
           autoClose={5000}

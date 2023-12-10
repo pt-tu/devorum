@@ -7,7 +7,7 @@ const PersonalInformation = ({ userProfile, handleChange }: UserProfileCompProps
   return (
     <div className="break-inside-avoid rounded-xl bg-dark-2 p-4">
       <h2 className="mb-1 text-lg font-medium">Personal Information</h2>
-      <form className="mt-4 space-y-4">
+      <form className="mt-8 space-y-10">
         <Input
           onChange={handleChange('fullName')}
           labelPlacement="outside"

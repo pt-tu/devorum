@@ -4,27 +4,35 @@ import { usePathname } from 'next/navigation'
 import { Listbox, ListboxItem } from '@nextui-org/react'
 import Link from 'next/link'
 import { QuicksortOverview } from '@/types/user.type'
-
+import classnames from 'classnames'
+import { DetailedHTMLProps, HTMLAttributes } from 'react'
 type ListItem = {
   name: string
   path: string
 }
 
-type Props = {
+type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
   list: ListItem[]
   overviewData?: QuicksortOverview
 }
 
-const Sidebar = ({ list, overviewData }: Props) => {
+const Sidebar = ({ list, overviewData, className, ...props }: Props) => {
   const pathname = usePathname()
 
+  const getHref = (path: string) => {
+    if (path && !path.startsWith('/')) {
+      return pathname + '/' + path
+    }
+    return path
+  }
+
   return (
-    <div className="col-span-3 h-fit rounded-xl bg-dark-2">
+    <div className={classnames('col-span-3 h-fit rounded-xl bg-dark-2', className)} {...props}>
       <Listbox aria-label="Actions" className="" variant="flat">
         {list.map((item) => (
           <ListboxItem
             as={Link}
-            href={item.path}
+            href={getHref(item.path)}
             key={item.name}
             className={classNames(pathname.endsWith(item.path) && 'bg-dark-1', 'h-12 px-4 text-base')}
           >

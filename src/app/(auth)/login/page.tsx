@@ -71,6 +71,8 @@ const Login = () => {
           required
           size="lg"
         />
+        <div className="h-4" />
+
         <PasswordInput
           placeholder="Your password"
           value={formik.values.password}

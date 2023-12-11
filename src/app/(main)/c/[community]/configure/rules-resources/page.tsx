@@ -1,5 +1,5 @@
 'use client'
-import useRoomsData from '@/hooks/useCommunityData'
+import useCommunityData from '@/hooks/useCommunityData'
 import { updateCommunityService } from '@/services/communityService'
 import { Community } from '@/types/community.type'
 import { Button, Input, Spinner, Textarea } from '@nextui-org/react'
@@ -9,7 +9,7 @@ import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 
 const ConfigureTheme = ({ params }: { params: Params }) => {
   const community = params.community
-  const { isLoading, data, mutate } = useRoomsData(community)
+  const { isLoading, data, mutate } = useCommunityData(community)
   const [communityData, setCommunityData] = useState<Community>()
   const [updateLoading, setUpdateLoading] = useState(false)
 

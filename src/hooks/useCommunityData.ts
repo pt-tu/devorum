@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useSWR from 'swr'
 
-const useRoomsData = () => {
+const useCommunityData = (community: string) => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWR<Room[], AxiosError>('listRoomsData', () =>
-    listRoomsService().then((res) => res.data),
+  const { isLoading, error, data, mutate } = useSWR<Community, AxiosError>('getCommunityData', () =>
+    getCommunityService(community).then((res) => res.data),
   )
 
   useEffect(() => {
@@ -23,4 +23,4 @@ const useRoomsData = () => {
   return { isLoading, error, data, mutate }
 }
 
-export default useRoomsData
+export default useCommunityData

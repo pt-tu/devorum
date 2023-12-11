@@ -1,4 +1,4 @@
-import useRoomsData from '@/hooks/useCommunityData'
+import useCommunityData from '@/hooks/useCommunityData'
 import { useUserStore } from '@/store/useUserStore'
 import {
   Avatar,
@@ -18,7 +18,7 @@ import { IoMdAdd } from 'react-icons/io'
 import { IoMdSearch } from 'react-icons/io'
 
 const MessageChannelsBar = () => {
-  const { data: rooms, isLoading } = useRoomsData()
+  const { data: rooms, isLoading } = useCommunityData()
   const user = useUserStore((state) => state.user)
   const [selected, setSelected] = useState<string>()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()

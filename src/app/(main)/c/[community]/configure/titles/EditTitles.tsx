@@ -1,5 +1,5 @@
 import TitleChip from '@/components/community/TitleChip'
-import useRoomsData from '@/hooks/useCommunityData'
+import useCommunityData from '@/hooks/useCommunityData'
 import { Button, Spinner } from '@nextui-org/react'
 import _ from 'lodash'
 import React, { useState } from 'react'

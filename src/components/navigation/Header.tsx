@@ -48,7 +48,7 @@ export default function Header() {
 
       {/* Right */}
       <div className="flex flex-1 flex-row items-center justify-center gap-6">
-        <Button variant="flat" isIconOnly>
+        <Button variant="flat" isIconOnly as={Link} href="/m">
           <Chat />
         </Button>
         <Button variant="flat" isIconOnly>

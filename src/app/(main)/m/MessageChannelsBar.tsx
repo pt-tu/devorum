@@ -1,6 +1,9 @@
 import { socket } from '@/configs/socketIO'
+import useListProfilesData from '@/hooks/useListProfilesData'
 import useRoomsData from '@/hooks/useRoomsData'
+import { getRoomService } from '@/services/chatService'
 import { useUserStore } from '@/store/useUserStore'
+import { User } from '@/types/user.type'
 import {
   Avatar,
   Button,
@@ -22,6 +25,8 @@ import { IoMdSearch } from 'react-icons/io'
 const MessageChannelsBar = () => {
   const { roomId } = useParams()
   const { data: rooms, isLoading } = useRoomsData()
+  const { data: profiles } = useListProfilesData()
+  const [search, setSearch] = useState('')
   const user = useUserStore((state) => state.user)
   const router = useRouter()
 
@@ -36,12 +41,26 @@ const MessageChannelsBar = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  if (!rooms || isLoading || !user)
+  if (!rooms || isLoading || !user || !profiles)
     return (
       <div className="col-span-3 flex h-[calc(100vh-80px)] w-full items-center justify-center">
         <Spinner size="lg" />
       </div>
     )
+
+  const handleCreateRoom = (username: string, onClose: () => void) => async () => {
+    try {
+      const response = await getRoomService(username)
+      if (rooms.find((room) => room._id === response.data._id)) {
+        router.push(`/m/${response.data._id}`)
+      } else {
+        window.location.href = `/m/${response.data._id}`
+      }
+      onClose()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="small-scrollbar relative col-span-3 h-full overflow-y-auto border-r border-r-gray-4/30 bg-dark-2">
@@ -75,7 +94,10 @@ const MessageChannelsBar = () => {
 
       <Button
         radius="full"
-        onClick={onOpen}
+        onClick={() => {
+          onOpen()
+          setSearch('')
+        }}
         isIconOnly
         size="lg"
         className="absolute bottom-4 right-2 h-16 w-16"
@@ -90,26 +112,40 @@ const MessageChannelsBar = () => {
             <>
               <ModalHeader className="flex flex-col gap-1">Message To</ModalHeader>
               <ModalBody>
-                <Input placeholder="Search" startContent={<IoMdSearch className="text-2xl" />} size="lg" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search"
+                  startContent={<IoMdSearch className="text-2xl" />}
+                  size="lg"
+                />
                 <div className="max-h-[70vh] overflow-y-auto">
-                  {rooms.map((room) => (
-                    <Button
-                      onClick={onClose}
-                      key={room._id}
-                      size="lg"
-                      variant="light"
-                      fullWidth
-                      className="h-16 px-4 text-left"
-                    >
-                      <div className="flex w-full items-center gap-4">
-                        <Avatar size="lg" />
-                        <div className="text-left">
-                          <p className="text-base">dev deism</p>
-                          <p className="font-light">tuan-hda</p>
-                        </div>
-                      </div>
-                    </Button>
-                  ))}
+                  {search &&
+                    profiles
+                      .filter(
+                        (profile) =>
+                          profile.username.toLowerCase().includes(search.toLowerCase()) &&
+                          profile.username !== user.username,
+                      )
+                      .slice(0, 6)
+                      .map((profile) => (
+                        <Button
+                          onClick={handleCreateRoom(profile.username, onClose)}
+                          key={profile._id}
+                          size="lg"
+                          variant="light"
+                          fullWidth
+                          className="h-16 px-4 text-left"
+                        >
+                          <div key={profile._id} className="flex w-full items-center gap-4">
+                            <Avatar size="lg" />
+                            <div className="text-left">
+                              <p className="font-base">{profile.username}</p>
+                              <p className="text-base font-light">{profile.fullName}</p>
+                            </div>
+                          </div>
+                        </Button>
+                      ))}
                 </div>
               </ModalBody>
               <ModalFooter />

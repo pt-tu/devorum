@@ -10,11 +10,12 @@ import { Message } from '@/types/chat.type'
 import { useUserStore } from '@/store/useUserStore'
 import { useMessageStore } from '@/store/useMessagesStore'
 import { useParams } from 'next/navigation'
+import { uploadFileService } from '@/services/uploadService'
+import Image from 'next/image'
 
 type Props = {
   isReplyingTo?: {
-    content: string
-    username: string
+    message: Message
   }
   setIsReplyingTo: (value: any) => void
 }
@@ -37,7 +38,9 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
         room: params.roomId,
         body: message,
         from: user.username,
+        replyTo: isReplyingTo?.message?._id,
       })
+      setIsReplyingTo(undefined)
     }
     setMessage('')
   }
@@ -58,17 +61,55 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
     }
   }, [appendMessage])
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    try {
+      if (file && user) {
+        const formData = new FormData()
+        formData.append('file', file)
+        const response = await uploadFileService(formData)
+        if (response.data) {
+          socket.emit('message', {
+            room: params.roomId,
+            from: user.username,
+            mediaUrl: response.data.url,
+          })
+        }
+      }
+    } catch (error) {
+      console.log('upload file message box', error)
+    }
+  }
+
   return (
-    <div className=" m-auto flex h-20 max-w-2xl flex-shrink-0 gap-6 pb-2 pt-2">
-      <input type="file" ref={ref} className="hidden" accept=".jpg,.jpeg,.png" />
+    <div className=" m-auto flex h-20 max-w-3xl flex-shrink-0 gap-6 pb-2 pt-2">
+      <input onChange={handleFileChange} type="file" ref={ref} className="hidden" accept=".jpg,.jpeg,.png" />
       <div className="relative flex-1">
         {isReplyingTo && (
           <div className="absolute -top-16 left-0 right-0 z-10 flex items-center gap-4 rounded-xl bg-default-100 px-4 py-2 text-sm">
             <FaReply className="text-xl" />
 
+            {isReplyingTo.message.mediaUrl && (
+              <div className="h-8 w-8">
+                <Image
+                  width={32}
+                  height={32}
+                  src={isReplyingTo.message.mediaUrl}
+                  alt="reply_message_media"
+                  className="h-full w-full rounded-none object-contain"
+                />
+              </div>
+            )}
+
             <div className="">
-              <p className="font-normal">tuan-hda</p>
-              <p className="font-light">Hello world</p>
+              <p className="font-normal">{isReplyingTo.message.from}</p>
+              {isReplyingTo.message.body && (
+                <p className="font-light">
+                  {isReplyingTo.message.body.length > 74
+                    ? isReplyingTo.message.body.slice(0, 74) + '...'
+                    : isReplyingTo.message.body}
+                </p>
+              )}
             </div>
 
             <Button

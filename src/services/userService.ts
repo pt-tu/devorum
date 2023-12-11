@@ -4,6 +4,10 @@ import { QuicksortOverview, User, UserRegister } from '@/types/user.type'
 
 const path = 'users'
 
+const listProfilesService = async () => {
+  return baseAxios.get<User[]>(`${path}/`)
+}
+
 const registerService = async (data: UserRegister) => {
   return authAxios.post<User>(`${path}/register`, data)
 }
@@ -69,4 +73,5 @@ export {
   blockUserService,
   unblockUserService,
   getOverviewQuicksortService,
+  listProfilesService,
 }

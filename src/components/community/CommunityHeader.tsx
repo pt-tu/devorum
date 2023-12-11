@@ -1,5 +1,5 @@
 'use client'
-import useRoomsData from '@/hooks/useCommunityData'
+import useCommunityData from '@/hooks/useCommunityData'
 import {
   joinCommunityService,
   leaveCommunityService,
@@ -24,7 +24,7 @@ type Props = {
 }
 
 const CommunityHeader = ({ community, isTheming }: Props) => {
-  const { data, mutate } = useRoomsData(community)
+  const { data, mutate } = useCommunityData(community)
   const user = useUserStore((state) => state.user)
   const router = useRouter()
 

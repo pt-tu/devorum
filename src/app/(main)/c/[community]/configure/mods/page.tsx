@@ -1,6 +1,6 @@
 'use client'
 import ModCard from '@/components/community/ModCard'
-import useRoomsData from '@/hooks/useCommunityData'
+import useCommunityData from '@/hooks/useCommunityData'
 import useCommunityMembersData from '@/hooks/useCommunityMembersData'
 import { addModService, deleteModService } from '@/services/communityService'
 import {
@@ -20,7 +20,7 @@ import React, { Key, useMemo, useState } from 'react'
 
 const ConfigureTheme = ({ params }: { params: Params }) => {
   const community = params.community
-  const { data, isLoading, mutate } = useRoomsData(community)
+  const { data, isLoading, mutate } = useCommunityData(community)
   const { data: membersData } = useCommunityMembersData(community)
   const [isOpen, setIsOpen] = useState(false)
   const [currentMod, setCurrentMod] = useState<string | null>(null)

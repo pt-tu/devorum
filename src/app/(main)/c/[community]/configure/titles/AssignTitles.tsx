@@ -1,4 +1,4 @@
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 import useCommunityMembersData from '@/hooks/useCommunityMembersData'
 import useUserTitlesData from '@/hooks/useUserTitlesData'
 import { updateCommunityMemberStatusService } from '@/services/communityService'

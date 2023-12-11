@@ -1,4 +1,4 @@
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 import useUserTitlesData from '@/hooks/useUserTitlesData'
 import { selfUpdateCommunityStatusService } from '@/services/communityService'
 import { Community } from '@/types/community.type'
@@ -11,7 +11,7 @@ type Props = {
 }
 
 const EditTitle = ({ community, onClose }: Props) => {
-  const { data, mutate } = useCommunityData(community)
+  const { data, mutate } = useRoomsData(community)
   const [currentTitle, setCurrentTitle] = useState<string>()
   const { data: userTitlesData } = useUserTitlesData(community)
 

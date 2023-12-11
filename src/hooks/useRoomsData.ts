@@ -1,16 +1,14 @@
-import { listRoomsService } from '@/services/chatService'
 import { getCommunityService } from '@/services/communityService'
-import { Room } from '@/types/chat.type'
 import { Community } from '@/types/community.type'
 import { AxiosError, isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useSWR from 'swr'
 
-const useRoomsData = () => {
+const useRoomData = (community: string) => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWR<Room[], AxiosError>('listRoomsData', () =>
-    listRoomsService().then((res) => res.data),
+  const { isLoading, error, data, mutate } = useSWR<Community, AxiosError>('getCommunityData', () =>
+    getCommunityService(community).then((res) => res.data),
   )
 
   useEffect(() => {
@@ -23,4 +21,4 @@ const useRoomsData = () => {
   return { isLoading, error, data, mutate }
 }
 
-export default useRoomsData
+export default useRoomData

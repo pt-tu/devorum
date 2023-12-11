@@ -62,7 +62,7 @@ const Message = ({ isSelf, language, replyTo, setIsReplyingTo, likes = 0 }: Prop
           )}
           {language ? (
             <SyntaxHighlighter
-              className={classNames('font-mono font-light', theme === 'light' && 'invert')}
+              className={classNames(theme === 'light' && 'invert')}
               language="javascript"
               style={atomDark}
               showLineNumbers

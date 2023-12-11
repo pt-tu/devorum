@@ -1,11 +1,11 @@
 'use client'
 
 import PrivateLayout from '@/components/layouts/PrivateLayout'
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 import { Fragment, useEffect } from 'react'
 
 export default function CommunityDetailLayout({ children, params }: { children: React.ReactNode; params: any }) {
-  const { data } = useCommunityData(params.community)
+  const { data } = useRoomsData(params.community)
 
   const Wrapper = !data || data.visibility === 'public' ? Fragment : PrivateLayout
 

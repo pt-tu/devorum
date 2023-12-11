@@ -1,4 +1,5 @@
-import useCommunityData from '@/hooks/useCommunityData'
+import { socket } from '@/configs/socketIO'
+import useRoomsData from '@/hooks/useRoomsData'
 import { useUserStore } from '@/store/useUserStore'
 import {
   Avatar,
@@ -13,14 +14,26 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import classNames from 'classnames'
-import React, { useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 import { IoMdAdd } from 'react-icons/io'
 import { IoMdSearch } from 'react-icons/io'
 
 const MessageChannelsBar = () => {
-  const { data: rooms, isLoading } = useCommunityData()
+  const { roomId } = useParams()
+  const { data: rooms, isLoading } = useRoomsData()
   const user = useUserStore((state) => state.user)
-  const [selected, setSelected] = useState<string>()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (rooms && user) {
+      socket.emit(
+        'joinRooms',
+        rooms.map((room) => room._id),
+      )
+    }
+  }, [rooms, user])
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   if (!rooms || isLoading || !user)
@@ -39,11 +52,11 @@ const MessageChannelsBar = () => {
         ) : (
           rooms.map((room) => (
             <Button
-              onClick={() => setSelected(room._id)}
+              onClick={() => router.push(`/m/${room._id}`)}
               key={room._id}
               fullWidth
-              variant={selected === room._id ? 'solid' : 'light'}
-              className={classNames('h-20', selected === room._id && 'pointer-events-none bg-default-200')}
+              variant={roomId === room._id ? 'solid' : 'light'}
+              className={classNames('h-20', roomId === room._id && 'pointer-events-none bg-default-200')}
             >
               <div className="relative flex h-full w-full items-center gap-6">
                 <Avatar size="lg" />
@@ -59,6 +72,7 @@ const MessageChannelsBar = () => {
           ))
         )}
       </ul>
+
       <Button
         radius="full"
         onClick={onOpen}

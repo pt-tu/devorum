@@ -5,19 +5,11 @@ import React, { useState } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { IoIosHeart } from 'react-icons/io'
+import { Message } from '@/types/chat.type'
+import { useUserStore } from '@/store/useUserStore'
 
 type Props = {
-  isSelf?: boolean
-  language?: string
-  replyTo?: {
-    content: string
-    username: string
-  }
-  likes?: number
-  // isReplyingTo?: {
-  //   content: string
-  //   username: string
-  // }
+  message: Message
   setIsReplyingTo: (value: any) => void
 }
 const codeString = `class HelloMessage extends React.Component {
@@ -40,8 +32,11 @@ ReactDOM.render(
 );
 `
 
-const Message = ({ isSelf, language, replyTo, setIsReplyingTo, likes = 0 }: Props) => {
+const Message = ({ setIsReplyingTo, message }: Props) => {
   const theme = useThemeStore((state) => state.theme)
+  const user = useUserStore((state) => state.user)
+
+  const isSelf = message.from === user?.username
 
   return (
     <div className={classNames(' flex w-full gap-4', isSelf && 'flex-row-reverse')}>
@@ -54,13 +49,13 @@ const Message = ({ isSelf, language, replyTo, setIsReplyingTo, likes = 0 }: Prop
             !isSelf ? 'bg-default-100' : 'bg-primary-300',
           )}
         >
-          {replyTo && (
+          {message.replyTo && (
             <div className="mb-2 rounded-lg bg-default-300/50 p-2 text-sm">
               <p className="font-normal">tuan-hda</p>
               <p className="font-light">Hello 500 anh em</p>
             </div>
           )}
-          {language ? (
+          {message.language ? (
             <SyntaxHighlighter
               className={classNames(theme === 'light' && 'invert')}
               language="javascript"
@@ -71,18 +66,21 @@ const Message = ({ isSelf, language, replyTo, setIsReplyingTo, likes = 0 }: Prop
               {codeString}
             </SyntaxHighlighter>
           ) : (
-            'Hello world'
+            message.body
           )}
           <div
-            className={classNames('absolute -bottom-2 group-hover:opacity-100', likes == 0 && 'opacity-0')}
+            className={classNames(
+              'absolute -bottom-2 group-hover:opacity-100',
+              message.likes.length === 0 && 'opacity-0',
+            )}
             style={{
-              left: isSelf ? `-${String(likes).length * 9 + 8}px` : 'auto',
-              right: !isSelf ? `-${String(likes).length * 9 + 8}px` : 'auto',
+              left: isSelf ? `-${String(message.likes.length).length * 9 + 8}px` : 'auto',
+              right: !isSelf ? `-${String(message.likes.length).length * 9 + 8}px` : 'auto',
             }}
           >
             <Button size="sm" isIconOnly radius="full" className="flex w-fit gap-1 px-2 text-xs font-light">
               <IoIosHeart className="text-red-500" />
-              {likes > 1 && likes}
+              {message.likes.length > 1 && message.likes.length}
             </Button>
           </div>
         </div>

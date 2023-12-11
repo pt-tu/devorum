@@ -1,11 +1,31 @@
 'use client'
 import { Avatar } from '@nextui-org/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Message from './Message'
 import MessageBox from './MessageBox'
+import { useMessageStore } from '@/store/useMessagesStore'
+import { useParams } from 'next/navigation'
+import { listRoomMessagesService } from '@/services/chatService'
 
 const MessageRoom = () => {
   const [isReplyingTo, setIsReplyingTo] = useState<{ content: string; username: string }>()
+  const { roomId }: { roomId?: string } = useParams()
+  const [rooms, loadMessages] = useMessageStore((state) => [state.rooms, state.loadMessages])
+  const ref = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        if (roomId) {
+          const response = await listRoomMessagesService(roomId)
+          loadMessages(roomId, response.data)
+          ref.current?.scrollIntoView()
+        }
+      } catch (error) {
+        console.log('list messages error', error)
+      }
+    })()
+  }, [loadMessages, roomId])
 
   return (
     <div className="relative col-span-9 h-full bg-dark-5">
@@ -18,7 +38,13 @@ const MessageRoom = () => {
       </div>
       <div className="small-scrollbar h-[calc(100vh-168px)] w-full overflow-y-auto">
         <div className="m-auto max-w-2xl space-y-4 px-1 pb-2 pt-20">
-          <Message setIsReplyingTo={setIsReplyingTo} />
+          {roomId &&
+            rooms[roomId] &&
+            rooms[roomId] &&
+            rooms[roomId]?.map((message) => (
+              <Message setIsReplyingTo={setIsReplyingTo} message={message} key={message._id} />
+            ))}
+          {/* <Message setIsReplyingTo={setIsReplyingTo} />
           <Message setIsReplyingTo={setIsReplyingTo} />
           <Message setIsReplyingTo={setIsReplyingTo} />
           <Message setIsReplyingTo={setIsReplyingTo} />
@@ -36,7 +62,8 @@ const MessageRoom = () => {
           <Message setIsReplyingTo={setIsReplyingTo} /> <Message setIsReplyingTo={setIsReplyingTo} />
           <Message setIsReplyingTo={setIsReplyingTo} />
           <Message setIsReplyingTo={setIsReplyingTo} replyTo={{ content: '', username: 'tuan-hda' }} isSelf />
-          <Message setIsReplyingTo={setIsReplyingTo} language="javascript" />
+          <Message setIsReplyingTo={setIsReplyingTo} language="javascript" /> */}
+          <div ref={ref} />
         </div>
       </div>
       <MessageBox isReplyingTo={isReplyingTo} setIsReplyingTo={setIsReplyingTo} />

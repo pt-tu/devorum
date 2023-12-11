@@ -1,10 +1,15 @@
+'use client'
 import { Button, Input } from '@nextui-org/react'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoClose, IoSend } from 'react-icons/io5'
 import { MdOutlinePermMedia } from 'react-icons/md'
 import { FaReply } from 'react-icons/fa'
-import { io } from 'socket.io-client'
 import { socket } from '@/configs/socketIO'
+import useRoomsData from '@/hooks/useRoomsData'
+import { Message } from '@/types/chat.type'
+import { useUserStore } from '@/store/useUserStore'
+import { useMessageStore } from '@/store/useMessagesStore'
+import { useParams } from 'next/navigation'
 
 type Props = {
   isReplyingTo?: {
@@ -15,11 +20,43 @@ type Props = {
 }
 
 const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
+  const params = useParams()
   const ref = useRef<HTMLInputElement | null>(null)
+  const user = useUserStore((state) => state.user)
+  const appendMessage = useMessageStore((state) => state.appendMessage)
+  const { data: rooms, isLoading } = useRoomsData()
+  const [message, setMessage] = useState('')
 
   const handleClick = () => {
     ref.current?.click()
   }
+
+  const sendMessage = () => {
+    if (user && rooms && rooms.length > 0) {
+      socket.emit('message', {
+        room: params.roomId,
+        body: message,
+        from: user.username,
+      })
+    }
+    setMessage('')
+  }
+
+  useEffect(() => {
+    const handleMessageResponse = (data: Message) => {
+      if (!data._id) {
+        return
+      }
+      console.log('Received message')
+      appendMessage(data)
+    }
+
+    socket.on('messageResponse', handleMessageResponse)
+
+    return () => {
+      socket.off('messageResponse', handleMessageResponse)
+    }
+  }, [appendMessage])
 
   return (
     <div className=" m-auto flex h-20 max-w-2xl flex-shrink-0 gap-6 pb-2 pt-2">
@@ -46,6 +83,8 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
           </div>
         )}
         <Input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           startContent={
             <Button onClick={handleClick} isIconOnly variant="light" radius="full">
               <MdOutlinePermMedia className="text-2xl" />
@@ -58,12 +97,9 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
       <div className="aspect-square h-full">
         <Button
           onClick={() => {
-            console.log('trigger')
-            socket.emit('message', { hello: 'Data' })
-            socket.once('messageResponse', function (msg) {
-              console.log('socket working on the frontend: ', msg)
-            })
+            sendMessage()
           }}
+          isDisabled={message.length === 0}
           isIconOnly
           radius="full"
           size="lg"

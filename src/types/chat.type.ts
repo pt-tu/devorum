@@ -7,9 +7,10 @@ export type Room = {
 }
 
 export type Message = {
+  _id: string
   from: string
   body: string
-  likes: [string]
+  likes: string[]
   replyTo?: string
   room: string
   createdBy: string

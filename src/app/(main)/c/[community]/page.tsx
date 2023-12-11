@@ -4,11 +4,11 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import CommunityHeader from '@/components/community/CommunityHeader'
 import CommunityOverviewBar from '@/components/community/CommunityOverviewBar'
 import CommunityContent from '@/components/community/CommunityContent'
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 
 const Community = ({ params }: { params: Params }) => {
   const { community } = params
-  const { isLoading, data } = useCommunityData(community)
+  const { isLoading, data } = useRoomsData(community)
 
   if (isLoading || !data)
     return (

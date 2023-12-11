@@ -4,13 +4,13 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import React from 'react'
 import EditTitles from './EditTitles'
 import AssignTitles from './AssignTitles'
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 import { updateCommunityService } from '@/services/communityService'
 
 const ConfigureTheme = ({ params }: { params: Params }) => {
   const community = params.community
 
-  const { isLoading, mutate, data } = useCommunityData(community)
+  const { isLoading, mutate, data } = useRoomsData(community)
 
   if (isLoading || !data)
     return (

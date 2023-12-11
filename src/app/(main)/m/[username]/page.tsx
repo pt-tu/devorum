@@ -1,6 +1,6 @@
 'use client'
 import { Avatar } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Message from './Message'
 import MessageBox from './MessageBox'
 

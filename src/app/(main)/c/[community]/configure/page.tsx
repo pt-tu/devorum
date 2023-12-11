@@ -1,5 +1,5 @@
 'use client'
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 import { Community } from '@/types/community.type'
 import { Button, Checkbox, Divider, Input, Radio, RadioGroup, Spinner, Textarea } from '@nextui-org/react'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
@@ -9,7 +9,7 @@ import { updateCommunityService } from '@/services/communityService'
 
 const ConfigureCommunity = ({ params }: { params: Params }) => {
   const community = params.community
-  const { isLoading, data, mutate } = useCommunityData(community)
+  const { isLoading, data, mutate } = useRoomsData(community)
   const [communityData, setCommunityData] = useState<Community>()
   const [updateLoading, setUpdateLoading] = useState(false)
 

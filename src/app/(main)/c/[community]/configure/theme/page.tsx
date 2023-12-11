@@ -1,6 +1,6 @@
 'use client'
 import CommunityHeader from '@/components/community/CommunityHeader'
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 import { updateCommunityService } from '@/services/communityService'
 import { uploadFileService } from '@/services/uploadService'
 import { Community } from '@/types/community.type'
@@ -10,7 +10,7 @@ import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 
 const ConfigureTheme = ({ params }: { params: Params }) => {
   const community = params.community
-  const { isLoading, data, mutate } = useCommunityData(community)
+  const { isLoading, data, mutate } = useRoomsData(community)
   const [updateLoading, setUpdateLoading] = useState(false)
 
   const ref = useRef<HTMLInputElement | null>(null)

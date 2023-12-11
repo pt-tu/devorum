@@ -2,7 +2,7 @@
 import ForbiddenModal from '@/components/common/ForbiddenModal'
 import Sidebar from '@/components/common/Sidebar'
 import PrivateLayout from '@/components/layouts/PrivateLayout'
-import useCommunityData from '@/hooks/useCommunityData'
+import useRoomsData from '@/hooks/useCommunityData'
 import { useUserStore } from '@/store/useUserStore'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
 import { useParams, useRouter } from 'next/navigation'
@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 
 export default function ConfigureCommunityLayout({ children }: { children: React.ReactNode }) {
   const { community } = useParams()
-  const { data } = useCommunityData(community as string)
+  const { data } = useRoomsData(community as string)
   const user = useUserStore((state) => state.user)
   const [isOpen, setOpen] = useState(false)
   const router = useRouter()

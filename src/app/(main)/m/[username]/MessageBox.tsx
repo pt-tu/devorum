@@ -3,6 +3,8 @@ import React, { useRef } from 'react'
 import { IoClose, IoSend } from 'react-icons/io5'
 import { MdOutlinePermMedia } from 'react-icons/md'
 import { FaReply } from 'react-icons/fa'
+import { io } from 'socket.io-client'
+import { socket } from '@/configs/socketIO'
 
 type Props = {
   isReplyingTo?: {
@@ -54,7 +56,20 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
         ></Input>
       </div>
       <div className="aspect-square h-full">
-        <Button isIconOnly radius="full" size="lg" color="primary" className="h-full w-full">
+        <Button
+          onClick={() => {
+            console.log('trigger')
+            socket.emit('message', { hello: 'Data' })
+            socket.once('messageResponse', function (msg) {
+              console.log('socket working on the frontend: ', msg)
+            })
+          }}
+          isIconOnly
+          radius="full"
+          size="lg"
+          color="primary"
+          className="h-full w-full"
+        >
           <IoSend className="text-xl" />
         </Button>
       </div>

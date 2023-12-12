@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useSWRImmutable from 'swr/immutable'
 
-const useCommunityData = (community: string) => {
+const useRoomsData = () => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWRImmutable<Community, AxiosError>('getCommunityData', () =>
-    getCommunityService(community).then((res) => res.data),
+  const { isLoading, error, data, mutate } = useSWRImmutable<Room[], AxiosError>('listRoomsData', () =>
+    listRoomsService().then((res) => res.data),
   )
 
   useEffect(() => {
@@ -23,4 +23,4 @@ const useCommunityData = (community: string) => {
   return { isLoading, error, data, mutate }
 }
 
-export default useCommunityData
+export default useRoomsData

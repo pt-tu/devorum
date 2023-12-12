@@ -1,15 +1,14 @@
-import { getCommunityMembersService, getCommunityService } from '@/services/communityService'
-import { Community, JoinedUser } from '@/types/community.type'
+import { listProfilesService } from '@/services/userService'
 import { User } from '@/types/user.type'
 import { AxiosError, isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useSWRImmutable from 'swr/immutable'
 
-const useCommunityMembersData = (community: string) => {
+const useListProfilesData = () => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWRImmutable<JoinedUser[], AxiosError>('getCommunityMembersData', () =>
-    getCommunityMembersService(community).then((res) => res.data),
+  const { isLoading, error, data, mutate } = useSWRImmutable<User[], AxiosError>('listProfilesData', () =>
+    listProfilesService().then((res) => res.data),
   )
 
   useEffect(() => {
@@ -22,4 +21,4 @@ const useCommunityMembersData = (community: string) => {
   return { isLoading, error, data, mutate }
 }
 
-export default useCommunityMembersData
+export default useListProfilesData

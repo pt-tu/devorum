@@ -7,12 +7,15 @@ import ThemeButton from '../common/ThemeButton'
 import { useAuthStore, useUserStore } from '@/store/useUserStore'
 import Image from 'next/image'
 import { defaultAvatar } from '@/configs/defaultValues'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Badge, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
+import useRoomsData from '@/hooks/useRoomsData'
 
 export default function Header() {
   const [user] = useUserStore((state) => [state.user])
   const logOut = useAuthStore((state) => state.logOut)
+  const { data } = useRoomsData()
+  const unreadMsgs = data?.filter((room) => !room.lastMessage?.seen?.includes(user?.username || '')).length
   const router = useRouter()
 
   const handleLogOut = useCallback(() => {
@@ -41,9 +44,17 @@ export default function Header() {
 
       {/* Right */}
       <div className="flex flex-1 flex-row items-center justify-center gap-6">
-        <Button variant="flat" isIconOnly>
-          <Chat />
-        </Button>
+        {unreadMsgs ? (
+          <Badge content={unreadMsgs} size="lg" color="primary">
+            <Button variant="flat" isIconOnly as={Link} href="/m">
+              <Chat />
+            </Button>
+          </Badge>
+        ) : (
+          <Button variant="flat" isIconOnly as={Link} href="/m">
+            <Chat />
+          </Button>
+        )}
         <Button variant="flat" isIconOnly>
           <Alarm />
         </Button>

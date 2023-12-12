@@ -1,16 +1,23 @@
 import { useThemeStore } from '@/store/useThemeStore'
-import { Avatar, Button, Image } from '@nextui-org/react'
+import { Avatar, Button, Chip } from '@nextui-org/react'
 import classNames from 'classnames'
 import React, { useState } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { IoIosHeart } from 'react-icons/io'
-import { Message } from '@/types/chat.type'
+import { Message as MessageType } from '@/types/chat.type'
 import { useUserStore } from '@/store/useUserStore'
+import moment from 'moment'
+import Image from 'next/image'
+import { socket } from '@/configs/socketIO'
+import { useParams } from 'next/navigation'
+import useRoomsData from '@/hooks/useRoomsData'
+import { User } from '@/types/user.type'
 
 type Props = {
-  message: Message
+  message: MessageType
   setIsReplyingTo: (value: any) => void
+  toUser?: User
 }
 const codeString = `class HelloMessage extends React.Component {
   handlePress = () => {
@@ -32,20 +39,42 @@ ReactDOM.render(
 );
 `
 
-const Message = ({ setIsReplyingTo, message }: Props) => {
+const Message = ({ setIsReplyingTo, message, toUser }: Props) => {
   const theme = useThemeStore((state) => state.theme)
   const user = useUserStore((state) => state.user)
+  const { roomId } = useParams()
+  const { data: rooms } = useRoomsData()
+
+  const likeMessage = () => {
+    if (roomId && user) {
+      socket.emit('likeMessage', {
+        _id: message._id,
+        username: user.username,
+      })
+    }
+  }
 
   const isSelf = message.from === user?.username
 
+  const checkIsSeen = () => {
+    if (!rooms || !user) return false
+    const room = rooms.find((r) => r._id === roomId)
+    return (
+      room?.lastMessage?._id === message._id &&
+      message.seen &&
+      message.seen.length >= 2 &&
+      message.from === user.username
+    )
+  }
+
   return (
     <div className={classNames(' flex w-full gap-4', isSelf && 'flex-row-reverse')}>
-      {!isSelf && <Avatar size="lg" />}
+      {!isSelf && <Avatar size="lg" src={toUser?.avatar} />}
       <div className="max-w-[80%]">
         <div
           onDoubleClick={() => setIsReplyingTo({ message })}
           className={classNames(
-            'group relative rounded-xl p-4 font-light',
+            'group relative min-w-[100px] rounded-xl p-4 font-light',
             !isSelf ? 'bg-default-100' : 'bg-primary-300',
           )}
         >
@@ -67,8 +96,8 @@ const Message = ({ setIsReplyingTo, message }: Props) => {
                 <p className="font-normal">{message.replyTo.from}</p>
                 {message.replyTo.body && (
                   <p className="font-light">
-                    {message.replyTo.body.length > 74
-                      ? message.replyTo.body.slice(0, 74) + '...'
+                    {message.replyTo.body.length > 60
+                      ? message.replyTo.body.slice(0, 60) + '...'
                       : message.replyTo.body}
                   </p>
                 )}
@@ -87,12 +116,23 @@ const Message = ({ setIsReplyingTo, message }: Props) => {
               {codeString}
             </SyntaxHighlighter>
           ) : message.mediaUrl ? (
-            <div className="-m-4 max-h-[65vh]">
-              <Image src={message.mediaUrl} alt="message_media" className="h-full w-full" />
+            <div className="-m-4">
+              <Image
+                height={5000}
+                width={5000}
+                src={message.mediaUrl}
+                alt="message_media"
+                className="max-h-[100vh] w-full rounded-xl"
+              />
             </div>
           ) : (
             message.body
           )}
+
+          <Chip size="sm" className="absolute bottom-0 right-0 z-[11] scale-80 bg-default-200/30 font-light">
+            {moment(message.createdAt).format('hh:mm')}
+          </Chip>
+
           <div
             className={classNames(
               'absolute -bottom-2 group-hover:opacity-100',
@@ -103,12 +143,19 @@ const Message = ({ setIsReplyingTo, message }: Props) => {
               right: !isSelf ? `-${String(message.likes.length).length * 9 + 8}px` : 'auto',
             }}
           >
-            <Button size="sm" isIconOnly radius="full" className="z-10 flex w-fit gap-1 px-2 text-xs font-light">
+            <Button
+              onClick={likeMessage}
+              size="sm"
+              isIconOnly
+              radius="full"
+              className="z-10 flex w-fit gap-1 px-2 text-xs font-light opacity-70"
+            >
               <IoIosHeart className="text-red-500" />
               {message.likes.length > 1 && message.likes.length}
             </Button>
           </div>
         </div>
+        {checkIsSeen() && <p className="text-sm font-light italic">Seen</p>}
       </div>
     </div>
   )

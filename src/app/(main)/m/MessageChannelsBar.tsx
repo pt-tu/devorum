@@ -21,12 +21,15 @@ import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { IoMdAdd } from 'react-icons/io'
 import { IoMdSearch } from 'react-icons/io'
+import moment from 'moment'
+import { Room } from '@/types/chat.type'
 
 const MessageChannelsBar = () => {
   const { roomId } = useParams()
   const { data: rooms, isLoading } = useRoomsData()
   const { data: profiles } = useListProfilesData()
   const [search, setSearch] = useState('')
+  const [roomSearch, setRoomSearch] = useState('')
   const user = useUserStore((state) => state.user)
   const router = useRouter()
 
@@ -48,6 +51,11 @@ const MessageChannelsBar = () => {
       </div>
     )
 
+  const filteredRooms = rooms.filter((room) => {
+    const participants = room.participants
+    return participants.find((participant) => participant.toLowerCase().includes(roomSearch.toLowerCase()))
+  })
+
   const handleCreateRoom = (username: string, onClose: () => void) => async () => {
     try {
       const response = await getRoomService(username)
@@ -56,20 +64,53 @@ const MessageChannelsBar = () => {
       } else {
         window.location.href = `/m/${response.data._id}`
       }
+      setRoomSearch('')
+      setSearch('')
       onClose()
     } catch (error) {
       console.log(error)
     }
   }
 
+  const getLastDate = (date: Date) => {
+    const today = moment()
+    const updatedDate = moment(date)
+    if (today.diff(updatedDate, 'days') < 7) {
+      return updatedDate.format('ddd')
+    }
+    if (today.diff(updatedDate, 'days') < 365) {
+      return updatedDate.format('MMM D')
+    }
+    return updatedDate.format('MMM D, YY')
+  }
+
+  const getToUserInfo = (room: Room) => {
+    const participants = room.participantsInfo
+    if (participants[0].username === user.username) {
+      return participants[1]
+    }
+    return participants[0]
+  }
+
+  const isSeen = (room: Room) => {
+    return room.lastMessage?.seen?.includes(user.username)
+  }
+
   return (
     <div className="small-scrollbar relative col-span-3 h-full overflow-y-auto border-r border-r-gray-4/30 bg-dark-2">
       <ul className=" space-y-2 p-2">
-        <Input startContent={<IoMdSearch className="text-2xl" />} className="px-2" size="lg" placeholder="Search" />
+        <Input
+          onChange={(e) => setRoomSearch(e.target.value)}
+          value={roomSearch}
+          startContent={<IoMdSearch className="text-2xl" />}
+          className="px-2"
+          size="lg"
+          placeholder="Search"
+        />
         {rooms.length === 0 ? (
           <div className="flex h-[calc(100vh-80px)] items-center justify-center">You have no messages.</div>
         ) : (
-          rooms.map((room) => (
+          filteredRooms.map((room) => (
             <Button
               onClick={() => router.push(`/m/${room._id}`)}
               key={room._id}
@@ -77,15 +118,26 @@ const MessageChannelsBar = () => {
               variant={roomId === room._id ? 'solid' : 'light'}
               className={classNames('h-20', roomId === room._id && 'pointer-events-none bg-default-200')}
             >
-              <div className="relative flex h-full w-full items-center gap-6">
-                <Avatar size="lg" />
-                <div className="text-left">
+              <div className="relative  flex h-full w-full items-center gap-6">
+                {!isSeen(room) && <div className="absolute -left-4 h-full w-1 bg-primary-400"></div>}
+                <Avatar className="flex-shrink-0" size="lg" src={getToUserInfo(room).avatar} />
+                <div className="min-w-0  flex-1  text-left">
                   <p className="text-base">
                     {room.participants.find((participant) => participant !== user.username) || user.username}
                   </p>
-                  <p className="text-base font-light">9 3 Hoàng: Hello world</p>
+                  {room.lastMessage && (
+                    <p
+                      className={classNames(
+                        isSeen(room) ? 'font-light' : 'font-normal',
+                        'min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-base',
+                      )}
+                    >
+                      {room.lastMessage.from === user.username ? 'You' : room.lastMessage.from}:{' '}
+                      {room.lastMessage.mediaUrl ? <i>Sent media</i> : room.lastMessage.body}
+                    </p>
+                  )}
                 </div>
-                <p className="absolute right-2 top-2 text-sm font-light">Fri</p>
+                <p className="absolute right-2 top-2 text-sm font-light">{getLastDate(room.updatedAt)}</p>
               </div>
             </Button>
           ))
@@ -138,7 +190,7 @@ const MessageChannelsBar = () => {
                           className="h-16 px-4 text-left"
                         >
                           <div key={profile._id} className="flex w-full items-center gap-4">
-                            <Avatar size="lg" />
+                            <Avatar src={profile.avatar} size="lg" />
                             <div className="text-left">
                               <p className="font-base">{profile.username}</p>
                               <p className="text-base font-light">{profile.fullName}</p>

@@ -2,8 +2,8 @@ import { User } from './user.type'
 
 export type Room = {
   _id: string
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   participants: [string]
   lastMessage?: Message
   participantsInfo: User[]
@@ -16,7 +16,9 @@ export type Message = {
   likes: string[]
   replyTo?: Message
   room: string
-  createdBy: string
+  seen?: string[]
   language?: string
   mediaUrl?: string
+  createdAt: Date
+  updatedAt: Date
 }

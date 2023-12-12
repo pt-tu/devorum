@@ -1,25 +1,28 @@
 'use client'
-import { Avatar } from '@nextui-org/react'
+import { Avatar, Spinner } from '@nextui-org/react'
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Message from './Message'
 import MessageBox from './MessageBox'
 import { MessageState, useMessageStore } from '@/store/useMessagesStore'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { listRoomMessagesService } from '@/services/chatService'
 import useRoomsData from '@/hooks/useRoomsData'
 import { useUserStore } from '@/store/useUserStore'
 import { User } from '@/types/user.type'
 import { Message as MessageType, Room } from '@/types/chat.type'
 import { socket } from '@/configs/socketIO'
+import { ReallySimpleInfiniteScroll } from 'react-really-simple-infinite-scroll'
 
 const MessageRoom = () => {
   const [isReplyingTo, setIsReplyingTo] = useState<{ message: MessageType }>()
   const [typingState, setTypingState] = useState<Set<string>>(new Set([]))
   const { roomId }: { roomId?: string } = useParams()
+  const [isInfiniteLoading, setIsInfiniteLoading] = useState(false)
   const [rooms, loadMessages] = useMessageStore((state) => [state.rooms, state.loadMessages])
-  const ref = useRef<HTMLDivElement | null>(null)
   const user = useUserStore((state) => state.user)
   const { data } = useRoomsData()
+  const [dots, setDots] = useState(1)
+  const [limit, setLimit] = useState(14)
 
   useLayoutEffect(() => {
     ;(async () => {
@@ -33,12 +36,6 @@ const MessageRoom = () => {
       }
     })()
   }, [loadMessages, roomId])
-
-  useEffect(() => {
-    if (roomId && rooms[roomId]) {
-      ref.current?.scrollIntoView()
-    }
-  }, [roomId, rooms])
 
   const seenMessage = useCallback(async (roomId?: string, rooms?: MessageState['rooms'], user?: User | null) => {
     if (user && rooms && roomId) {
@@ -98,11 +95,7 @@ const MessageRoom = () => {
     }
   }, [])
 
-  if (!data || !roomId) {
-    return null
-  }
-
-  let participates = data.find((room) => room._id === roomId) as Room
+  let participates = data?.find((room) => room._id === roomId) as Room
   let toUser: User
   if (participates?.participantsInfo[0].username === user?.username) {
     toUser = participates?.participantsInfo[1]
@@ -110,8 +103,41 @@ const MessageRoom = () => {
     toUser = participates?.participantsInfo[0]
   }
 
+  const isOtherTyping = typingState.has(toUser?.username)
+
+  useEffect(() => {
+    if (isOtherTyping) {
+      const interval = setInterval(() => {
+        setDots((prev) => {
+          if (prev === 3) {
+            return 1
+          }
+          return prev + 1
+        })
+      }, 500)
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [isOtherTyping])
+
+  if (!data || !roomId) {
+    return null
+  }
+
   console.log('typingState', typingState)
-  const isOtherTyping = typingState.has(toUser.username)
+
+  const messages = rooms[roomId]?.messages || []
+  const sliceMessages = messages.slice(-limit)
+
+  const incLimit = () => {
+    setIsInfiniteLoading(true)
+    console.log('trigger')
+    setTimeout(() => {
+      setLimit((prev) => prev + 10)
+      setIsInfiniteLoading(false)
+    }, 1000)
+  }
 
   return (
     <div className="relative col-span-9 h-full bg-dark-5">
@@ -119,24 +145,44 @@ const MessageRoom = () => {
         <Avatar src={toUser.avatar} size="lg" />
         <div>
           <p className="text-base">{toUser.username}</p>
-          <p className="font-light">{toUser.fullName}</p>
+          <p className="font-light">
+            {toUser.fullName}{' '}
+            <i>{isOtherTyping && `typing something${dots === 1 ? '.' : dots === 2 ? '..' : '...'}`}</i>
+          </p>
         </div>
       </div>
       <div className="small-scrollbar h-[calc(100vh-168px)] w-full overflow-y-auto">
-        <div className="m-auto max-w-2xl space-y-4 px-1 pb-2 pt-20">
-          {roomId &&
-            rooms[roomId] &&
-            rooms[roomId].messages.map((message) => (
-              <Message toUser={toUser} setIsReplyingTo={setIsReplyingTo} message={message} key={message._id} />
+        <div className="m-auto h-full max-w-2xl space-y-4 px-1 pb-2 pt-20">
+          <ReallySimpleInfiniteScroll
+            className={`infinite-scroll display-inverse h-full space-y-4`}
+            hasMore={limit < messages.length}
+            length={messages.length}
+            loadingComponent={
+              isInfiniteLoading && (
+                <div className="flex w-full flex-col items-center justify-center">
+                  <div className="spinner">
+                    <Spinner size="lg" />
+                  </div>
+                  <span className="loading-label">Loading...</span>
+                </div>
+              )
+            }
+            isInfiniteLoading={isInfiniteLoading}
+            onInfiniteLoad={incLimit}
+            displayInverse={true}
+          >
+            {sliceMessages.map((message) => (
+              <div key={message._id}>
+                <Message toUser={toUser} setIsReplyingTo={setIsReplyingTo} message={message} key={message._id} />
+              </div>
             ))}
-
-          {isOtherTyping && (
-            <div className="flex items-center gap-4">
+          </ReallySimpleInfiniteScroll>
+          {/* {isOtherTyping && (
+            <div className="flex w-full items-center gap-4">
               <Avatar size="lg" src={toUser?.avatar} />
               <p>Typing...</p>
             </div>
-          )}
-          <div ref={ref} />
+          )} */}
         </div>
       </div>
 

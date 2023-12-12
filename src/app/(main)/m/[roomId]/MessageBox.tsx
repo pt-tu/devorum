@@ -67,25 +67,6 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
     }, 3000)
   }
 
-  useEffect(() => {
-    const handleMessageResponse = (data: { message: Message; type: 'append' | 'update' }) => {
-      if (!data?.message?._id) {
-        return
-      }
-
-      console.log('Received message')
-      if (user) checkPageStatus(data.message, user)
-      appendMessage(data.message, data.type)
-      mutate()
-    }
-
-    socket.on('messageResponse', handleMessageResponse)
-
-    return () => {
-      socket.off('messageResponse', handleMessageResponse)
-    }
-  }, [appendMessage, message, mutate, user])
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     try {
@@ -106,12 +87,14 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
     }
   }
 
+
+
   return (
     <div className=" m-auto flex h-20 max-w-2xl flex-shrink-0 gap-6 pb-2 pt-2">
       <input onChange={handleFileChange} type="file" ref={ref} className="hidden" accept=".jpg,.jpeg,.png" />
       <div className="relative flex-1">
         {isReplyingTo && (
-          <div className="absolute -top-16 left-0 right-0 z-10 flex items-center gap-4 rounded-xl bg-default-100 px-4 py-2 text-sm">
+          <div className="absolute -top-16 left-0 right-0 z-[11] flex items-center gap-4 rounded-xl bg-default-100 px-4 py-2 text-sm">
             <FaReply className="text-xl" />
 
             {isReplyingTo.message.mediaUrl && (

@@ -3,11 +3,11 @@ import { User } from '@/types/user.type'
 import { AxiosError, isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 
 const useListProfilesData = () => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWR<User[], AxiosError>('listProfilesData', () =>
+  const { isLoading, error, data, mutate } = useSWRImmutable<User[], AxiosError>('listProfilesData', () =>
     listProfilesService().then((res) => res.data),
   )
 

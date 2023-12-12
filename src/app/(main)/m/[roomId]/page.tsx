@@ -44,9 +44,9 @@ const MessageRoom = () => {
         console.log('cannot find room messages')
         return
       }
-      const lastMsg = roomMessages.messages[roomMessages.messages.length - 1]
+      const lastMsg: MessageType | undefined = roomMessages.messages[roomMessages.messages.length - 1]
       console.log('lastmsg', lastMsg)
-      if (!lastMsg.seen?.includes(user.username)) {
+      if (lastMsg && !lastMsg?.seen?.includes(user.username)) {
         console.log('send seen message event')
         socket.emit('seenMessage', { _id: lastMsg._id, username: user.username })
       }

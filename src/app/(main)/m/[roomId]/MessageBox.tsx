@@ -12,6 +12,7 @@ import { useMessageStore } from '@/store/useMessagesStore'
 import { useParams } from 'next/navigation'
 import { uploadFileService } from '@/services/uploadService'
 import Image from 'next/image'
+import checkPageStatus from '@/utils/notifyUser'
 
 type Props = {
   isReplyingTo?: {
@@ -20,12 +21,14 @@ type Props = {
   setIsReplyingTo: (value: any) => void
 }
 
+let timeout: NodeJS.Timeout
+
 const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
   const params = useParams()
   const ref = useRef<HTMLInputElement | null>(null)
   const user = useUserStore((state) => state.user)
   const appendMessage = useMessageStore((state) => state.appendMessage)
-  const { data: rooms, isLoading } = useRoomsData()
+  const { data: rooms, mutate } = useRoomsData()
   const [message, setMessage] = useState('')
 
   const handleClick = () => {
@@ -39,19 +42,41 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
         body: message,
         from: user.username,
         replyTo: isReplyingTo?.message?._id,
+        seen: [user.username],
       })
       setIsReplyingTo(undefined)
     }
     setMessage('')
   }
 
+  const handleTyping = () => {
+    if (params.roomId && user?.username) {
+      socket.emit('typing', {
+        room: params.roomId,
+        username: user.username,
+      })
+      if (timeout) clearTimeout(timeout)
+    }
+    timeout = setTimeout(() => {
+      if (params.roomId && user?.username) {
+        socket.emit('stopTyping', {
+          room: params.roomId,
+          username: user.username,
+        })
+      }
+    }, 3000)
+  }
+
   useEffect(() => {
-    const handleMessageResponse = (data: Message) => {
-      if (!data._id) {
+    const handleMessageResponse = (data: { message: Message; type: 'append' | 'update' }) => {
+      if (!data?.message?._id) {
         return
       }
+
       console.log('Received message')
-      appendMessage(data)
+      if (user) checkPageStatus(data.message, user)
+      appendMessage(data.message, data.type)
+      mutate()
     }
 
     socket.on('messageResponse', handleMessageResponse)
@@ -59,7 +84,7 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
     return () => {
       socket.off('messageResponse', handleMessageResponse)
     }
-  }, [appendMessage])
+  }, [appendMessage, message, mutate, user])
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -82,7 +107,7 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
   }
 
   return (
-    <div className=" m-auto flex h-20 max-w-3xl flex-shrink-0 gap-6 pb-2 pt-2">
+    <div className=" m-auto flex h-20 max-w-2xl flex-shrink-0 gap-6 pb-2 pt-2">
       <input onChange={handleFileChange} type="file" ref={ref} className="hidden" accept=".jpg,.jpeg,.png" />
       <div className="relative flex-1">
         {isReplyingTo && (
@@ -105,8 +130,8 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
               <p className="font-normal">{isReplyingTo.message.from}</p>
               {isReplyingTo.message.body && (
                 <p className="font-light">
-                  {isReplyingTo.message.body.length > 74
-                    ? isReplyingTo.message.body.slice(0, 74) + '...'
+                  {isReplyingTo.message.body.length > 60
+                    ? isReplyingTo.message.body.slice(0, 60) + '...'
                     : isReplyingTo.message.body}
                 </p>
               )}
@@ -124,6 +149,12 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
           </div>
         )}
         <Input
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              sendMessage()
+            }
+            handleTyping()
+          }}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           startContent={

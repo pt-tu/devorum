@@ -32,7 +32,7 @@ const MessageRoom = () => {
           loadMessages(roomId, response.data)
         }
       } catch (error) {
-        console.log('list messages error', error)
+        console.log('list messages error:', error)
       }
     })()
   }, [loadMessages, roomId])

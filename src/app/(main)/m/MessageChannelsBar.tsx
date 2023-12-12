@@ -33,15 +33,6 @@ const MessageChannelsBar = () => {
   const user = useUserStore((state) => state.user)
   const router = useRouter()
 
-  useEffect(() => {
-    if (rooms && user) {
-      socket.emit(
-        'joinRooms',
-        rooms.map((room) => room._id),
-      )
-    }
-  }, [rooms, user])
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   if (!rooms || isLoading || !user || !profiles)

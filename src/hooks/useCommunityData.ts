@@ -5,11 +5,11 @@ import { Community } from '@/types/community.type'
 import { AxiosError, isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 
 const useCommunityData = (community: string) => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWR<Community, AxiosError>('getCommunityData', () =>
+  const { isLoading, error, data, mutate } = useSWRImmutable<Community, AxiosError>('getCommunityData', () =>
     getCommunityService(community).then((res) => res.data),
   )
 

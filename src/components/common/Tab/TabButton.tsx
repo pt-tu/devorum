@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import Link from 'next/link'
-import React from 'react'
+import React, { Key } from 'react'
 import { ReactNode } from 'react'
 
 function TabButton({ icon, label, isSelected, onClick }: TabProps) {
@@ -20,6 +20,7 @@ function TabButton({ icon, label, isSelected, onClick }: TabProps) {
 
 export default TabButton
 export interface TabProps {
+  key: Key
   icon?: ReactNode
   label: string
   isSelected?: boolean

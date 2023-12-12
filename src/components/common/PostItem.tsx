@@ -5,10 +5,18 @@ import { Tags } from './CommentItem/Tag'
 import { useRouter } from 'next/navigation'
 import { TagProps } from './CommentItem/Tag/TagButton'
 import { usePostStore } from '@/store/usePostStore'
-import { Dropdown, MenuProps, Space, message } from 'antd'
 import { MDEditor, Markdown } from './Markdown'
 import classNames from 'classnames'
-import { Button, Input } from '@nextui-org/react'
+import {
+  Button,
+  ButtonGroup,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
+  MenuProps,
+} from '@nextui-org/react'
 import moment from 'moment'
 
 const items: MenuProps['items'] = [
@@ -43,12 +51,16 @@ function PostItem(props: PostProps) {
   const handlePostClick = () => {
     if (!props.isEditing) router.push('post/1')
   }
-  const onClick: MenuProps['onClick'] = ({ key }) => {
+  const onAction = (key: React.Key) => {
     switch (key) {
       case 'edit':
         setIsEditing(props.postId)
         break
+      case 'follow':
+        console.log('Follow post')
+        break
       case 'delete':
+        console.log('Delete post')
         break
       default:
         break
@@ -74,12 +86,19 @@ function PostItem(props: PostProps) {
             <p className="text-sm font-normal text-gray-bg">{props.user.name}</p>
             <p className="text-[10px] font-light text-gray-400">{moment(props.time).fromNow()}</p>
           </div>
-          <Dropdown menu={{ items, onClick }} placement="bottomRight">
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
+          <Dropdown backdrop="blur">
+            <DropdownTrigger>
+              <Button isIconOnly variant="light" radius="full">
                 <MoreOutlined className="text-2xl text-gray-3" />
-              </Space>
-            </a>
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu onAction={onAction} variant="faded" aria-label="Static Actions">
+              <DropdownItem key="edit">Edit post</DropdownItem>
+              <DropdownItem key="follow">Follow this post</DropdownItem>
+              <DropdownItem key="delete" className="text-danger" color="danger">
+                Delete
+              </DropdownItem>
+            </DropdownMenu>
           </Dropdown>
         </div>
         {/* Body */}
@@ -89,10 +108,10 @@ function PostItem(props: PostProps) {
               <Input value={title} className="mb-5" onChange={(e) => setTitle(e.target.value)} />
               <MDEditor value={content} onChange={(e) => setContent(e || '')} />
               <div className="mt-5 flex flex-row justify-end gap-4">
-                <Button size="md" radius="sm" onClick={() => setIsEditing(props.postId)}>
+                <Button size="md" radius="sm" onPress={() => setIsEditing(props.postId)}>
                   Cancel
                 </Button>
-                <Button size="md" radius="sm" color="primary" onClick={handleSaveClick}>
+                <Button size="md" radius="sm" color="primary" onPress={handleSaveClick}>
                   Save
                 </Button>
               </div>
@@ -108,27 +127,32 @@ function PostItem(props: PostProps) {
           )}
         </div>
         {/* Footer */}
-        <div className="flex flex-row items-center gap-4">
+        <div className="flex flex-row items-center gap-1">
           {props?.tags && <Tags tags={props.tags} />}
           <div className="flex-1" />
-          <div className="flex flex-row items-center gap-1 text-sm text-gray-3">
-            <EyeOutlined />
-            <p>{props.react.views}</p>
-          </div>
-          <div
-            className="flex cursor-pointer flex-row items-center gap-1 text-sm text-gray-3"
-            onClick={handlePostClick}
-          >
-            <MessageOutlined />
-            <p>{props.react.comments}</p>
-          </div>
-          <div
-            className="flex cursor-pointer flex-row items-center gap-1 text-sm text-gray-3"
-            onClick={() => increaseVote(props.postId)}
-          >
-            <ArrowUpOutlined />
-            <p>{props.react.votes}</p>
-          </div>
+          <ButtonGroup size="sm">
+            <Button key={'view'} variant="light" className="text-gray-3" startContent={<EyeOutlined />}>
+              {props.react.views}
+            </Button>
+            <Button
+              key={'comment'}
+              variant="light"
+              className="text-gray-3"
+              startContent={<MessageOutlined />}
+              onPress={handlePostClick}
+            >
+              {props.react.comments}
+            </Button>
+            <Button
+              key={'vote'}
+              variant="light"
+              className="text-gray-3"
+              startContent={<ArrowUpOutlined />}
+              onPress={() => increaseVote(props.postId)}
+            >
+              {props.react.votes}
+            </Button>
+          </ButtonGroup>
         </div>
       </div>
     )

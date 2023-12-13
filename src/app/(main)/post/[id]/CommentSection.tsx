@@ -1,11 +1,35 @@
-import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, Textarea } from '@nextui-org/react'
+import {
+  Avatar,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Textarea,
+} from '@nextui-org/react'
 import React from 'react'
 import Comment from './Comment'
 
 const CommentSection = () => {
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-medium">Comments</h1>
+      <div className="mb-6 flex items-center">
+        <h1 className="text-2xl font-medium">Comments</h1>
+        <Dropdown>
+          <DropdownTrigger>
+            <p className="ml-auto text-sm font-light">Sorted by Recent</p>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Static Actions">
+            <DropdownItem key="sort-recent">Sort recent</DropdownItem>
+            <DropdownItem key="sort-relevant">Sort relevant</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
       <Card className="p-6">
         <CardHeader className="space-x-4">
           <Avatar src="/gray.png" />
@@ -24,7 +48,9 @@ const CommentSection = () => {
       <div className="h-6" />
 
       <div className="mt-6 space-y-6">
-        <Comment />
+        <Comment reply={2} />
+        <Divider />
+        <Comment reply={1} />
       </div>
     </div>
   )

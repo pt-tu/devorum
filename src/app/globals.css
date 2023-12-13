@@ -116,3 +116,15 @@
     opacity: 0.8;
   }
 }
+
+.two-lines-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.remove-border > div {
+  border: 0 !important;
+}

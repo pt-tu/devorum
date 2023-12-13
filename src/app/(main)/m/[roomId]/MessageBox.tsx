@@ -101,7 +101,7 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
   }
 
   return (
-    <div className=" m-auto flex w-full max-w-2xl flex-shrink-0 gap-6 pb-2 pt-2">
+    <div className=" m-auto flex w-full max-w-2xl flex-shrink-0 gap-6 pb-2">
       <input onChange={handleFileChange} type="file" ref={ref} className="hidden" accept=".jpg,.jpeg,.png" />
       <div className="relative flex-1">
         {isReplyingTo && (

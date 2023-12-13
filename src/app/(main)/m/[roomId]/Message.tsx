@@ -18,9 +18,10 @@ type Props = {
   message: MessageType
   setIsReplyingTo: (value: any) => void
   toUser?: User
+  showAvatar?: boolean
 }
 
-const Message = ({ setIsReplyingTo, message, toUser }: Props) => {
+const Message = ({ setIsReplyingTo, message, toUser, showAvatar = true }: Props) => {
   const theme = useThemeStore((state) => state.theme)
   const user = useUserStore((state) => state.user)
   const { roomId } = useParams()
@@ -49,8 +50,8 @@ const Message = ({ setIsReplyingTo, message, toUser }: Props) => {
   }
 
   return (
-    <div className={classNames(' flex w-full gap-4', isSelf && 'flex-row-reverse')}>
-      {!isSelf && <Avatar size="lg" src={toUser?.avatar} />}
+    <div className={classNames('flex w-full gap-4', isSelf && 'flex-row-reverse')}>
+      {!isSelf && <>{showAvatar ? <Avatar size="lg" src={toUser?.avatar} /> : <div className="w-[54px]" />}</>}
       <div className="max-w-[80%]">
         <div
           onDoubleClick={() => setIsReplyingTo({ message })}
@@ -87,15 +88,17 @@ const Message = ({ setIsReplyingTo, message, toUser }: Props) => {
           )}
 
           {message.language && message.body ? (
-            <SyntaxHighlighter
-              className={classNames(theme === 'light' && 'invert')}
-              language={message.language}
-              style={atomDark}
-              showLineNumbers
-              wrapLongLines
-            >
-              {message.body}
-            </SyntaxHighlighter>
+            <div className="-mx-4 -my-6">
+              <SyntaxHighlighter
+                className={classNames('', theme === 'light' && 'invert')}
+                language={message.language}
+                style={atomDark}
+                showLineNumbers
+                wrapLongLines
+              >
+                {message.body}
+              </SyntaxHighlighter>
+            </div>
           ) : message.mediaUrl ? (
             <div className="-m-4">
               <Image

@@ -153,9 +153,9 @@ const MessageRoom = () => {
       </div>
 
       <div className="small-scrollbar w-full flex-1 overflow-y-auto">
-        <div className="m-auto h-full max-w-2xl space-y-4 px-1 pb-2 pt-20">
+        <div className="m-auto h-full max-w-2xl space-y-4 px-1 pb-2">
           <ReallySimpleInfiniteScroll
-            className={`infinite-scroll display-inverse h-full space-y-4`}
+            className={`infinite-scroll display-inverse h-full space-y-4 pt-20`}
             hasMore={limit < messages.length}
             length={messages.length}
             loadingComponent={
@@ -172,9 +172,15 @@ const MessageRoom = () => {
             onInfiniteLoad={incLimit}
             displayInverse={true}
           >
-            {sliceMessages.map((message) => (
+            {sliceMessages.map((message, index) => (
               <div key={message._id}>
-                <Message toUser={toUser} setIsReplyingTo={setIsReplyingTo} message={message} key={message._id} />
+                <Message
+                  showAvatar={index === sliceMessages.length - 1 || sliceMessages[index + 1].from !== message.from}
+                  toUser={toUser}
+                  setIsReplyingTo={setIsReplyingTo}
+                  message={message}
+                  key={message._id}
+                />
               </div>
             ))}
           </ReallySimpleInfiniteScroll>

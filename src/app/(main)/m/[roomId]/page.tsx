@@ -140,8 +140,8 @@ const MessageRoom = () => {
   }
 
   return (
-    <div className="relative col-span-9 h-full bg-dark-5">
-      <div className="absolute z-20 flex h-[72px] w-full items-center gap-4 border-l border-l-dark-2 bg-dark-2/50 px-6 shadow-md backdrop-blur-md">
+    <div className="relative col-span-9 flex h-[calc(100vh-80px)] flex-col justify-between bg-dark-5">
+      <div className="absolute z-20 flex h-[72px] w-full flex-shrink-0 items-center gap-4 border-l border-l-dark-2 bg-dark-2/50 px-6 shadow-md backdrop-blur-md">
         <Avatar src={toUser.avatar} size="lg" />
         <div>
           <p className="text-base">{toUser.username}</p>
@@ -151,7 +151,8 @@ const MessageRoom = () => {
           </p>
         </div>
       </div>
-      <div className="small-scrollbar h-[calc(100vh-168px)] w-full overflow-y-auto">
+
+      <div className="small-scrollbar w-full flex-1 overflow-y-auto">
         <div className="m-auto h-full max-w-2xl space-y-4 px-1 pb-2 pt-20">
           <ReallySimpleInfiniteScroll
             className={`infinite-scroll display-inverse h-full space-y-4`}
@@ -177,12 +178,6 @@ const MessageRoom = () => {
               </div>
             ))}
           </ReallySimpleInfiniteScroll>
-          {/* {isOtherTyping && (
-            <div className="flex w-full items-center gap-4">
-              <Avatar size="lg" src={toUser?.avatar} />
-              <p>Typing...</p>
-            </div>
-          )} */}
         </div>
       </div>
 

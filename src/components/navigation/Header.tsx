@@ -10,6 +10,7 @@ import { defaultAvatar } from '@/configs/defaultValues'
 import { Badge, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import useRoomsData from '@/hooks/useRoomsData'
+import { IoMdCode } from 'react-icons/io'
 
 export default function Header() {
   const [user] = useUserStore((state) => [state.user])
@@ -51,6 +52,10 @@ export default function Header() {
 
       {/* Right */}
       <div className="flex flex-1 flex-row items-center justify-center gap-6">
+        <Button variant="flat" isIconOnly as={Link} href="/dev">
+          <IoMdCode className="text-2xl" />
+        </Button>
+
         {unreadMsgs ? (
           <Badge content={unreadMsgs} size="lg" color="primary">
             <Button variant="flat" isIconOnly as={Link} href="/m">

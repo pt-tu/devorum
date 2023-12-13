@@ -19,25 +19,6 @@ type Props = {
   setIsReplyingTo: (value: any) => void
   toUser?: User
 }
-const codeString = `class HelloMessage extends React.Component {
-  handlePress = () => {
-    alert('Hello')
-  }
-  render() {
-    return (
-      <div>
-        <p>Hello {this.props.name}</p>
-        <button onClick={this.handlePress}>Say Hello</button>
-      </div>
-    );
-  }
-}
-
-ReactDOM.render(
-  <HelloMessage name="Taylor" />,
-  mountNode
-);
-`
 
 const Message = ({ setIsReplyingTo, message, toUser }: Props) => {
   const theme = useThemeStore((state) => state.theme)
@@ -105,15 +86,15 @@ const Message = ({ setIsReplyingTo, message, toUser }: Props) => {
             </div>
           )}
 
-          {message.language ? (
+          {message.language && message.body ? (
             <SyntaxHighlighter
               className={classNames(theme === 'light' && 'invert')}
-              language="javascript"
+              language={message.language}
               style={atomDark}
               showLineNumbers
               wrapLongLines
             >
-              {codeString}
+              {message.body}
             </SyntaxHighlighter>
           ) : message.mediaUrl ? (
             <div className="-m-4">

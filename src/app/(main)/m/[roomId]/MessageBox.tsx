@@ -1,5 +1,5 @@
 'use client'
-import { Button, Input } from '@nextui-org/react'
+import { Button, Textarea } from '@nextui-org/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { IoClose, IoSend } from 'react-icons/io5'
 import { MdOutlinePermMedia } from 'react-icons/md'
@@ -12,7 +12,7 @@ import { useMessageStore } from '@/store/useMessagesStore'
 import { useParams } from 'next/navigation'
 import { uploadFileService } from '@/services/uploadService'
 import Image from 'next/image'
-import checkPageStatus from '@/utils/notifyUser'
+import detectLang from 'lang-detector'
 
 type Props = {
   isReplyingTo?: {
@@ -37,13 +37,26 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
 
   const sendMessage = () => {
     if (user && rooms && rooms.length > 0) {
-      socket.emit('message', {
+      const lang = detectLang(message)
+
+      let language: string | undefined = undefined
+      if (typeof lang === 'string') {
+        language = lang.toLowerCase()
+      }
+
+      const data: any = {
         room: params.roomId,
         body: message,
         from: user.username,
         replyTo: isReplyingTo?.message?._id,
         seen: [user.username],
-      })
+      }
+
+      if (language && language !== 'unknown') {
+        data.language = language
+      }
+
+      socket.emit('message', data)
       setIsReplyingTo(undefined)
     }
     setMessage('')
@@ -87,10 +100,8 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
     }
   }
 
-
-
   return (
-    <div className=" m-auto flex h-20 max-w-2xl flex-shrink-0 gap-6 pb-2 pt-2">
+    <div className=" m-auto flex w-full max-w-2xl flex-shrink-0 gap-6 pb-2">
       <input onChange={handleFileChange} type="file" ref={ref} className="hidden" accept=".jpg,.jpeg,.png" />
       <div className="relative flex-1">
         {isReplyingTo && (
@@ -131,10 +142,13 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
             </Button>
           </div>
         )}
-        <Input
+        <Textarea
+          minRows={1}
+          maxRows={4}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !e.shiftKey) {
               sendMessage()
+              e.preventDefault()
             }
             handleTyping()
           }}
@@ -145,25 +159,26 @@ const MessageBox = ({ isReplyingTo, setIsReplyingTo }: Props) => {
               <MdOutlinePermMedia className="text-2xl" />
             </Button>
           }
+          classNames={{
+            input: ['mt-2'],
+          }}
           size="lg"
           className="h-full w-full rounded-xl"
-        ></Input>
+        ></Textarea>
       </div>
-      <div className="aspect-square h-full">
-        <Button
-          onClick={() => {
-            sendMessage()
-          }}
-          isDisabled={message.length === 0}
-          isIconOnly
-          radius="full"
-          size="lg"
-          color="primary"
-          className="h-full w-full"
-        >
-          <IoSend className="text-xl" />
-        </Button>
-      </div>
+      <Button
+        onClick={() => {
+          sendMessage()
+        }}
+        isDisabled={message.length === 0}
+        isIconOnly
+        radius="full"
+        size="lg"
+        color="primary"
+        className="h-16 w-16"
+      >
+        <IoSend className="text-xl" />
+      </Button>
     </div>
   )
 }

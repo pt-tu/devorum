@@ -12,6 +12,7 @@ import { User } from '@/types/user.type'
 import { Message as MessageType, Room } from '@/types/chat.type'
 import { socket } from '@/configs/socketIO'
 import { ReallySimpleInfiniteScroll } from 'react-really-simple-infinite-scroll'
+import moment from 'moment'
 
 const MessageRoom = () => {
   const [isReplyingTo, setIsReplyingTo] = useState<{ message: MessageType }>()
@@ -139,9 +140,13 @@ const MessageRoom = () => {
     }, 1000)
   }
 
+  const isDateDifferent = (date1: Date, date2: Date) => {
+    return moment(date1).format('DD/MM/YYYY') !== moment(date2).format('DD/MM/YYYY')
+  }
+
   return (
-    <div className="relative col-span-9 h-full bg-dark-5">
-      <div className="absolute z-20 flex h-[72px] w-full items-center gap-4 border-l border-l-dark-2 bg-dark-2/50 px-6 shadow-md backdrop-blur-md">
+    <div className="relative col-span-9 flex h-[calc(100vh-80px)] flex-col justify-between bg-dark-5">
+      <div className="absolute z-20 flex h-[72px] w-full flex-shrink-0 items-center gap-4 border-l border-l-dark-2 bg-dark-2/50 px-6 shadow-md backdrop-blur-md">
         <Avatar src={toUser.avatar} size="lg" />
         <div>
           <p className="text-base">{toUser.username}</p>
@@ -151,10 +156,11 @@ const MessageRoom = () => {
           </p>
         </div>
       </div>
-      <div className="small-scrollbar h-[calc(100vh-168px)] w-full overflow-y-auto">
-        <div className="m-auto h-full max-w-2xl space-y-4 px-1 pb-2 pt-20">
+
+      <div className="small-scrollbar w-full flex-1 overflow-y-auto">
+        <div className="m-auto h-full max-w-2xl space-y-4 px-1 pb-2">
           <ReallySimpleInfiniteScroll
-            className={`infinite-scroll display-inverse h-full space-y-4`}
+            className={`infinite-scroll display-inverse h-full space-y-4 pt-20`}
             hasMore={limit < messages.length}
             length={messages.length}
             loadingComponent={
@@ -171,18 +177,19 @@ const MessageRoom = () => {
             onInfiniteLoad={incLimit}
             displayInverse={true}
           >
-            {sliceMessages.map((message) => (
+            {sliceMessages.map((message, index) => (
               <div key={message._id}>
-                <Message toUser={toUser} setIsReplyingTo={setIsReplyingTo} message={message} key={message._id} />
+                <Message
+                  showDate={index === 0 || isDateDifferent(message.createdAt, sliceMessages[index - 1].createdAt)}
+                  showAvatar={index === sliceMessages.length - 1 || sliceMessages[index + 1].from !== message.from}
+                  toUser={toUser}
+                  setIsReplyingTo={setIsReplyingTo}
+                  message={message}
+                  key={message._id}
+                />
               </div>
             ))}
           </ReallySimpleInfiniteScroll>
-          {/* {isOtherTyping && (
-            <div className="flex w-full items-center gap-4">
-              <Avatar size="lg" src={toUser?.avatar} />
-              <p>Typing...</p>
-            </div>
-          )} */}
         </div>
       </div>
 

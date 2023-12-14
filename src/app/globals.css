@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,13 +10,26 @@
 * {
   font-family: Rubik, Inter, Arial, Helvetica, sans-serif;
 }
+
+*.dev * {
+  font-family: var(--code-font-family), monospace !important;
+}
+
+*.override-font-size * {
+  font-size: var(--custom-font-size) !important;
+  outline: 0 !important;
+}
+
 @layer base {
   :root {
+    --code-font-family: 'Fira Code';
     --color-0: 211 202 194;
     --color-1: 247 247 247;
     --color-2: 255 255 255;
     --color-4: 245 245 245;
     --color-dark-5: 255 255 255;
+    --color-dark-6: 255 255 255;
+    --color-dark-7: 245 245 245;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -24,6 +38,8 @@
       --color-2: 45 45 45;
       --color-4: 44 53 61;
       --color-dark-5: 10 10 10;
+      --color-dark-6: 30 30 30;
+      --color-dark-7: 45 45 45;
     }
   }
   :root[data-theme='dark'] {
@@ -36,6 +52,8 @@
     --color-gray-5: 160 170 184;
     --color-gray-3: 247 247 247;
     --color-dark-5: 19 19 19;
+    --color-dark-6: 30 30 30;
+    --color-dark-7: 45 45 45;
   }
   :root[data-theme='light'] {
     --color-0: 211 202 194;
@@ -47,6 +65,8 @@
     --color-gray-5: 197 208 230;
     --color-gray-3: 151 152 157;
     --color-dark-5: 255 255 255;
+    --color-dark-6: 255 255 255;
+    --color-dark-7: 245 245 245;
   }
 }
 

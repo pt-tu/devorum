@@ -198,6 +198,9 @@ const Dev = () => {
             selectedKey={tab}
             key={'underlined'}
             variant={'underlined'}
+            classNames={{
+              panel: 'h-[calc(100%-40px)]',
+            }}
             aria-label="Tabs variants"
           >
             <Tab
@@ -228,7 +231,7 @@ const Dev = () => {
                 ))}
               </div>
             </Tab>
-            <Tab key="Shell" title={<p className="text-[13px]">Shell</p>}>
+            <Tab key="Shell" title={<p className="h-full text-[13px]">Shell</p>}>
               <Shell fontSize={options.fontSize} />
             </Tab>
           </Tabs>

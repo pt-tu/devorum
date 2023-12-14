@@ -15,6 +15,11 @@
   font-family: var(--code-font-family), monospace !important;
 }
 
+*.override-font-size * {
+  font-size: var(--custom-font-size) !important;
+  outline: 0 !important;
+}
+
 @layer base {
   :root {
     --code-font-family: 'Fira Code';

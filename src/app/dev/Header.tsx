@@ -26,13 +26,15 @@ type Props = {
     formatOnSave: boolean
   }
   setOptions: (value: { fontSize: string; fontFamily: string; tabSize: number; formatOnSave: boolean }) => void
+  processing: boolean
+  submit: () => void
 }
 
 const fontSize = ['12px', '13px', '14px', '15px', '16px', '17px', '18px', '19px', '20px']
 const fontFamilies = ['Fira Code', 'monospace', 'Arial']
 const tabSizes = ['2', '4']
 
-const Header = ({ options, setOptions }: Props) => {
+const Header = ({ options, setOptions, processing, submit }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
@@ -44,7 +46,7 @@ const Header = ({ options, setOptions }: Props) => {
           </Link>
         </div>
         <div className="flex items-center justify-center">
-          <Button color="primary" size="sm">
+          <Button isLoading={processing} onClick={submit} color="primary" size="sm">
             <FaPlay />
             Run
           </Button>

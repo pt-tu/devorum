@@ -44,3 +44,10 @@ export interface Language {
   id: number
   name: string
 }
+
+export type Options = {
+  fontSize: string
+  fontFamily: string
+  tabSize: number
+  formatOnSave: boolean
+}

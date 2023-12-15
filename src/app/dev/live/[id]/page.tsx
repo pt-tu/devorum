@@ -1,33 +1,18 @@
 'use client'
-import React from 'react'
-import { Tab, Tabs, Textarea } from '@nextui-org/react'
 
+import useEditor from '@/hooks/useEditor'
+import React from 'react'
+import EditorWithChildren from '../../EditorWithChildren'
+import { Tab, Tabs, Textarea } from '@nextui-org/react'
 import { MdDeleteOutline } from 'react-icons/md'
 import moment from 'moment'
-import Shell from './Shell'
-import EditorWithChildren from '../EditorWithChildren'
-import useEditor from '@/hooks/useEditor'
 
-const Play = () => {
+const LiveRoom = () => {
   const editor = useEditor()
 
   return (
     <EditorWithChildren {...editor}>
-      <title>Play With Code</title>
-      <div className="dev h-full flex-[2] flex-shrink-0 rounded-xl bg-dark-6 p-2">
-        <Tabs key={'underlined'} variant={'underlined'} aria-label="Tabs variants">
-          <Tab key="Input" title={<span className="text-[13px]">Input</span>}>
-            <Textarea
-              value={editor.input}
-              onChange={(e) => editor.setInput(e.target.value)}
-              style={{ fontSize: editor.options.fontSize }}
-              className="mx-1"
-              fullWidth
-            />
-          </Tab>
-        </Tabs>
-      </div>
-      <div className="dev small-scrollbar relative flex-[3] overflow-y-auto rounded-xl bg-dark-6 p-2">
+      <div className="small-scrollbar flex-1 overflow-y-auto rounded-xl bg-dark-6 p-2">
         <Tabs
           onSelectionChange={(value) => editor.setTab(value as string)}
           selectedKey={editor.tab}
@@ -38,6 +23,15 @@ const Play = () => {
           }}
           aria-label="Tabs variants"
         >
+          <Tab key="Input" title={<span className="text-[13px]">Input</span>}>
+            <Textarea
+              value={editor.input}
+              onChange={(e) => editor.setInput(e.target.value)}
+              style={{ fontSize: editor.options.fontSize }}
+              className="mx-1"
+              fullWidth
+            />
+          </Tab>
           <Tab
             key="Console"
             title={
@@ -65,15 +59,17 @@ const Play = () => {
                 </div>
               ))}
             </div>
-            <div className="h-12" />
-          </Tab>
-          <Tab key="Shell" title={<p className="h-full text-[13px]">Shell</p>}>
-            <Shell fontSize={editor.options.fontSize} />
           </Tab>
         </Tabs>
+
+        <div className="h-12" />
+      </div>
+      <div className="flex flex-1 gap-2 ">
+        <div className="h-full flex-1 rounded-xl bg-dark-6 p-2"></div>
+        <div className="h-full flex-1 rounded-xl bg-dark-6 p-2"></div>
       </div>
     </EditorWithChildren>
   )
 }
 
-export default Play
+export default LiveRoom

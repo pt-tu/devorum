@@ -26,7 +26,7 @@ type Props = {
     formatOnSave: boolean
   }
   setOptions: (value: { fontSize: string; fontFamily: string; tabSize: number; formatOnSave: boolean }) => void
-  processing: boolean
+  processing?: boolean
   submit: () => void
 }
 
@@ -39,17 +39,19 @@ const Header = ({ options, setOptions, processing, submit }: Props) => {
 
   return (
     <>
-      <div className="col-span-2 grid grid-cols-3 items-center justify-center">
+      <div className="sticky top-0 z-[11] col-span-2 grid grid-cols-3 items-center justify-center bg-dark-2 p-2">
         <div>
           <Link href={'/'}>
             <Logo width={32} height={32} />
           </Link>
         </div>
         <div className="flex items-center justify-center">
-          <Button isLoading={processing} onClick={submit} color="primary" size="sm">
-            <FaPlay />
-            Run
-          </Button>
+          {processing !== undefined && (
+            <Button isLoading={processing} onClick={submit} color="primary" size="sm">
+              <FaPlay />
+              Run
+            </Button>
+          )}
         </div>
         <div className="flex items-center justify-end gap-4">
           <Button onClick={onOpen} size="sm" radius="full" isIconOnly variant="light">

@@ -30,6 +30,7 @@
     --color-dark-5: 255 255 255;
     --color-dark-6: 255 255 255;
     --color-dark-7: 245 245 245;
+    --color-dark-true: 255 255 255;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -40,6 +41,7 @@
       --color-dark-5: 10 10 10;
       --color-dark-6: 30 30 30;
       --color-dark-7: 45 45 45;
+      --color-dark-true: 0 0 0;
     }
   }
   :root[data-theme='dark'] {
@@ -54,6 +56,7 @@
     --color-dark-5: 19 19 19;
     --color-dark-6: 30 30 30;
     --color-dark-7: 45 45 45;
+    --color-dark-true: 0 0 0;
   }
   :root[data-theme='light'] {
     --color-0: 211 202 194;
@@ -67,6 +70,7 @@
     --color-dark-5: 255 255 255;
     --color-dark-6: 255 255 255;
     --color-dark-7: 245 245 245;
+    --color-dark-true: 255 255 255;
   }
 }
 

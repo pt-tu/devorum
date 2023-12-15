@@ -26,6 +26,7 @@ const config: Config = {
           5: 'rgb(var(--color-dark-5) / <alpha-value>)',
           6: 'rgb(var(--color-dark-6) / <alpha-value>)',
           7: 'rgb(var(--color-dark-7) / <alpha-value>)',
+          true: 'rgb(var(--color-dark-true) / <alpha-value>)',
         },
         gray: {
           3: 'rgb(var(--color-gray-3) / <alpha-value>)',

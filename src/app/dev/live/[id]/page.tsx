@@ -8,7 +8,7 @@ import { MdDeleteOutline } from 'react-icons/md'
 import moment from 'moment'
 
 const LiveRoom = () => {
-  const editor = useEditor()
+  const editor = useEditor(false)
 
   return (
     <EditorWithChildren {...editor}>

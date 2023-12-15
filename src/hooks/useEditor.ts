@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import moment from 'moment'
 import { Value } from 'classnames'
 
-const useEditor = () => {
+const useEditor = (persist = true) => {
   const [code, setCode] = useState('')
   const [processing, setProcessing] = useState(false)
   const [input, setInput] = useState('')
@@ -50,13 +50,17 @@ const useEditor = () => {
   }
 
   useEffect(() => {
-    setCode(localStorage.getItem('code') || '')
+    if (persist) {
+      setCode(localStorage.getItem('code') || '')
+    }
     setOptions(JSON.parse(localStorage.getItem('code-options') || '{}'))
-  }, [])
+  }, [persist])
 
   const handleCodeChange = (v: Value) => {
     setCode(v as string)
-    localStorage.setItem('code', v as string)
+    if (persist) {
+      localStorage.setItem('code', v as string)
+    }
   }
 
   const changeOptions = (value: typeof options) => {

@@ -28,22 +28,24 @@ type Props = {
   setOptions: (value: { fontSize: string; fontFamily: string; tabSize: number; formatOnSave: boolean }) => void
   processing?: boolean
   submit: () => void
+  title?: string
 }
 
 const fontSize = ['12px', '13px', '14px', '15px', '16px', '17px', '18px', '19px', '20px']
 const fontFamilies = ['Fira Code', 'monospace', 'Arial']
 const tabSizes = ['2', '4']
 
-const Header = ({ options, setOptions, processing, submit }: Props) => {
+const Header = ({ title, options, setOptions, processing, submit }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
     <>
       <div className="sticky top-0 z-[11] col-span-2 grid grid-cols-3 items-center justify-center bg-dark-2 p-2">
-        <div>
+        <div className="flex items-center gap-4">
           <Link href={'/'}>
             <Logo width={32} height={32} />
           </Link>
+          <p className="text-sm">{title}</p>
         </div>
         <div className="flex items-center justify-center">
           {processing !== undefined && (

@@ -24,6 +24,7 @@
     "lang-detector": "^1.0.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "monaco-editor": "^0.45.0",
     "next": "latest",
     "next-remove-imports": "^1.0.12",
     "next-seo": "^6.4.0",

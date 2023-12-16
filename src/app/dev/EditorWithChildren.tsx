@@ -37,6 +37,7 @@ type Props = {
   changeOptions: (value: Options) => void
   submit: () => Promise<void>
   format: () => void
+  title?: string
 }
 
 const EditorWithChildren = ({
@@ -52,12 +53,19 @@ const EditorWithChildren = ({
   format,
   handleCodeChange,
   handleEditorDidMount,
+  title,
 }: Props) => {
   const theme = useThemeStore((state) => state.theme)
 
   return (
     <>
-      <Header submit={submit} processing={processing} options={{ ...options }} setOptions={changeOptions} />
+      <Header
+        title={title}
+        submit={submit}
+        processing={processing}
+        options={{ ...options }}
+        setOptions={changeOptions}
+      />
 
       <div
         className="grid h-[calc(100vh-48px)] grid-cols-2 gap-2 overflow-hidden bg-dark-7 px-2 pb-2 text-[13px]"

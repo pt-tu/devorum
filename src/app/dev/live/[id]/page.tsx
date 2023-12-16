@@ -6,12 +6,25 @@ import EditorWithChildren from '../../EditorWithChildren'
 import { Tab, Tabs, Textarea } from '@nextui-org/react'
 import { MdDeleteOutline } from 'react-icons/md'
 import moment from 'moment'
+import * as Y from 'yjs'
+import { WebsocketProvider } from 'y-websocket'
+import { MonacoBinding } from 'y-monaco'
 
-const LiveRoom = () => {
-  const editor = useEditor(false)
+const LiveRoom = ({ params }: { params: any }) => {
+  const id = params.id
+  const editor = useEditor(false, (editor, monaco) => {
+    const doc = new Y.Doc()
+    const provider = new WebsocketProvider('ws://localhost:1234', 'monaco', doc)
+    const type = doc.getText('monaco')
+    console.log('editor.getModel()', editor.getModel())
+    console.log('editor', editor)
+    const binding = new MonacoBinding(type, editor.getModel(), new Set([editor]), provider.awareness)
+    console.log('biding', binding)
+    console.log(provider.awareness)
+  })
 
   return (
-    <EditorWithChildren {...editor}>
+    <EditorWithChildren title={id} {...editor}>
       <div className="small-scrollbar flex-1 overflow-y-auto rounded-xl bg-dark-6 p-2">
         <Tabs
           onSelectionChange={(value) => editor.setTab(value as string)}

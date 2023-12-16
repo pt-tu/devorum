@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import moment from 'moment'
 import { Value } from 'classnames'
 
-const useEditor = (persist = true) => {
+const useEditor = (persist = true, outerEditorDidMount?: (editor: any, monaco: any) => void) => {
   const [code, setCode] = useState('')
   const [processing, setProcessing] = useState(false)
   const [input, setInput] = useState('')
@@ -47,6 +47,7 @@ const useEditor = (persist = true) => {
         e.preventDefault()
       }
     })
+    outerEditorDidMount && outerEditorDidMount(editor, monaco)
   }
 
   useEffect(() => {
@@ -145,6 +146,7 @@ const useEditor = (persist = true) => {
     handleCodeChange,
     changeOptions,
     submit,
+    editorRef,
     format,
   }
 }

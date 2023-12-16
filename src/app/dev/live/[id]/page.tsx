@@ -14,7 +14,7 @@ const LiveRoom = ({ params }: { params: any }) => {
   const id = params.id
   const editor = useEditor(false, (editor, monaco) => {
     const doc = new Y.Doc()
-    const provider = new WebsocketProvider('ws://localhost:1234', 'monaco', doc)
+    const provider = new WebsocketProvider('ws://localhost:8102', 'monaco', doc)
     const type = doc.getText('monaco')
     console.log('editor.getModel()', editor.getModel())
     console.log('editor', editor)

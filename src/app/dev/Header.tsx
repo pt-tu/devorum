@@ -1,6 +1,7 @@
 import { Logo } from '@/assets'
 import ThemeButton from '@/components/common/ThemeButton'
 import User from '@/components/navigation/User'
+import { useThemeStore } from '@/store/useThemeStore'
 import {
   Button,
   Checkbox,
@@ -13,6 +14,7 @@ import {
   SelectItem,
   useDisclosure,
 } from '@nextui-org/react'
+import classNames from 'classnames'
 import Link from 'next/link'
 import React from 'react'
 import { FaPlay } from 'react-icons/fa6'
@@ -38,9 +40,16 @@ const tabSizes = ['2', '4']
 const Header = ({ title, options, setOptions, processing, submit }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
+  const theme = useThemeStore((state) => state.theme)
+
   return (
     <>
-      <div className="sticky top-0 z-[11] col-span-2 grid grid-cols-3 items-center justify-center bg-dark-2 p-2">
+      <div
+        className={classNames(
+          'sticky top-0 z-[11] col-span-2 grid grid-cols-3 items-center justify-center p-2',
+          theme === 'light' ? 'bg-dark-1' : 'bg-dark-2',
+        )}
+      >
         <div className="flex items-center gap-4">
           <Link href={'/'}>
             <Logo width={32} height={32} />

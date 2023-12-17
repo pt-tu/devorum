@@ -3,7 +3,6 @@ import { Block, Follow } from './follow.type'
 type User = {
   email: string
   username: string
-  password: string
   fullName?: string
   avatar?: string
   banner?: string

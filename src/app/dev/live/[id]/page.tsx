@@ -1,7 +1,7 @@
 'use client'
 
 import useEditor from '@/hooks/useEditor'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import EditorWithChildren from '../../EditorWithChildren'
 import { Tab, Tabs, Textarea } from '@nextui-org/react'
 import { MdDeleteOutline } from 'react-icons/md'
@@ -12,9 +12,13 @@ import { WebsocketProvider } from 'y-websocket'
 import { socket } from '@/configs/socketIO'
 import { useUserStore } from '@/store/useUserStore'
 import { User } from '@/types/user.type'
+import getRandomColor from '@/utils/genRanColor'
 
 const LiveRoom = ({ params }: { params: any }) => {
   const id = params.id
+  const [editorClassName, setEditorClassName] = useState<{
+    [key: number]: string
+  }>({})
   const [participants, setParticipants] = useState<User[]>([])
   const user = useUserStore((state) => state.user)
   const [ws, setWs] = useState<WebSocket | null>(null)
@@ -23,6 +27,7 @@ const LiveRoom = ({ params }: { params: any }) => {
     const provider = new WebsocketProvider('ws://localhost/live', id, doc, {})
     const type = doc.getText('monaco')
     const binding = new MonacoBinding(type, innerEditor.getModel(), new Set([innerEditor]), provider.awareness)
+
     if (user) {
       socket.emit('joinRoomDev', {
         user: user,
@@ -30,31 +35,35 @@ const LiveRoom = ({ params }: { params: any }) => {
       })
     }
 
-    ;(provider.ws as WebSocket).addEventListener('open', () => {
-      setWs(provider.ws as WebSocket)
-      const ws = provider.ws as WebSocket
+    ;(provider.ws as WebSocket)?.addEventListener('open', () => {
+      if (provider) {
+        setWs(provider.ws as WebSocket)
+        const ws = provider.ws as WebSocket
 
-      ws.addEventListener('message', (e) => {
-        if (e.data) {
-          try {
-            const payload = JSON.parse(e.data)
-            switch (payload.type) {
-              case 'change-language':
-                console.log('change-language', payload)
-                editor.setCurrLan(new Set([payload.data.language]))
-                break
-              default:
-                break
-            }
-          } catch (error) {
-            console.log('error parsing data received from live server', error)
+        ws.addEventListener('message', (e) => {
+          if (e.data) {
+            try {
+              const str = new TextDecoder().decode(e.data)
+              const payload = JSON.parse(str)
+              switch (payload.type) {
+                case 'change-language':
+                  console.log('change-language', payload)
+                  editor.setCurrLan(new Set([payload.data.language]))
+                  break
+                case 'updateUsersInRoom':
+                  console.log('new user joined', payload)
+                  break
+                default:
+                  break
+              }
+            } catch (_) {}
           }
-        }
-      })
+        })
+      }
     })
   })
 
-  console.log(editor.currLan)
+  console.log('editorClassName', editorClassName)
 
   useEffect(() => {
     const getRoomParticipants = (data: any) => {
@@ -68,7 +77,9 @@ const LiveRoom = ({ params }: { params: any }) => {
   }, [id])
 
   const onChangeLanguage = (keys: Set<string>) => {
-    ws?.send(JSON.stringify({ type: 'change-language', data: { language: keys.values().next().value } }))
+    if (ws) {
+      ws.send(JSON.stringify({ type: 'change-language', data: { language: keys.values().next().value } }))
+    }
   }
 
   return (

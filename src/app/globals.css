@@ -152,3 +152,46 @@
 .remove-border > div {
   border: 0 !important;
 }
+
+/* [class^='yRemoteSelection-'] {
+  background-color: var(--yRemoteSelectionColor);
+}
+
+[class^='yRemoteSelectionHead-'] {
+  position: absolute;
+  background-color: var(--yRemoteSelectionColor);
+  border-left: var(--yRemoteSelectionColor) solid 2px;
+  border-top: var(--yRemoteSelectionColor) solid 2px;
+  border-bottom: var(--yRemoteSelectionColor) solid 2px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+[class^='yRemoteSelectionHead-']::after {
+  position: absolute;
+  content: ' ';
+  border: 3px solid orange;
+  border-radius: 4px;
+  left: -4px;
+  top: -5px;
+}
+*/
+.yRemoteSelection {
+  background-color: rgb(250, 129, 0, 0.5);
+}
+.yRemoteSelectionHead {
+  position: absolute;
+  border-left: orange solid 2px;
+  border-top: orange solid 2px;
+  border-bottom: orange solid 2px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.yRemoteSelectionHead::after {
+  position: absolute;
+  content: ' ';
+  border: 3px solid orange;
+  border-radius: 4px;
+  left: -4px;
+  top: -5px;
+}

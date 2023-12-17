@@ -1,30 +1,78 @@
 'use client'
 
 import useEditor from '@/hooks/useEditor'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import EditorWithChildren from '../../EditorWithChildren'
 import { Tab, Tabs, Textarea } from '@nextui-org/react'
 import { MdDeleteOutline } from 'react-icons/md'
 import moment from 'moment'
 import * as Y from 'yjs'
-import { WebsocketProvider } from 'y-websocket'
 import { MonacoBinding } from 'y-monaco'
+import { WebsocketProvider } from 'y-websocket'
+import { socket } from '@/configs/socketIO'
+import { useUserStore } from '@/store/useUserStore'
+import { User } from '@/types/user.type'
 
 const LiveRoom = ({ params }: { params: any }) => {
   const id = params.id
-  const editor = useEditor(false, (editor, monaco) => {
+  const [participants, setParticipants] = useState<User[]>([])
+  const user = useUserStore((state) => state.user)
+  const [ws, setWs] = useState<WebSocket | null>(null)
+  const editor = useEditor(false, (innerEditor, monaco) => {
     const doc = new Y.Doc()
-    const provider = new WebsocketProvider('ws://localhost:8102', 'monaco', doc)
+    const provider = new WebsocketProvider('ws://localhost/live', id, doc, {})
     const type = doc.getText('monaco')
-    console.log('editor.getModel()', editor.getModel())
-    console.log('editor', editor)
-    const binding = new MonacoBinding(type, editor.getModel(), new Set([editor]), provider.awareness)
-    console.log('biding', binding)
-    console.log(provider.awareness)
+    const binding = new MonacoBinding(type, innerEditor.getModel(), new Set([innerEditor]), provider.awareness)
+    if (user) {
+      socket.emit('joinRoomDev', {
+        user: user,
+        room: id,
+      })
+    }
+
+    ;(provider.ws as WebSocket).addEventListener('open', () => {
+      setWs(provider.ws as WebSocket)
+      const ws = provider.ws as WebSocket
+
+      ws.addEventListener('message', (e) => {
+        if (e.data) {
+          try {
+            const payload = JSON.parse(e.data)
+            switch (payload.type) {
+              case 'change-language':
+                console.log('change-language', payload)
+                editor.setCurrLan(new Set([payload.data.language]))
+                break
+              default:
+                break
+            }
+          } catch (error) {
+            console.log('error parsing data received from live server', error)
+          }
+        }
+      })
+    })
   })
 
+  console.log(editor.currLan)
+
+  useEffect(() => {
+    const getRoomParticipants = (data: any) => {
+      console.log('joinRoomDevResponse', data)
+      setParticipants(Object.values(data[id])?.map((o: any) => o.user) || [])
+    }
+    socket.on('joinRoomDevResponse', getRoomParticipants)
+    return () => {
+      socket.off('joinRoomDevResponse', getRoomParticipants)
+    }
+  }, [id])
+
+  const onChangeLanguage = (keys: Set<string>) => {
+    ws?.send(JSON.stringify({ type: 'change-language', data: { language: keys.values().next().value } }))
+  }
+
   return (
-    <EditorWithChildren title={id} {...editor}>
+    <EditorWithChildren outerOnChangeLang={onChangeLanguage} participants={participants} title={id} {...editor}>
       <div className="small-scrollbar flex-1 overflow-y-auto rounded-xl bg-dark-6 p-2">
         <Tabs
           onSelectionChange={(value) => editor.setTab(value as string)}

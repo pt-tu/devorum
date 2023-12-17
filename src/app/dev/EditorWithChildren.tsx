@@ -2,12 +2,13 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import Editor from '@monaco-editor/react'
 import { useThemeStore } from '@/store/useThemeStore'
-import { Button, Select, SelectItem, Tooltip } from '@nextui-org/react'
+import { Button, Select, SelectItem, Selection, Tooltip } from '@nextui-org/react'
 import { SiPrettier } from 'react-icons/si'
 
 import Header from './Header'
 import { Options, SubmissionResponse } from '@/types/dev.type'
 import { Value } from 'classnames'
+import { User } from '@/types/user.type'
 
 type Props = {
   children: React.ReactNode
@@ -32,16 +33,19 @@ type Props = {
       value: string
     }
   }
+  participants?: User[]
   handleEditorDidMount: (editor: any, monaco: any) => void
   handleCodeChange: (v: Value) => void
   changeOptions: (value: Options) => void
   submit: () => Promise<void>
   format: () => void
   title?: string
+  outerOnChangeLang?: (keys: Set<string>) => void
 }
 
 const EditorWithChildren = ({
   children,
+  participants,
   code,
   submit,
   processing,
@@ -53,13 +57,19 @@ const EditorWithChildren = ({
   format,
   handleCodeChange,
   handleEditorDidMount,
+  outerOnChangeLang,
   title,
 }: Props) => {
   const theme = useThemeStore((state) => state.theme)
 
+  const onChangeLang = (keys: Selection) => {
+    setCurrLan(keys as Set<string>)
+    outerOnChangeLang && outerOnChangeLang(keys as Set<string>)
+  }
   return (
     <>
       <Header
+        participants={participants}
         title={title}
         submit={submit}
         processing={processing}
@@ -81,8 +91,9 @@ const EditorWithChildren = ({
               variant="underlined"
               labelPlacement="outside"
               size="sm"
-              onSelectionChange={(keys) => setCurrLan(keys as Set<string>)}
+              onSelectionChange={onChangeLang}
               defaultSelectedKeys={currLan}
+              selectedKeys={currLan}
               className="max-w-[320px]"
             >
               {Object.values(languageOptions)
@@ -102,7 +113,7 @@ const EditorWithChildren = ({
           <Editor
             value={code}
             onChange={handleCodeChange}
-            options={{ ...options, wordWrap: 'true' }}
+            options={{ ...options, wordWrap: 'on' }}
             onMount={handleEditorDidMount}
             className="h-[calc(100vh-120px)]"
             language={languageOptions[currLan.values().next().value]?.value || 'javascript'}

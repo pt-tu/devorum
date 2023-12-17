@@ -1,4 +1,4 @@
-import { SubmissionResponse } from '@/types/dev.type'
+import { Options, SubmissionResponse } from '@/types/dev.type'
 import { useEffect, useRef, useState } from 'react'
 import { languageOptions as langData } from '@/constants/languageOptions'
 import configs from '@/configs/configs'
@@ -14,12 +14,12 @@ const useEditor = (persist = true, outerEditorDidMount?: (editor: any, monaco: a
   const [results, setResults] = useState<SubmissionResponse[]>([])
   const [currLan, setCurrLan] = useState<Set<string>>(new Set(['63']))
   const [tab, setTab] = useState('Console')
-  const [options, setOptions] = useState({
+  const [options, setOptions] = useState<Options>({
     fontSize: '13px',
     fontFamily: 'Fira Code',
     tabSize: 2,
     formatOnSave: false,
-  })
+  } as unknown as Options)
   const formatOnSave = useRef<boolean>(true)
   const editorRef = useRef<any>(null)
   const languageOptions = langData.reduce(

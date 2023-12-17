@@ -3,7 +3,7 @@ import configs from '@/configs/configs'
 import React, { CSSProperties, useEffect, useRef } from 'react'
 
 type Props = {
-  fontSize: string
+  fontSize: number | string
 }
 
 const Shell = ({ fontSize = '13px' }: Props) => {

@@ -2,6 +2,8 @@ import { Logo } from '@/assets'
 import ThemeButton from '@/components/common/ThemeButton'
 import User from '@/components/navigation/User'
 import { useThemeStore } from '@/store/useThemeStore'
+import { Options } from '@/types/dev.type'
+import { User as UserType } from '@/types/user.type'
 import {
   Button,
   Checkbox,
@@ -12,6 +14,7 @@ import {
   ModalHeader,
   Select,
   SelectItem,
+  Tooltip,
   useDisclosure,
 } from '@nextui-org/react'
 import classNames from 'classnames'
@@ -21,23 +24,19 @@ import { FaPlay } from 'react-icons/fa6'
 import { IoSettingsOutline } from 'react-icons/io5'
 
 type Props = {
-  options: {
-    fontSize: string
-    fontFamily: string
-    tabSize: number
-    formatOnSave: boolean
-  }
-  setOptions: (value: { fontSize: string; fontFamily: string; tabSize: number; formatOnSave: boolean }) => void
+  options: Options
+  setOptions: (value: Options) => void
   processing?: boolean
   submit: () => void
   title?: string
+  participants?: UserType[]
 }
 
 const fontSize = ['12px', '13px', '14px', '15px', '16px', '17px', '18px', '19px', '20px']
 const fontFamilies = ['Fira Code', 'monospace', 'Arial']
 const tabSizes = ['2', '4']
 
-const Header = ({ title, options, setOptions, processing, submit }: Props) => {
+const Header = ({ participants, title, options, setOptions, processing, submit }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const theme = useThemeStore((state) => state.theme)
@@ -65,6 +64,14 @@ const Header = ({ title, options, setOptions, processing, submit }: Props) => {
           )}
         </div>
         <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center gap-2">
+            {participants &&
+              participants.map((user) => (
+                <Tooltip key={user._id} content={user.username}>
+                  <User key={user._id} size="sm" user={user} />
+                </Tooltip>
+              ))}
+          </div>
           <Button onClick={onOpen} size="sm" radius="full" isIconOnly variant="light">
             <IoSettingsOutline className="text-xl text-default-500" />
           </Button>

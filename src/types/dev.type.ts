@@ -46,7 +46,7 @@ export interface Language {
 }
 
 export type Options = {
-  fontSize: string
+  fontSize: number
   fontFamily: string
   tabSize: number
   formatOnSave: boolean

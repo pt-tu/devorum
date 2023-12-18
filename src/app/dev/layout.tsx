@@ -1,12 +1,13 @@
-'use client'
+import { Metadata } from 'next'
+import React from 'react'
 
-import PrivateLayout from '@/components/layouts/PrivateLayout'
-
-export default function DevLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <section>
-      <title>Dev Playground</title>
-      {children}
-    </section>
-  )
+export const metadata: Metadata = {
+  title: 'Dev Playground',
+  description: 'Build things with ease',
 }
+
+const DevLayout = ({ children }: { children: React.ReactNode }) => {
+  return <section>{children}</section>
+}
+
+export default DevLayout

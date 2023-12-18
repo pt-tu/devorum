@@ -1,3 +1,5 @@
+import { User } from './user.type'
+
 export interface SubmissionResponse {
   source_code: string
   language_id: number
@@ -43,4 +45,18 @@ export interface Status {
 export interface Language {
   id: number
   name: string
+}
+
+export type Options = {
+  fontSize: number
+  fontFamily: string
+  tabSize: number
+  formatOnSave: boolean
+}
+
+export type DevMessage = {
+  room: string
+  body: string
+  createdAt: Date
+  from: User
 }

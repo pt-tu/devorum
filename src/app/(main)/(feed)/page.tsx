@@ -1,11 +1,12 @@
 'use client'
 import { AppButton, HorizontalNav, PostItem, Divider } from '@/components'
 import { TabProps } from '@/components/common/Tab/TabButton'
+import usePostsData from '@/hooks/usePostsData'
 import { usePostStore } from '@/store/usePostStore'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
 import { Tab, Tabs } from '@nextui-org/react'
 import Head from 'next/head'
-import React, { Key, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const tabs: TabProps[] = [
   {
@@ -27,11 +28,17 @@ const tabs: TabProps[] = [
 ]
 
 export default function Page() {
-  const { posts } = usePostStore()
-  const [selectedTab, setSelectedTab] = useState(tabs[0].key)
+  const { posts, setPosts } = usePostStore()
+  const [selectedTab, setSelectedTab] = useState<string | number>(tabs[0].key)
   const [currentPosts, setCurrentPosts] = useState(posts)
 
-  const onSelectionChange = (key: Key) => {
+  const { data, isLoading } = usePostsData(1, 10)
+  // if (data?.posts) setPosts(data.posts)
+  useEffect(() => {
+    if (data?.posts) setCurrentPosts(data.posts)
+  }, [isLoading])
+
+  const onSelectionChange = (key: string | number) => {
     setSelectedTab(key)
     switch (key) {
       case 'top':
@@ -72,7 +79,7 @@ export default function Page() {
         <Tabs
           aria-label="Options"
           variant="light"
-          selectedKey={selectedTab}
+          selectedKey={selectedTab || tabs[0].key}
           onSelectionChange={(key) => onSelectionChange(key)}
         >
           {tabs.map((tab) => (
@@ -90,7 +97,7 @@ export default function Page() {
 
         <Divider className="my-5" />
         {currentPosts.map((item) => (
-          <PostItem {...item} key={item.postId} />
+          <PostItem {...item} key={item._id} />
         ))}
       </div>
     </div>

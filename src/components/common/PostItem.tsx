@@ -3,7 +3,6 @@ import { ArrowUpOutlined, EyeOutlined, MessageOutlined, MoreOutlined, SmileOutli
 import React, { useEffect, useState } from 'react'
 import { Tags } from './CommentItem/Tag'
 import { useRouter } from 'next/navigation'
-import { TagProps } from './CommentItem/Tag/TagButton'
 import { usePostStore } from '@/store/usePostStore'
 import { MDEditor, Markdown } from './Markdown'
 import classNames from 'classnames'
@@ -14,26 +13,14 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Image,
   Input,
-  MenuProps,
 } from '@nextui-org/react'
 import moment from 'moment'
+import { Post, Tag } from '@/types/post.type'
+import { defaultAvatar } from '@/configs/defaultValues'
 
-const items: MenuProps['items'] = [
-  {
-    key: 'edit',
-    label: 'Edit',
-  },
-  {
-    key: 'delete',
-    danger: true,
-    label: 'Delete',
-    // icon: <SmileOutlined />,
-    // disabled: true,
-  },
-]
-
-function PostItem(props: PostProps) {
+function PostItem(props: Post) {
   const router = useRouter()
   const { increaseVote, setIsEditing, updatePost } = usePostStore()
   const [title, setTitle] = useState<string>(props.title)
@@ -54,7 +41,7 @@ function PostItem(props: PostProps) {
   const onAction = (key: React.Key) => {
     switch (key) {
       case 'edit':
-        setIsEditing(props.postId)
+        setIsEditing(props._id)
         break
       case 'follow':
         console.log('Follow post')
@@ -71,9 +58,8 @@ function PostItem(props: PostProps) {
       ...props,
       title,
       content,
-      time: new Date().toLocaleDateString(),
     })
-    setIsEditing(props.postId)
+    setIsEditing(props._id)
   }
 
   return (
@@ -81,10 +67,10 @@ function PostItem(props: PostProps) {
       <div className="mb-6 flex flex-col gap-6 rounded-2xl bg-dark-2 px-8 py-6">
         {/* Header */}
         <div className="flex max-h-min flex-row">
-          <img className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.url} />
+          <Image className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.avatar || defaultAvatar} />
           <div className="ml-4 h-full flex-1">
-            <p className="text-sm font-normal text-gray-bg">{props.user.name}</p>
-            <p className="text-[10px] font-light text-gray-400">{moment(props.time).fromNow()}</p>
+            <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>
+            <p className="text-[10px] font-light text-gray-400">{moment(props.updatedAt).fromNow()}</p>
           </div>
           <Dropdown backdrop="blur">
             <DropdownTrigger>
@@ -108,7 +94,7 @@ function PostItem(props: PostProps) {
               <Input value={title} className="mb-5" onChange={(e) => setTitle(e.target.value)} />
               <MDEditor value={content} onChange={(e) => setContent(e || '')} />
               <div className="mt-5 flex flex-row justify-end gap-4">
-                <Button size="md" radius="sm" onPress={() => setIsEditing(props.postId)}>
+                <Button size="md" radius="sm" onPress={() => setIsEditing(props._id)}>
                   Cancel
                 </Button>
                 <Button size="md" radius="sm" color="primary" onPress={handleSaveClick}>
@@ -128,11 +114,11 @@ function PostItem(props: PostProps) {
         </div>
         {/* Footer */}
         <div className="flex flex-row items-center gap-1">
-          {props?.tags && <Tags tags={props.tags} />}
+          {props?.tags.length > 0 && <Tags tags={props.tags} />}
           <div className="flex-1" />
           <ButtonGroup size="sm">
             <Button key={'view'} variant="light" className="text-gray-3" startContent={<EyeOutlined />}>
-              {props.react.views}
+              {props.views?.length}
             </Button>
             <Button
               key={'comment'}
@@ -141,16 +127,16 @@ function PostItem(props: PostProps) {
               startContent={<MessageOutlined />}
               onPress={handlePostClick}
             >
-              {props.react.comments}
+              {props.comments?.length}
             </Button>
             <Button
               key={'vote'}
               variant="light"
               className="text-gray-3"
               startContent={<ArrowUpOutlined />}
-              onPress={() => increaseVote(props.postId)}
+              onPress={() => increaseVote(props._id)}
             >
-              {props.react.votes}
+              {props.votes?.length}
             </Button>
           </ButtonGroup>
         </div>
@@ -175,5 +161,5 @@ export interface PostProps {
     name: string
     url: string
   }
-  tags?: TagProps[]
+  tags?: Tag[]
 }

@@ -1,21 +1,22 @@
-import React from "react";
-import TagButton, { TagProps } from "./TagButton";
+import React from 'react'
+import TagButton from './TagButton'
+import { Tag } from '@/types/post.type'
 
 interface Props {
-  tags: TagProps[];
+  tags: Tag[]
 }
 
 function Tags({ tags }: Props) {
   //   const { tags } = props;
   return (
     tags.length && (
-      <div className="flex flex-row gap-2 my-3">
-        {tags.map(({ link, label }, index) => (
-          <TagButton link={link} label={label} key={index} />
+      <div className="my-3 flex flex-row gap-2">
+        {tags.map((tag, index) => (
+          <TagButton tag={tag} key={index} />
         ))}
       </div>
     )
-  );
+  )
 }
 
-export default Tags;
+export default Tags

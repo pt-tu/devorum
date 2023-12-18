@@ -1,3 +1,4 @@
+import { listPostService } from '@/services/postSevice'
 import { Post } from '@/types/post.type'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -6,10 +7,14 @@ import { createWithEqualityFn } from 'zustand/traditional'
 
 interface PostState {
   posts: Post[]
+  currentPage: number
+  totalPages: number
+  totalItems: number
   selectedPost: Post | undefined
 }
 
 interface PostActions {
+  getPosts: () => Promise<void>
   setIsEditing: (id: string) => void
   setSelectedPost: (id: string) => void
   increaseVote: (id: string) => void
@@ -22,7 +27,24 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
     persist(
       (set) => ({
         posts: [],
+        currentPage: 0,
+        totalPages: 0,
+        totalItems: 0,
         selectedPost: undefined,
+        getPosts: async () => {
+          try {
+            const response = await listPostService(1)
+            set((state) => {
+              const { posts, currentPage, totalPages, totalItems } = response.data
+              state.posts = posts
+              state.currentPage = currentPage
+              state.totalPages = totalPages
+              state.totalItems = totalItems
+            })
+          } catch (error) {
+            console.log('Get posts:', error)
+          }
+        },
         setIsEditing: (id) => {
           set((state) => {
             const postIndex = state.posts.findIndex((item) => item._id === id)

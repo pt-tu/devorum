@@ -4,8 +4,8 @@ import { socket } from '@/configs/socketIO'
 import useRoomsData from '@/hooks/useRoomsData'
 import { useMessageStore } from '@/store/useMessagesStore'
 import { useUserStore } from '@/store/useUserStore'
+import { Message } from '@/types/chat.type'
 import checkPageStatus from '@/utils/notifyUser'
-import { Message } from 'postcss'
 import { useEffect } from 'react'
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {

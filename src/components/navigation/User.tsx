@@ -2,18 +2,22 @@ import { useAuthStore, useUserStore } from '@/store/useUserStore'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useCallback } from 'react'
+import React, { forwardRef, useCallback } from 'react'
 import { defaultAvatar } from '@/configs/defaultValues'
 import { useRouter } from 'next/navigation'
+import { User } from '@/types/user.type'
 
 type Props = {
   size?: 'sm' | 'md' | 'lg'
+  user?: User
 }
 
-const User = ({ size }: Props) => {
-  const [user] = useUserStore((state) => [state.user])
+const User = forwardRef<HTMLDivElement, Props>(({ size, user: outerUser }: Props, ref) => {
+  const [innerUser] = useUserStore((state) => [state.user])
   const logOut = useAuthStore((state) => state.logOut)
   const router = useRouter()
+
+  const user = outerUser || innerUser
 
   const handleLogOut = useCallback(() => {
     logOut()
@@ -46,24 +50,31 @@ const User = ({ size }: Props) => {
             </Button>
           </DropdownTrigger>
           <DropdownMenu closeOnSelect aria-label="Static Actions">
-            <DropdownItem showDivider as={Link} href={`/p/${user.username}`} key="profile">
+            <DropdownItem showDivider={!outerUser} as={Link} href={`/p/${user.username}`} key="profile">
               {user.fullName || user.username}
               <p className="text-xs font-normal opacity-70">/{user.username}</p>
             </DropdownItem>
-            <DropdownItem as={Link} href="/quicksort" key="quicksort">
-              Quicksort
-            </DropdownItem>
-            <DropdownItem showDivider as={Link} href="/settings" key="settings">
-              Settings
-            </DropdownItem>
-            <DropdownItem onClick={handleLogOut} key="logout">
-              Log Out
-            </DropdownItem>
+            {!outerUser &&
+              ((
+                <>
+                  <DropdownItem as={Link} href="/quicksort" key="quicksort">
+                    Quicksort
+                  </DropdownItem>
+                  <DropdownItem showDivider as={Link} href="/settings" key="settings">
+                    Settings
+                  </DropdownItem>
+                  <DropdownItem onClick={handleLogOut} key="logout">
+                    Log Out
+                  </DropdownItem>
+                </>
+              ) as any)}
           </DropdownMenu>
         </Dropdown>
       )}
     </>
   )
-}
+})
+
+User.displayName = 'UserCircle'
 
 export default User

@@ -30,7 +30,7 @@ export const useMessageStore = createWithEqualityFn<MessageState>()(
 
           state.rooms[room].messages.push(message)
         } else {
-          const needUpdatedMessage = state.rooms[room].messages.find((m) => m._id === message._id)
+          const needUpdatedMessage = state.rooms[room]?.messages.find((m) => m._id === message._id)
           if (needUpdatedMessage) {
             console.log('trigger needUpdatedMessage')
             needUpdatedMessage.likes = message.likes

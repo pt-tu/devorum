@@ -1,6 +1,7 @@
 'use client'
 import { AppButton, HorizontalNav, PostItem, Divider } from '@/components'
 import { TabProps } from '@/components/common/Tab/TabButton'
+import usePostsData from '@/hooks/usePostsData'
 import { usePostStore } from '@/store/usePostStore'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
 import { Tab, Tabs } from '@nextui-org/react'
@@ -27,9 +28,15 @@ const tabs: TabProps[] = [
 ]
 
 export default function Page() {
-  const { posts } = usePostStore()
+  const { posts, setPosts } = usePostStore()
   const [selectedTab, setSelectedTab] = useState<string | number>(tabs[0].key)
   const [currentPosts, setCurrentPosts] = useState(posts)
+
+  const { data, isLoading } = usePostsData(1, 10)
+  // if (data?.posts) setPosts(data.posts)
+  useEffect(() => {
+    if (data?.posts) setCurrentPosts(data.posts)
+  }, [isLoading])
 
   const onSelectionChange = (key: string | number) => {
     setSelectedTab(key)

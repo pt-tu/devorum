@@ -14,7 +14,7 @@ interface PostState {
 }
 
 interface PostActions {
-  getPosts: () => Promise<void>
+  // getPosts: () => Promise<void>
   setIsEditing: (id: string) => void
   setSelectedPost: (id: string) => void
   increaseVote: (id: string) => void
@@ -31,20 +31,20 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
         totalPages: 0,
         totalItems: 0,
         selectedPost: undefined,
-        getPosts: async () => {
-          try {
-            const response = await listPostService(1)
-            set((state) => {
-              const { posts, currentPage, totalPages, totalItems } = response.data
-              state.posts = posts
-              state.currentPage = currentPage
-              state.totalPages = totalPages
-              state.totalItems = totalItems
-            })
-          } catch (error) {
-            console.log('Get posts:', error)
-          }
-        },
+        // getPosts: async () => {
+        //   try {
+        //     const response = await listPostService(1, 1)
+        //     set((state) => {
+        //       const { posts, currentPage, totalPages, totalItems } = response.data
+        //       state.posts = state.posts.concat(posts)
+        //       state.currentPage = currentPage
+        //       state.totalPages = totalPages
+        //       state.totalItems = totalItems
+        //     })
+        //   } catch (error) {
+        //     console.log('Get posts:', error)
+        //   }
+        // },
         setIsEditing: (id) => {
           set((state) => {
             const postIndex = state.posts.findIndex((item) => item._id === id)

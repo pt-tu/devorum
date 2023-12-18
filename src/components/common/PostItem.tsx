@@ -18,6 +18,7 @@ import {
 } from '@nextui-org/react'
 import moment from 'moment'
 import { Post, Tag } from '@/types/post.type'
+import { defaultAvatar } from '@/configs/defaultValues'
 
 function PostItem(props: Post) {
   const router = useRouter()
@@ -66,9 +67,9 @@ function PostItem(props: Post) {
       <div className="mb-6 flex flex-col gap-6 rounded-2xl bg-dark-2 px-8 py-6">
         {/* Header */}
         <div className="flex max-h-min flex-row">
-          <Image className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.avatar} />
+          <Image className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.avatar || defaultAvatar} />
           <div className="ml-4 h-full flex-1">
-            <p className="text-sm font-normal text-gray-bg">{props.user.fullName}</p>
+            <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>
             <p className="text-[10px] font-light text-gray-400">{moment(props.updatedAt).fromNow()}</p>
           </div>
           <Dropdown backdrop="blur">
@@ -113,11 +114,11 @@ function PostItem(props: Post) {
         </div>
         {/* Footer */}
         <div className="flex flex-row items-center gap-1">
-          {props?.tags && <Tags tags={props.tags} />}
+          {props?.tags.length > 0 && <Tags tags={props.tags} />}
           <div className="flex-1" />
           <ButtonGroup size="sm">
             <Button key={'view'} variant="light" className="text-gray-3" startContent={<EyeOutlined />}>
-              {props.views.length}
+              {props.views?.length}
             </Button>
             <Button
               key={'comment'}
@@ -126,7 +127,7 @@ function PostItem(props: Post) {
               startContent={<MessageOutlined />}
               onPress={handlePostClick}
             >
-              {props.comments.length}
+              {props.comments?.length}
             </Button>
             <Button
               key={'vote'}
@@ -135,7 +136,7 @@ function PostItem(props: Post) {
               startContent={<ArrowUpOutlined />}
               onPress={() => increaseVote(props._id)}
             >
-              {props.votes.length}
+              {props.votes?.length}
             </Button>
           </ButtonGroup>
         </div>

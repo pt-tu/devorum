@@ -20,20 +20,24 @@ import useLiveRoomsData from '@/hooks/useLiveRoomsData'
 import moment from 'moment'
 import Link from 'next/link'
 import { FaRegCircleQuestion } from 'react-icons/fa6'
+import { Options } from '@/types/dev.type'
+import { useUserStore } from '@/store/useUserStore'
 
 const Live = () => {
   const { data, mutate } = useLiveRoomsData()
   const [search, setSearch] = useState('')
+  const user = useUserStore((state) => state.user)
   const filteredData = data?.filter(
     (liveRoom) =>
-      liveRoom.owner.toLowerCase().includes(search.toLowerCase()) || liveRoom._id.includes(search.toLowerCase()),
+      (liveRoom.owner.toLowerCase().includes(search.toLowerCase()) || liveRoom._id.includes(search.toLowerCase())) &&
+      (liveRoom.visibility === 'public' || liveRoom.owner === user?.username),
   )
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const [options, setOptions] = useState({
-    fontSize: '13px',
+  const [options, setOptions] = useState<Options>({
+    fontSize: '13px' as unknown as number,
     fontFamily: 'Fira Code',
     tabSize: 2,
     formatOnSave: false,

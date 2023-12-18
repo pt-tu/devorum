@@ -8,3 +8,7 @@ export const createLiveRoomService = async () => {
 }
 
 export const listLiveRoomsService = async () => baseAxios.get<LiveRoom[]>(`${path}/`)
+export const getLiveRoomService = async (id: string) => baseAxios.get<LiveRoom>(`${path}/${id}`)
+export const updateLiveRoomService = async (id: string, data: Partial<LiveRoom>) => {
+  return baseAxios.put(`${path}/${id}`, data)
+}

@@ -35,7 +35,10 @@ export default function Page() {
   const { data, isLoading } = usePostsData(1, 10)
   // if (data?.posts) setPosts(data.posts)
   useEffect(() => {
-    if (data?.posts) setCurrentPosts(data.posts)
+    if (data?.posts) {
+      setPosts(data.posts)
+      setCurrentPosts(data.posts)
+    }
   }, [isLoading])
 
   const onSelectionChange = (key: string | number) => {

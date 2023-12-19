@@ -17,7 +17,7 @@ interface PostActions {
   // getPosts: () => Promise<void>
   setIsEditing: (id: string) => void
   setSelectedPost: (id: string) => void
-  increaseVote: (id: string) => void
+  toggleVote: (post_id: string, votes: string[]) => void
   updatePost: (payload: Post) => void
   setPosts: (posts: Post[]) => void
 }
@@ -31,20 +31,6 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
         totalPages: 0,
         totalItems: 0,
         selectedPost: undefined,
-        // getPosts: async () => {
-        //   try {
-        //     const response = await listPostService(1, 1)
-        //     set((state) => {
-        //       const { posts, currentPage, totalPages, totalItems } = response.data
-        //       state.posts = state.posts.concat(posts)
-        //       state.currentPage = currentPage
-        //       state.totalPages = totalPages
-        //       state.totalItems = totalItems
-        //     })
-        //   } catch (error) {
-        //     console.log('Get posts:', error)
-        //   }
-        // },
         setIsEditing: (id) => {
           set((state) => {
             const postIndex = state.posts.findIndex((item) => item._id === id)
@@ -57,16 +43,16 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
             if (post) state.selectedPost = post
           })
         },
-        increaseVote: (user_id) => {
+        toggleVote: (post_id, votes) => {
           set((state) => {
-            // const postIndex = state.posts.findIndex((item) => item._id === user_id)
-            // if (postIndex !== -1) state.posts[postIndex].react.votes += 1
+            const postIndex = state.posts.findIndex((item) => item._id === post_id)
+            if (postIndex !== -1 && votes) state.posts[postIndex].votes = votes
           })
         },
         updatePost: (payload) => {
           set((state) => {
             const postIndex = state.posts.findIndex((item) => item._id === payload._id)
-            if (postIndex !== -1) state.posts[postIndex] = payload
+            if (postIndex !== -1) state.posts[postIndex] = { ...payload, user: state.posts[postIndex].user }
           })
         },
         setPosts: (posts) => {

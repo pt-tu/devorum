@@ -1,5 +1,5 @@
 'use client'
-import { Avatar, Spinner } from '@nextui-org/react'
+import { Avatar, Button, Spinner } from '@nextui-org/react'
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Message from './Message'
 import MessageBox from './MessageBox'
@@ -13,6 +13,7 @@ import { Message as MessageType, Room } from '@/types/chat.type'
 import { socket } from '@/configs/socketIO'
 import { ReallySimpleInfiniteScroll } from 'react-really-simple-infinite-scroll'
 import moment from 'moment'
+import { IoCallOutline } from 'react-icons/io5'
 
 const MessageRoom = () => {
   const [isReplyingTo, setIsReplyingTo] = useState<{ message: MessageType }>()
@@ -144,6 +145,8 @@ const MessageRoom = () => {
     return moment(date1).format('DD/MM/YYYY') !== moment(date2).format('DD/MM/YYYY')
   }
 
+  if (!toUser) return null
+
   return (
     <div className="relative col-span-9 flex h-[calc(100vh-80px)] flex-col justify-between bg-dark-5">
       <div className="absolute z-20 flex h-[72px] w-full flex-shrink-0 items-center gap-4 border-l border-l-dark-2 bg-dark-2/50 px-6 shadow-md backdrop-blur-md">
@@ -155,6 +158,22 @@ const MessageRoom = () => {
             <i>{isOtherTyping && `typing something${dots === 1 ? '.' : dots === 2 ? '..' : '...'}`}</i>
           </p>
         </div>
+        <Button
+          onClick={() =>
+            window.open(
+              `/call/${roomId}?avatar=${toUser.avatar || ''}`,
+              '_blank',
+              'location=yes,height=570,width=520,scrollbars=yes,status=yes',
+            )
+          }
+          isIconOnly
+          className="ml-auto"
+          radius="full"
+          size="lg"
+          variant="light"
+        >
+          <IoCallOutline className="text-xl" />
+        </Button>
       </div>
 
       <div className="small-scrollbar w-full flex-1 overflow-y-auto">

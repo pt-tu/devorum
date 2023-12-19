@@ -15,6 +15,7 @@ import { User } from '@/types/user.type'
 import { DevMessage } from '@/types/dev.type'
 import { IoSend } from 'react-icons/io5'
 import classNames from 'classnames'
+import Call from '@/app/call/Call'
 
 const LiveRoom = ({ params }: { params: any }) => {
   const id = params.id
@@ -212,7 +213,13 @@ const LiveRoom = ({ params }: { params: any }) => {
               </Button>
             </div>
           </div>
-          <div className="h-full flex-1 rounded-xl bg-dark-6 p-2"></div>
+
+          <div className="relative flex h-full flex-1 flex-col items-center rounded-xl bg-dark-6 p-2">
+            <h1 className="ml-3 mt-3 w-full pb-2">Voice</h1>
+            <div className="absolute top-0 h-full">
+              <Call channel={id} allowVideo={false} askToJoin />
+            </div>
+          </div>
         </div>
       </div>
     </EditorWithChildren>

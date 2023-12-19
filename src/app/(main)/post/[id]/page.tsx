@@ -50,6 +50,7 @@ export default function Page() {
               <span>#message</span>
             </p>
 
+            {/* Community */}
             <Card>
               <CardBody className="p-6">
                 <div className="flex items-center justify-between gap-4">
@@ -67,6 +68,7 @@ export default function Page() {
               </CardBody>
             </Card>
 
+            {/* Post info */}
             <div className="flex items-center gap-4">
               <Avatar src="/gray.png" size="lg" />
               <div>
@@ -80,7 +82,7 @@ export default function Page() {
             </div>
 
             <ActionBar />
-
+            {/* Content */}
             <div className="space-y-7 text-lg font-light leading-8">
               <p>
                 Practicing is a great way of learning. Not everyone however has a mentor that can guide them through the
@@ -117,6 +119,7 @@ export default function Page() {
         </div>
       </div>
 
+      {/* Author recommendation */}
       <div className="mx-auto max-w-2xl space-y-16">
         <div className="h-12"></div>
 

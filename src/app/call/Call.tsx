@@ -54,16 +54,21 @@ const Call = ({ channel, avatar, allowEndCall = true, allowVideo = true, askToJo
   const [isVideoSubed, setIsVideoSubed] = useState(false)
   const [isJoined, setIsJoined] = useState(false)
 
-  const turnOnCamera = async (flag?: boolean) => {
-    flag = flag ?? !isVideoOn
+  const turnOnCamera = useCallback(async (flag: boolean) => {
+    flag = flag
     setIsVideoOn(flag)
 
     if (videoTrack) {
       return videoTrack.setEnabled(flag)
     }
-    videoTrack = await createCameraVideoTrack()
-    videoTrack.play('camera-video')
-  }
+
+    try {
+      videoTrack = await createCameraVideoTrack()
+    } catch (error) {
+      console.log('Not found camera')
+    }
+    videoTrack?.play('camera-video')
+  }, [])
 
   const turnOnMicrophone = useCallback(async (flag: boolean) => {
     setIsAudioOn(flag)
@@ -73,7 +78,11 @@ const Call = ({ channel, avatar, allowEndCall = true, allowVideo = true, askToJo
       return
     }
 
-    audioTrack = await createMicrophoneAudioTrack()
+    try {
+      audioTrack = await createMicrophoneAudioTrack()
+    } catch (error) {
+      console.log('Not found audio')
+    }
     // audioTrack.play();
   }, [])
 
@@ -84,6 +93,7 @@ const Call = ({ channel, avatar, allowEndCall = true, allowVideo = true, askToJo
       }
 
       client.on('user-published', onUserPublish)
+      client.on('user-unpublished', onUserUnPublish)
 
       await client.join(configs.AGORA_APP_ID, channel, null, null)
       setIsJoined((prev) => !prev)
@@ -150,6 +160,13 @@ const Call = ({ channel, avatar, allowEndCall = true, allowVideo = true, askToJo
     }
   }
 
+  const onUserUnPublish = async (user: IAgoraRTCRemoteUser, mediaType: 'video' | 'audio') => {
+    if (mediaType === 'video') {
+      setIsVideoSubed(false)
+      await client.unsubscribe(user, mediaType)
+    }
+  }
+
   useEffect(() => {
     const closeChannel = () => {
       leaveChannel()
@@ -169,15 +186,29 @@ const Call = ({ channel, avatar, allowEndCall = true, allowVideo = true, askToJo
           </Button>
         </div>
       ) : (
-        <div className="relative flex h-full w-full max-w-sm items-end justify-center rounded-xl py-6">
+        <div className="relative flex h-full w-full max-w-sm items-center justify-center rounded-xl py-6">
           {allowVideo ? (
-            <div className="right-side">
-              <video id="camera-video" hidden={isVideoOn ? false : true}></video>
-              <video id="remote-video" hidden={isVideoSubed ? false : true}></video>
+            <>
+              <video
+                className={classNames('absolute w-full rounded-xl', !isVideoSubed && 'hidden')}
+                id="remote-video"
+              ></video>
+              {!isVideoSubed && (
+                <Avatar
+                  src={avatar || '/gray.png'}
+                  size="lg"
+                  className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2"
+                />
+              )}
+
+              <video
+                id="camera-video"
+                className="fixed left-0 top-0 max-w-[200px] rounded-xl bg-black shadow-lg"
+              ></video>
               {/* {isJoined && !isVideoSubed ? (
               <div className="waiting">You can shared channel {channel.current} to others.....</div>
             ) : null} */}
-            </div>
+            </>
           ) : (
             <Avatar
               src={avatar || '/gray.png'}
@@ -185,7 +216,7 @@ const Call = ({ channel, avatar, allowEndCall = true, allowVideo = true, askToJo
               className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2"
             />
           )}
-          <div className="flex w-full items-center justify-center gap-4">
+          <div className="absolute flex w-full items-center justify-center gap-4 self-end">
             <Button
               onClick={() => turnOnMicrophone(!isAudioOn)}
               className={classNames(!isAudioOn && 'opacity-25')}

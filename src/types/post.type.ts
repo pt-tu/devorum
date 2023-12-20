@@ -11,15 +11,15 @@ export type Tag = {
 export type Post = {
   _id: string
   title: string
-  content: string
-  views: string[]
-  comments: string[]
-  votes: string[]
+  content?: string
+  views?: string[]
+  comments?: string[]
+  votes?: string[]
   user: User
-  tags: Tag[]
-  isEditing: boolean
-  createdAt: Date
-  updatedAt: Date
+  tags?: Tag[]
+  isEditing?: boolean
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export type Posts = {

@@ -21,6 +21,8 @@ import ReactCrop, { Crop } from 'react-image-crop'
 import getCroppedImg from '@/utils/getCroppedImg'
 import _ from 'lodash'
 import ImageResize from 'image-resize'
+import { createReportService } from '@/services/reportService'
+import { toast } from 'react-toastify'
 
 const Report = ({ children }: { children?: ReactNode }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
@@ -42,6 +44,9 @@ const Report = ({ children }: { children?: ReactNode }) => {
 
   const onRemove = () => {
     setLocalImageUrl('')
+    if (ref.current) {
+      ref.current.value = ''
+    }
   }
 
   const getCroppedImage = (c: Crop) => {
@@ -86,7 +91,18 @@ const Report = ({ children }: { children?: ReactNode }) => {
           formData.append('file', file)
           const response = await uploadFileService(formData)
           console.log('response upload image report:', response)
-          // const await
+          await createReportService({
+            description: description.trim(),
+            image: response.data.url,
+          })
+          setLocalImageUrl('')
+          setScreenshotImageUrl('')
+          setCrop(undefined)
+          if (ref.current) {
+            ref.current.value = ''
+          }
+          onClose()
+          toast.success('Report sent successfully')
         } catch (error) {
           console.log('upload image error:', error)
         } finally {
@@ -130,24 +146,22 @@ const Report = ({ children }: { children?: ReactNode }) => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Report problem</ModalHeader>
-              <ModalBody>
+              <ModalBody className="max-h-[80vh] overflow-y-auto">
                 <Textarea
                   onChange={(e) => setDescription(e.target.value)}
                   size="lg"
                   placeholder="Please include as much information as possible"
                 ></Textarea>
                 {localImageUrl && (
-                  <div className="relative">
-                    <div className=" aspect-video w-full overflow-hidden rounded-xl">
-                      <ReactCrop crop={crop} onChange={(c) => setCrop(c)}>
-                        <Image className="w-full rounded-xl object-cover" alt="capture-img" src={localImageUrl} />
-                      </ReactCrop>
+                  <div className="relative mx-auto mt-4 flex w-fit items-center justify-center">
+                    <div className="flex w-fit items-center justify-center overflow-hidden rounded-xl">
+                      <Image className="w-full rounded-xl object-cover" alt="capture-img" src={localImageUrl} />
                     </div>
                     <Button
                       onClick={onRemove}
                       size="sm"
                       isIconOnly
-                      className="absolute -right-2 -top-2 z-[11]"
+                      className="absolute -right-4 -top-4 z-[11]"
                       radius="full"
                     >
                       <IoClose />

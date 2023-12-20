@@ -10,7 +10,6 @@ import { useUserStore } from '@/store/useUserStore'
 import { useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
-import Report from '@/components/report/Report'
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
@@ -47,7 +46,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           pauseOnHover
           theme="dark"
         />
-        <Report />
       </body>
     </html>
   )

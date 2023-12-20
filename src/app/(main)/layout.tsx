@@ -1,5 +1,6 @@
 'use client'
 import { Header } from '@/components'
+import Report from '@/components/report/Report'
 import { socket } from '@/configs/socketIO'
 import useRoomsData from '@/hooks/useRoomsData'
 import { useMessageStore } from '@/store/useMessagesStore'
@@ -49,6 +50,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         {children}
       </div>
       <div className="h-16" />
+      <Report />
     </section>
   )
 }

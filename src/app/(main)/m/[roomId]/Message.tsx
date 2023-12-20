@@ -50,6 +50,12 @@ const Message = ({ setIsReplyingTo, message, toUser, showAvatar = true, showDate
     )
   }
 
+  const checkIsLike = () => {
+    if (message) {
+      return message.likes.includes(user?.username || '')
+    }
+  }
+
   const formatDate = (date: Date) => {
     const now = moment()
     const days = now.diff(date, 'days')
@@ -141,9 +147,10 @@ const Message = ({ setIsReplyingTo, message, toUser, showAvatar = true, showDate
               <Button
                 onClick={likeMessage}
                 size="sm"
+                color={checkIsLike() ? 'success' : 'default'}
                 isIconOnly
                 radius="full"
-                className="z-10 flex w-fit gap-1 px-2 text-xs font-light opacity-70"
+                className="z-[11] flex w-fit gap-1 px-2 text-xs font-light opacity-70"
               >
                 <IoIosHeart className="text-red-500" />
                 {message.likes.length > 1 && message.likes.length}

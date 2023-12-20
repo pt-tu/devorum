@@ -6,6 +6,7 @@ import { usePostStore } from '@/store/usePostStore'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
 import { Tab, Tabs } from '@nextui-org/react'
 import Head from 'next/head'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 const tabs: TabProps[] = [
@@ -31,6 +32,7 @@ export default function Page() {
   const { posts, setPosts } = usePostStore()
   const [selectedTab, setSelectedTab] = useState<string | number>(tabs[0].key)
   const [currentPosts, setCurrentPosts] = useState(posts)
+  const router = useRouter()
 
   const { data, isLoading } = usePostsData(1, 10)
   // if (data?.posts) setPosts(data.posts)
@@ -77,7 +79,7 @@ export default function Page() {
         {/* Question */}
         <div className="mb-2 flex flex-row justify-center">
           <p className="flex-1 text-3xl font-normal text-gray-bg">Top Questions</p>
-          <AppButton title="Post" onClick={() => console.log('Click')} />
+          <AppButton title="Post" onClick={() => router.push('new/post')} />
         </div>
         <Tabs
           aria-label="Options"

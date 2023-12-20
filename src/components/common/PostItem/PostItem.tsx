@@ -27,7 +27,7 @@ import PostFooter from './PostFooter'
 function PostItem(props: Post) {
   const { setIsEditing, updatePost } = usePostStore()
   const [title, setTitle] = useState<string>(props.title)
-  const [content, setContent] = useState<string>(props.content)
+  const [content, setContent] = useState<string | undefined>(props.content)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {

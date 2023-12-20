@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import { useUserStore } from '@/store/useUserStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
 
@@ -20,6 +20,7 @@ const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [user, getUserProfile] = useUserStore((state) => [state.user, state.getUserProfile])
+  const [screenCapture, setScreenCapture] = useState('')
 
   useEffect(() => {
     getUserProfile()

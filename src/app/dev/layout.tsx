@@ -1,13 +1,15 @@
-import { Metadata } from 'next'
+'use client'
 import React from 'react'
-
-export const metadata: Metadata = {
-  title: 'Dev Playground',
-  description: 'Build things with ease',
-}
+import Report from '@/components/report/Report'
 
 const DevLayout = ({ children }: { children: React.ReactNode }) => {
-  return <section>{children}</section>
+  return (
+    <section>
+      <title>Dev Playground</title>
+      {children}
+      <Report />
+    </section>
+  )
 }
 
 export default DevLayout

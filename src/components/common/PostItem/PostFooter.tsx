@@ -13,7 +13,7 @@ const PostFooter = (props: Post) => {
   const router = useRouter()
   const { toggleVote } = usePostStore()
   const { user } = useUserStore()
-  const checkVote = props.votes.includes(user?._id || '')
+  const checkVote = props.votes?.includes(user?._id || '')
   const [commentLoading, setCommentLoading] = useState(false)
 
   const handleCommentClick = () => {

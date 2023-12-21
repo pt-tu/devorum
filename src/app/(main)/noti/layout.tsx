@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 }
 
 export default function NotiLayout({ children }: { children: React.ReactNode }) {
-  return <div className="m-auto mt-4 grid max-w-xl">{children}</div>
+  return <div className="m-auto mt-4 grid max-w-2xl">{children}</div>
 }

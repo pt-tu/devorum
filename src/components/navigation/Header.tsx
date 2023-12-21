@@ -53,7 +53,7 @@ export default function Header() {
         </Button>
 
         {unreadMsgs ? (
-          <Badge content={unreadMsgs} size="lg" color="primary">
+          <Badge content={''} size="lg" color="primary">
             <Button radius="full" variant="flat" isIconOnly as={Link} href="/m">
               <Chat />
             </Button>
@@ -63,9 +63,11 @@ export default function Header() {
             <Chat />
           </Button>
         )}
-        <Button radius="full" variant="flat" isIconOnly>
-          <Alarm />
-        </Button>
+        <Badge content={''} size="lg" color="primary">
+          <Button radius="full" variant="flat" isIconOnly>
+            <Alarm />
+          </Button>
+        </Badge>
         <User />
         <ThemeButton />
       </div>

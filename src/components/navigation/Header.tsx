@@ -64,7 +64,7 @@ export default function Header() {
           </Button>
         )}
         <Badge content={''} size="lg" color="primary">
-          <Button radius="full" variant="flat" isIconOnly>
+          <Button as={Link} href="/noti" radius="full" variant="flat" isIconOnly>
             <Alarm />
           </Button>
         </Badge>

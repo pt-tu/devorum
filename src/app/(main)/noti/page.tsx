@@ -4,6 +4,7 @@ import Notification from './Notification'
 import { Fragment, useCallback, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import useFixMissingScroll from '@/hooks/useFixMissingScroll'
+import IconMap from '@/configs/iconMap'
 
 const Noti = () => {
   const [notifications, setNotifications] = useState<number[]>([1, 2])
@@ -41,7 +42,7 @@ const Noti = () => {
             >
               {notifications.map((n, i) => (
                 <Fragment key={i}>
-                  <Notification key={i} type="comment" />
+                  <Notification isRead={i % 2 === 0} key={i} type={Object.keys(IconMap)[i % 5]} />
                   {i !== notifications.length - 1 && <Divider />}
                 </Fragment>
               ))}

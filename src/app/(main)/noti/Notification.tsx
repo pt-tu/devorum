@@ -1,3 +1,4 @@
+import IconMap from '@/configs/iconMap'
 import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User } from '@nextui-org/react'
 import classNames from 'classnames'
 import Image from 'next/image'
@@ -6,15 +7,8 @@ import React from 'react'
 import { BiDotsHorizontal } from 'react-icons/bi'
 
 type Props = {
-  type: 'comment' | 'post' | 'community' | 'general'
+  type: 'comment' | 'post' | 'community' | 'general' | 'user'
   isRead?: boolean
-}
-
-const IconMap = {
-  comment: '/messenger.svg',
-  post: '/twitch.svg',
-  community: '/dribbble.svg',
-  general: '/snapchat.svg',
 }
 
 const Notification = ({ type, isRead }: Props) => {

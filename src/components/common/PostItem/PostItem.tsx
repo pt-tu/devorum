@@ -1,74 +1,35 @@
 'use client'
-import { ArrowUpOutlined, EyeOutlined, MessageOutlined, MoreOutlined, SmileOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { Tags } from '../CommentItem/Tag'
-import { useRouter } from 'next/navigation'
-import { usePostStore } from '@/store/usePostStore'
 import { MDEditor, Markdown } from '../Markdown'
-import classNames from 'classnames'
-import {
-  Button,
-  ButtonGroup,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Image,
-  Input,
-} from '@nextui-org/react'
-import moment from 'moment'
-import { Post, Tag } from '@/types/post.type'
-import { defaultAvatar } from '@/configs/defaultValues'
-import { useUserStore } from '@/store/useUserStore'
-import { updatePostService } from '@/services/postSevice'
+import { Input } from '@nextui-org/react'
+import { Post } from '@/types/post.type'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
+import { usePostStore } from '@/store/usePostStore'
 
 function PostItem(props: Post) {
-  const { setIsEditing, updatePost } = usePostStore()
-  const [title, setTitle] = useState<string>(props.title)
-  const [content, setContent] = useState<string | undefined>(props.content)
   const [mounted, setMounted] = useState(false)
-
+  const { updateSelected } = usePostStore()
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  useEffect(() => {
-    setTitle(props.title)
-    setContent(props.content)
-  }, [props])
-
-  const handleSaveClick = async () => {
-    const newData = {
-      ...props,
-      title,
-      content,
-    }
-    const res = await updatePostService(newData)
-
-    updatePost(res.data)
-  }
-
   return (
     mounted && (
-      <div className="mb-6 flex flex-col gap-6 rounded-2xl bg-dark-2 px-8 py-6">
+      <div className="mb-6 flex flex-col rounded-2xl bg-dark-2 px-8 py-6">
         <PostHeader {...props} />
 
         {/* Body */}
-        <div>
+        <div className="mt-6">
           {props.isEditing ? (
             <>
-              <Input value={title} className="mb-5" onChange={(e) => setTitle(e.target.value)} />
-              <MDEditor value={content} onChange={(e) => setContent(e || '')} />
-              <div className="mt-5 flex flex-row justify-end gap-4">
-                <Button size="md" radius="sm" onPress={() => setIsEditing(props._id)}>
-                  Cancel
-                </Button>
-                <Button size="md" radius="sm" color="primary" onPress={handleSaveClick}>
-                  Save
-                </Button>
-              </div>
+              <Input
+                label="Title"
+                value={props.title}
+                className="mb-5"
+                onChange={(e) => updateSelected({ title: e.target.value })}
+              />
+              <MDEditor value={props.content} onChange={(e) => updateSelected({ content: e })} />
             </>
           ) : (
             <>
@@ -80,6 +41,8 @@ function PostItem(props: Post) {
             </>
           )}
         </div>
+
+        <Tags isEditing={props.isEditing} tags={props.tags || []} />
 
         <PostFooter {...props} />
       </div>

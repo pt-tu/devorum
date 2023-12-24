@@ -6,6 +6,7 @@ export type Tag = {
   desc?: string
   author_id: string
   deleted: boolean
+  post_ref: string[]
 }
 
 export type Post = {
@@ -27,4 +28,10 @@ export type Posts = {
   posts: Post[]
   totalPages: number
   currentPage: number
+}
+
+export type PostUpdate = {
+  title?: string
+  content?: string
+  tags?: Tag[]
 }

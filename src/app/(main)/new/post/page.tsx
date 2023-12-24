@@ -1,26 +1,22 @@
 'use client'
 import { PostItem } from '@/components'
+import { usePostStore } from '@/store/usePostStore'
 import { useUserStore } from '@/store/useUserStore'
-import { Post } from '@/types/post.type'
-import { User } from '@/types/user.type'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
-const initPost = (user: User) => {
-  return {
-    _id: '-1',
-    title: '',
-    isEditing: true,
-    user,
-  } as Post
-}
-
 const NewPage = () => {
+  const router = useRouter()
   const { user } = useUserStore()
-  if (!user) return
+  if (!user) router.push('/login')
+  const { selected } = usePostStore()
+
   return (
-    <div className="mt-20">
-      <PostItem {...initPost(user)} />
-    </div>
+    selected && (
+      <div className="mt-20">
+        <PostItem {...selected} />
+      </div>
+    )
   )
 }
 

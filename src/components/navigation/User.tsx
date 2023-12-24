@@ -2,7 +2,7 @@ import { useAuthStore, useUserStore } from '@/store/useUserStore'
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { forwardRef, useCallback } from 'react'
+import React, { forwardRef, useCallback, useState } from 'react'
 import { defaultAvatar } from '@/configs/defaultValues'
 import { useRouter } from 'next/navigation'
 import { User } from '@/types/user.type'
@@ -16,6 +16,7 @@ const User = forwardRef<HTMLDivElement, Props>(({ size, user: outerUser }: Props
   const [innerUser] = useUserStore((state) => [state.user])
   const logOut = useAuthStore((state) => state.logOut)
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const user = outerUser || innerUser
 
@@ -27,7 +28,7 @@ const User = forwardRef<HTMLDivElement, Props>(({ size, user: outerUser }: Props
   return (
     <>
       {!user ? (
-        <Button size={size} as={Link} href="/register" isIconOnly>
+        <Button size={size} as={Link} onClick={() => setIsLoading(true)} href="/login" isLoading={isLoading} isIconOnly>
           <Image
             width={34}
             height={34}

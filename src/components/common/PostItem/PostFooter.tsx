@@ -15,9 +15,8 @@ import {
 import { ArrowUpOutlined, EyeOutlined, MessageOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/navigation'
 import { usePostStore } from '@/store/usePostStore'
-import classNames from 'classnames'
 import { useUserStore } from '@/store/useUserStore'
-import { toggleVoteService } from '@/services/postSevice'
+import { toggleVoteService, updatePostService } from '@/services/postSevice'
 
 const PostFooter = (props: Post) => {
   const router = useRouter()
@@ -26,8 +25,19 @@ const PostFooter = (props: Post) => {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
   const checkVote = props.votes?.includes(user?._id || '')
   const [commentLoading, setCommentLoading] = useState(false)
-  const isNew = props._id === '-1'
 
+  const { setIsEditing, updatePost } = usePostStore()
+
+  const handleSaveClick = async () => {
+    const newData = {
+      ...props,
+      // title,
+      // content,
+    }
+    const res = await updatePostService(newData)
+
+    updatePost(res.data)
+  }
   const handleCommentClick = () => {
     setCommentLoading(true)
     if (!props.isEditing) router.push(`post/${props._id}`)
@@ -70,9 +80,17 @@ const PostFooter = (props: Post) => {
           )}
         </ModalContent>
       </Modal>
-      {props.tags && props.tags.length > 0 && <Tags tags={props.tags || []} />}
       <div className="flex-1" />
-      {!isNew && (
+      {props.isEditing ? (
+        <div className="mt-5 flex flex-row justify-end gap-4">
+          <Button size="md" radius="sm" onPress={() => setIsEditing(props._id)}>
+            Cancel
+          </Button>
+          <Button size="md" radius="sm" color="primary" onPress={handleSaveClick}>
+            {props.isEditing ? 'Post' : 'Save'}
+          </Button>
+        </div>
+      ) : (
         <ButtonGroup size="sm">
           <Button
             key={'view'}

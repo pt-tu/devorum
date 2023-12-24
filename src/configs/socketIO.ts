@@ -4,4 +4,10 @@ let socket = io('http://localhost', {
   reconnectionDelayMax: 10000,
 })
 console.log('socket', socket)
-export { socket }
+
+const notiSocket = io('http://localhost', {
+  path: '/notifications/socket.io',
+  reconnectionDelayMax: 10000,
+})
+
+export { socket, notiSocket }

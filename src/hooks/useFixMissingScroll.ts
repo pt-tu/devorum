@@ -12,9 +12,6 @@ function useFixMissingScroll({ hasMoreItems, fetchMoreItems, element }: Props) {
   }, [fetchMoreItems])
 
   useEffect(() => {
-    console.log('element:', element)
-    console.log('hasmoreitems:', hasMoreItems)
-    console.log('fetchCb:', fetchCb)
     const hasScroll = element ? element.scrollHeight > element.clientHeight : true
     if (!hasScroll && hasMoreItems) {
       setTimeout(() => {

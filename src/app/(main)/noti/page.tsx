@@ -1,24 +1,44 @@
 'use client'
-import { Card, CardBody, Divider, Spinner, Tab, Tabs } from '@nextui-org/react'
+import { Divider, Spinner, Tab, Tabs } from '@nextui-org/react'
 import Notification from './Notification'
-import { Fragment, useCallback, useRef, useState } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import useFixMissingScroll from '@/hooks/useFixMissingScroll'
-import IconMap from '@/configs/iconMap'
+import EmptyStateWrapper from './EmptyStateWrapper'
+import { useNotificationStore } from '@/store/useNotificationStore'
+import useInfiniteScrollData from '@/hooks/useInfiniteScrollData'
+import { Notification as NotificationType } from '@/types/notification.type'
 
 const Noti = () => {
-  const [notifications, setNotifications] = useState<number[]>([1, 2])
+  // Must use 3 different states to prevent infinite loop. The createWithEqualityFn of zustand is not working correctly
+  const notifications = useNotificationStore((state) => state.notifications)
+  const loading = useNotificationStore((state) => state.loading)
+  const unreadNotifications = useMemo(() => {
+    return notifications.filter((noti) => !noti.isRead)
+  }, [notifications])
+
+  const {
+    limitData: limitNotifications,
+    hasMore: hasMoreNotifications,
+    releaseData: releaseNotifications,
+  } = useInfiniteScrollData<NotificationType>(notifications)
+  const {
+    limitData: limitUnreadNotifications,
+    hasMore: hasMoreUnreadNotifications,
+    releaseData: releaseUnreadNotifications,
+  } = useInfiniteScrollData<NotificationType>(unreadNotifications)
+
   const [element, setElement] = useState<HTMLDivElement | null>(null)
 
-  const fetchData = useCallback(async () => {
-    console.log('triggered fetchdata')
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setNotifications((prev) => [...prev, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  }, [])
+  useFixMissingScroll({
+    hasMoreItems: hasMoreNotifications,
+    fetchMoreItems: releaseNotifications,
+    element: element,
+  })
 
   useFixMissingScroll({
-    hasMoreItems: true,
-    fetchMoreItems: fetchData,
+    hasMoreItems: hasMoreUnreadNotifications,
+    fetchMoreItems: releaseUnreadNotifications,
     element: element,
   })
 
@@ -27,36 +47,52 @@ const Noti = () => {
       <h1 className="text-2xl font-medium">Notifications</h1>
       <Tabs variant="light" size="lg" className="mt-6" aria-label="Options">
         <Tab key="all" title="All">
-          <div className="-mx-6">
-            <InfiniteScroll
-              dataLength={notifications.length} //This is important field to render the next data
-              next={fetchData}
-              hasMore={true}
-              loader={<Spinner className="w-full" />}
-              endMessage={
-                <p style={{ textAlign: 'center' }}>
-                  <b>Yay! You have seen it all</b>
-                </p>
-              }
-              // // below props only if you need pull down functionality
-            >
-              {notifications.map((n, i) => (
-                <Fragment key={i}>
-                  <Notification isRead={i % 2 === 0} key={i} type={Object.keys(IconMap)[i % 5]} />
-                  {i !== notifications.length - 1 && <Divider />}
-                </Fragment>
-              ))}
-            </InfiniteScroll>
-          </div>
+          <EmptyStateWrapper isLoading={loading} isEmpty={notifications.length === 0}>
+            <div className="-mx-6">
+              <InfiniteScroll
+                dataLength={limitNotifications.length} //This is important field to render the next data
+                next={releaseNotifications}
+                hasMore={limitNotifications.length < notifications.length}
+                loader={<Spinner className="w-full" />}
+                endMessage={
+                  <p className="mt-4" style={{ textAlign: 'center' }}>
+                    Yay! There&apos;s no more notifications
+                  </p>
+                }
+              >
+                {notifications.map((noti, i) => (
+                  <Fragment key={i}>
+                    <Notification data={noti} />
+                    {i !== notifications.length - 1 && <Divider />}
+                  </Fragment>
+                ))}
+              </InfiniteScroll>
+            </div>
+          </EmptyStateWrapper>
         </Tab>
         <Tab key="unread" title="Unread">
-          <div className="-mx-6">
-            <Notification type="comment" />
-            <Divider />
-            <Notification type="community" />
-            <Divider />
-            <Notification type="post" />
-          </div>
+          <EmptyStateWrapper isEmpty={notifications.length === 0}>
+            <div className="-mx-6">
+              <InfiniteScroll
+                dataLength={limitUnreadNotifications.length} //This is important field to render the next data
+                next={releaseUnreadNotifications}
+                hasMore={hasMoreUnreadNotifications}
+                loader={<Spinner className="w-full" />}
+                endMessage={
+                  <p className="mt-4" style={{ textAlign: 'center' }}>
+                    Yay! There&apos;s no more notifications
+                  </p>
+                }
+              >
+                {limitUnreadNotifications.map((noti, i) => (
+                  <Fragment key={i}>
+                    <Notification data={noti} />
+                    {i !== notifications.length - 1 && <Divider />}
+                  </Fragment>
+                ))}
+              </InfiniteScroll>
+            </div>
+          </EmptyStateWrapper>
         </Tab>
       </Tabs>
     </div>

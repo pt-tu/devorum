@@ -3,20 +3,47 @@ import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, 
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { use } from 'react'
 import { BiDotsHorizontal } from 'react-icons/bi'
+import { Notification as NotificationType } from '@/types/notification.type'
+import moment from 'moment'
+import { deleteNotificationService, updateNotificationService } from '@/services/notificationService'
+import { useNotificationStore } from '@/store/useNotificationStore'
 
 type Props = {
-  type: 'comment' | 'post' | 'community' | 'general' | 'user'
-  isRead?: boolean
+  data: NotificationType
 }
 
-const Notification = ({ type, isRead }: Props) => {
+const Notification = ({ data }: Props) => {
+  const loadNotifications = useNotificationStore((state) => state.loadNotifications)
+  const markUnread = async (target: boolean) => {
+    try {
+      await updateNotificationService(data._id, { isRead: target })
+      loadNotifications()
+    } catch (error) {
+      console.log('Mark unread notification error:', error)
+    }
+  }
+
+  const deleteNoti = async () => {
+    try {
+      await deleteNotificationService(data._id)
+      loadNotifications()
+    } catch (error) {
+      console.log('Delete notification error:', error)
+    }
+  }
+
+  const handleClick = () => {
+    markUnread(true)
+  }
+
   return (
     <div className="relative">
       <Button
         as={Link}
-        href="#"
+        onClick={handleClick}
+        href={data.href}
         variant="light"
         fullWidth
         className="relative h-fit rounded-xl px-6 py-10 transition-all"
@@ -24,17 +51,14 @@ const Notification = ({ type, isRead }: Props) => {
         <div className="flex w-full items-start font-light">
           <div className="flex h-full min-h-[110px] flex-shrink-0 flex-col items-center justify-between ">
             <Avatar src="https://i.imgur.com/3ZLQ1fT.jpg" className="flex-shrink-0" size="lg" />
-            {!isRead && <div className="h-3 w-3 rounded-full bg-blue-600"></div>}
+            {!data.isRead && <div className="h-3 w-3 rounded-full bg-blue-600"></div>}
           </div>
-          <div className={classNames('ml-8 min-w-0 flex-1 pr-6 text-left text-base', isRead && 'opacity-70')}>
-            <b>Nhan Hong Thanh</b>
+          <div className={classNames('ml-8 min-w-0 flex-1 pr-6 text-left text-base', data.isRead && 'opacity-70')}>
+            <b>{data.from}</b>
             <p className=" two-lines-ellipsis mt-1 whitespace-normal text-sm text-default-600">
-              Mentioned you in a comment. 12 Dec 20:01
+              {data.action}. {moment(data.createdAt).format('DD MMM hh:mm')}
             </p>
-            <p className="mt-2 whitespace-normal">
-              &quot;Lorem ipsum dolor sit amet consect adipisicing elit. Lorem ipsum dolor sit amet consectetur
-              adipisicing elit.&quot;
-            </p>
+            <p className="mt-2 whitespace-normal">&quot;{data.content}.&quot;</p>
           </div>
         </div>
 
@@ -42,7 +66,7 @@ const Notification = ({ type, isRead }: Props) => {
           <Image
             width={144}
             height={144}
-            src={IconMap[type]}
+            src={IconMap[data.type]}
             className="absolute -top-1 z-10 aspect-square scale-[130%] object-cover object-center"
             alt="type_icon"
           />
@@ -62,8 +86,12 @@ const Notification = ({ type, isRead }: Props) => {
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">
-          <DropdownItem key="markUnread">Mark as unread</DropdownItem>
-          <DropdownItem key="delete">Delete this</DropdownItem>
+          <DropdownItem onClick={() => markUnread(!data.isRead)} key="markUnread">
+            Mark as {data.isRead ? 'unread' : 'read'}
+          </DropdownItem>
+          <DropdownItem onClick={deleteNoti} key="delete">
+            Delete this
+          </DropdownItem>
           <DropdownItem key="delete">Turn off notifications for</DropdownItem>
         </DropdownMenu>
       </Dropdown>

@@ -7,7 +7,11 @@ import React, { use } from 'react'
 import { BiDotsHorizontal } from 'react-icons/bi'
 import { Notification as NotificationType } from '@/types/notification.type'
 import moment from 'moment'
-import { deleteNotificationService, updateNotificationService } from '@/services/notificationService'
+import {
+  deleteNotificationService,
+  listNotificationsService,
+  updateNotificationService,
+} from '@/services/notificationService'
 import { useNotificationStore } from '@/store/useNotificationStore'
 
 type Props = {
@@ -16,10 +20,21 @@ type Props = {
 
 const Notification = ({ data }: Props) => {
   const loadNotifications = useNotificationStore((state) => state.loadNotifications)
+
+  const listNotifications = async () => {
+    try {
+      const response = await listNotificationsService()
+      return response.data
+    } catch (error) {
+      console.log('List notifications error:', error)
+      return []
+    }
+  }
+
   const markUnread = async (target: boolean) => {
     try {
       await updateNotificationService(data._id, { isRead: target })
-      loadNotifications()
+      loadNotifications(await listNotifications())
     } catch (error) {
       console.log('Mark unread notification error:', error)
     }
@@ -28,7 +43,7 @@ const Notification = ({ data }: Props) => {
   const deleteNoti = async () => {
     try {
       await deleteNotificationService(data._id)
-      loadNotifications()
+      loadNotifications(await listNotifications())
     } catch (error) {
       console.log('Delete notification error:', error)
     }
@@ -36,6 +51,11 @@ const Notification = ({ data }: Props) => {
 
   const handleClick = () => {
     markUnread(true)
+  }
+  const getAvatarSrc = () => {
+    if (data.type === 'user' && 'username' in data.fromData) {
+      return data.fromData.avatar
+    }
   }
 
   return (
@@ -50,7 +70,7 @@ const Notification = ({ data }: Props) => {
       >
         <div className="flex w-full items-start font-light">
           <div className="flex h-full min-h-[110px] flex-shrink-0 flex-col items-center justify-between ">
-            <Avatar src="https://i.imgur.com/3ZLQ1fT.jpg" className="flex-shrink-0" size="lg" />
+            <Avatar src={getAvatarSrc() || '/gray.png'} className="flex-shrink-0" size="lg" />
             {!data.isRead && <div className="h-3 w-3 rounded-full bg-blue-600"></div>}
           </div>
           <div className={classNames('ml-8 min-w-0 flex-1 pr-6 text-left text-base', data.isRead && 'opacity-70')}>

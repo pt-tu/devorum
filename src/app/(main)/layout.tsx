@@ -3,6 +3,7 @@ import { Header } from '@/components'
 import Report from '@/components/report/Report'
 import { notiSocket, socket } from '@/configs/socketIO'
 import useRoomsData from '@/hooks/useRoomsData'
+import { listNotificationsService } from '@/services/notificationService'
 import { useMessageStore } from '@/store/useMessagesStore'
 import { useNotificationStore } from '@/store/useNotificationStore'
 import { useUserStore } from '@/store/useUserStore'
@@ -37,9 +38,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }, [user])
 
   useEffect(() => {
-    if (user) {
-      loadNotifications()
-    }
+    ;(async () => {
+      if (user) {
+        const response = await listNotificationsService()
+        loadNotifications(response.data)
+      }
+    })()
   }, [loadNotifications, user])
 
   useEffect(() => {

@@ -8,28 +8,22 @@ export interface NotificationState {
   notifications: Notification[]
   loading: boolean
   appendNotification: (noti: Notification) => void
-  loadNotifications: () => void
+  loadNotifications: (notis: Notification[]) => void
 }
 
 export const useNotificationStore = createWithEqualityFn<NotificationState>()(
-  immer((set, get) => ({
+  immer((set) => ({
     loading: true,
     notifications: [],
     appendNotification: (noti: Notification) =>
       set((state) => {
         state.notifications.unshift(noti)
       }),
-    loadNotifications: async () => {
-      try {
-        const response = await listNotificationsService()
-        set((state) => {
-          state.notifications = response.data
-          state.loading = false
-        })
-      } catch (error) {
-        console.log('Fetch notifications error:', error)
-        set((state) => (state.loading = false))
-      }
+    loadNotifications: (notis) => {
+      set((state) => {
+        state.notifications = notis
+        state.loading = false
+      })
     },
   })),
 )

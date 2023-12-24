@@ -10,7 +10,7 @@ import useInfiniteScrollData from '@/hooks/useInfiniteScrollData'
 import { Notification as NotificationType } from '@/types/notification.type'
 
 const Noti = () => {
-  // Must use 3 different states to prevent infinite loop. The createWithEqualityFn of zustand is not working correctly
+  // Must use 2 different states to prevent infinite loop. The createWithEqualityFn of zustand is not working correctly
   const notifications = useNotificationStore((state) => state.notifications)
   const loading = useNotificationStore((state) => state.loading)
   const unreadNotifications = useMemo(() => {

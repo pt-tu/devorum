@@ -42,9 +42,19 @@ export const updateCommunityMemberStatusService = (community: string, username: 
   baseAxios.put(`${path}/${community}/members/${username}`, data)
 export const selfUpdateCommunityStatusService = (community: string, data: Omit<UpdateJoinedStatus, 'role'>) =>
   baseAxios.put(`${path}/${community}/members/self-update`, data)
+export const removeUserFromCommunityService = (community: string, username: string) =>
+  baseAxios.delete(`${path}/${community}/members/${username}`)
 
 // Mods
 export const addModService = (community: string, username: string) =>
   baseAxios.post(`${path}/${community}/mods`, { username })
 export const deleteModService = (community: string, username: string) =>
   baseAxios.delete(`${path}/${community}/mods/${username}`)
+
+export const inviteUserService = async (community: string, username: string) =>
+  baseAxios.post(`${path}/${community}/invitation`, {
+    username,
+  })
+
+export const deleteInvitationService = async (community: string, username: string) =>
+  baseAxios.delete(`${path}/${community}/invitation/${username}`)

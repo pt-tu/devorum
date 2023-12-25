@@ -1,21 +1,22 @@
 'use client'
-import { Alarm, Chat, Communication, DropDownArrow, Home, Logo, Search } from '@/assets'
-import React, { useCallback, useMemo } from 'react'
-import AppInput from '../common/AppInput'
+import { Alarm, Chat, Communication, Home, Logo, Search } from '@/assets'
+import React, { useMemo } from 'react'
 import Link from 'next/link'
 import ThemeButton from '../common/ThemeButton'
 import { useAuthStore, useUserStore } from '@/store/useUserStore'
-import Image from 'next/image'
-import { defaultAvatar } from '@/configs/defaultValues'
-import { Badge, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from '@nextui-org/react'
+import { Badge, Button, Input } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import useRoomsData from '@/hooks/useRoomsData'
 import { IoMdCode } from 'react-icons/io'
 import User from './User'
+import { useNotificationStore } from '@/store/useNotificationStore'
 
 export default function Header() {
+  const notifications = useNotificationStore((state) => state.notifications)
+  const unreadNotificationsLength = useMemo(() => {
+    return notifications.filter((noti) => !noti.isRead).length
+  }, [notifications])
   const [user] = useUserStore((state) => [state.user])
-  const logOut = useAuthStore((state) => state.logOut)
   const { data } = useRoomsData()
   const unreadMsgs = data?.filter((room) => !room.lastMessage?.seen?.includes(user?.username || '')).length
   const router = useRouter()
@@ -53,7 +54,7 @@ export default function Header() {
         </Button>
 
         {unreadMsgs ? (
-          <Badge content={unreadMsgs} size="lg" color="primary">
+          <Badge content={unreadMsgs} color="primary">
             <Button radius="full" variant="flat" isIconOnly as={Link} href="/m">
               <Chat />
             </Button>
@@ -63,9 +64,18 @@ export default function Header() {
             <Chat />
           </Button>
         )}
-        <Button radius="full" variant="flat" isIconOnly>
-          <Alarm />
-        </Button>
+        {unreadNotificationsLength !== 0 ? (
+          <Badge content={unreadNotificationsLength} color="primary">
+            <Button as={Link} href="/noti" radius="full" variant="flat" isIconOnly>
+              <Alarm />
+            </Button>
+          </Badge>
+        ) : (
+          <Button as={Link} href="/noti" radius="full" variant="flat" isIconOnly>
+            <Alarm />
+          </Button>
+        )}
+
         <User />
         <ThemeButton />
       </div>

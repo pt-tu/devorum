@@ -21,7 +21,7 @@ const InteractionSection = ({ userProfile, fetchUserProfile }: Props) => {
 
   const unfollow = async () => {
     try {
-      await unfollowUserService(userProfile._id)
+      await unfollowUserService(userProfile.username)
       fetchUserProfile()
     } catch (error) {
       console.log(error)
@@ -30,7 +30,7 @@ const InteractionSection = ({ userProfile, fetchUserProfile }: Props) => {
 
   const follow = async () => {
     try {
-      await followUserService(userProfile._id)
+      await followUserService(userProfile.username)
       fetchUserProfile()
     } catch (error) {
       console.log(error)
@@ -47,7 +47,7 @@ const InteractionSection = ({ userProfile, fetchUserProfile }: Props) => {
 
   const handleBlockClick = async () => {
     try {
-      await blockUserService(userProfile._id)
+      await blockUserService(userProfile.username)
       fetchUserProfile()
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.msg) {
@@ -59,7 +59,7 @@ const InteractionSection = ({ userProfile, fetchUserProfile }: Props) => {
 
   const handleUnblockClick = async () => {
     try {
-      await unblockUserService(userProfile._id)
+      await unblockUserService(userProfile.username)
       fetchUserProfile()
     } catch (error) {
       console.log(error)
@@ -79,7 +79,7 @@ const InteractionSection = ({ userProfile, fetchUserProfile }: Props) => {
         width={1280}
         height={384}
       />
-      {user?._id !== userProfile._id ? (
+      {user?.username !== userProfile.username ? (
         userProfile.blockStatus?.effective ? (
           <div className="p-4">
             <Button color="danger" onClick={handleUnblockClick}>

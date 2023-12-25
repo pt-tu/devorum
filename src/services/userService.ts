@@ -36,24 +36,24 @@ const getBlockListService = () => {
   return baseAxios.get<BlockInformation>(`${path}/relationship/block`)
 }
 
-const followUserService = async (id: string) => {
+const followUserService = async (username: string) => {
   return baseAxios.post(`${path}/relationship/follow`, {
-    to: id,
+    to: username,
   })
 }
 
-const unfollowUserService = async (id: string) => {
-  return baseAxios.delete(`${path}/relationship/follow/${id}`)
+const unfollowUserService = async (username: string) => {
+  return baseAxios.delete(`${path}/relationship/follow/${username}`)
 }
 
-const blockUserService = async (id: string) => {
+const blockUserService = async (username: string) => {
   return baseAxios.post(`${path}/relationship/block`, {
-    to: id,
+    to: username,
   })
 }
 
-const unblockUserService = async (id: string) => {
-  return baseAxios.delete(`${path}/relationship/block/${id}`)
+const unblockUserService = async (username: string) => {
+  return baseAxios.delete(`${path}/relationship/block/${username}`)
 }
 
 const getOverviewQuicksortService = async () => {

@@ -4,12 +4,14 @@ import React, { useMemo } from 'react'
 import Link from 'next/link'
 import ThemeButton from '../common/ThemeButton'
 import { useAuthStore, useUserStore } from '@/store/useUserStore'
-import { Badge, Button, Input } from '@nextui-org/react'
+import { Badge, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import useRoomsData from '@/hooks/useRoomsData'
 import { IoMdCode } from 'react-icons/io'
 import User from './User'
 import { useNotificationStore } from '@/store/useNotificationStore'
+import { IoCreate } from 'react-icons/io5'
+import { TbPlus } from 'react-icons/tb'
 
 export default function Header() {
   const notifications = useNotificationStore((state) => state.notifications)
@@ -24,19 +26,23 @@ export default function Header() {
   return (
     <div className="fixed -right-4 left-0 top-0 z-50 flex h-20 flex-1 flex-row items-center justify-between border-b border-b-dark-1 bg-dark-2/90 px-5 backdrop-blur-md">
       {/* Left */}
-      <div className="flex flex-1 flex-row items-center justify-between gap-[10px] pr-7">
+      <div className="flex flex-1 flex-row items-center gap-6 pr-7">
         <Button isIconOnly as={Link} href="/">
           <Logo width={40} height={40} />
         </Button>
 
-        <div className="flex w-fit flex-row items-center gap-5">
+        <Button radius="full" variant="flat" isIconOnly as={Link} href="/dev">
+          <IoMdCode className="text-2xl" />
+        </Button>
+
+        {/* <div className="flex w-fit flex-row items-center gap-5">
           <Button variant="light" isIconOnly onPress={() => router.push('/')}>
             <Home className="h-5 w-5" />
           </Button>
           <Button variant="light" isIconOnly>
             <Communication className="h-5 w-5" />
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {/* Middle */}
@@ -49,9 +55,21 @@ export default function Header() {
 
       {/* Right */}
       <div className="flex flex-1 flex-row items-center justify-center gap-6">
-        <Button radius="full" variant="flat" isIconOnly as={Link} href="/dev">
-          <IoMdCode className="text-2xl" />
-        </Button>
+        <Dropdown>
+          <DropdownTrigger>
+            <Button radius="full" variant="flat" isIconOnly>
+              <TbPlus className="text-2xl" />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu>
+            <DropdownItem as={Link} href="/new/post">
+              Post
+            </DropdownItem>
+            <DropdownItem as={Link} href="/new/community">
+              Community
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
 
         {unreadMsgs ? (
           <Badge content={unreadMsgs} color="primary">

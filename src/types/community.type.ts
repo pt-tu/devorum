@@ -19,6 +19,7 @@ export type Community = NewCommunity & {
   photo?: string
   allowAligningTitle: boolean
   joinedStatus?: JoinedStatus
+  allowUsers: [string]
 }
 
 export type CreateUserTitle = {

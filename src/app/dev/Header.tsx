@@ -2,6 +2,7 @@
 import { Logo } from '@/assets'
 import ThemeButton from '@/components/common/ThemeButton'
 import User from '@/components/navigation/User'
+import { socket } from '@/configs/socketIO'
 import useListProfilesData from '@/hooks/useListProfilesData'
 import useLiveRoomDetailData from '@/hooks/useLiveRoomDetailData'
 import { updateLiveRoomService } from '@/services/liveService'
@@ -91,6 +92,10 @@ const Header = ({ participants, title, options, setOptions, processing, submit }
     if (id) {
       await updateLiveRoomService(id, {
         accessibleUsers: Array.from(accessibleUsers.values()),
+      })
+      socket.emit('kick', {
+        room: id,
+        username: username,
       })
     }
     setAccessibleUsers(new Set(accessibleUsers))
@@ -204,7 +209,7 @@ const Header = ({ participants, title, options, setOptions, processing, submit }
                   ></Checkbox>
                 </div>
 
-                {window.location.href.includes('live') && (
+                {liveRoom?.owner === user?.username && window.location.href.includes('live') && (
                   <div className="flex items-center justify-between">
                     <p>Visibility</p>
                     <Select

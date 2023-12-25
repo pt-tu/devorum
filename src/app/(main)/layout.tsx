@@ -11,6 +11,7 @@ import { Message } from '@/types/chat.type'
 import { Notification } from '@/types/notification.type'
 import checkPageStatus from '@/utils/notifyUser'
 import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const user = useUserStore((state) => state.user)
@@ -48,7 +49,9 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const handleReceiveNotification = (noti: Notification) => {
+      console.log('Received new notification:', noti)
       appendNotification(noti)
+      toast.info(noti.content)
     }
 
     notiSocket.on('notification', handleReceiveNotification)
@@ -77,15 +80,15 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     }
   }, [appendMessage, mutate, user])
 
-  useEffect(() => {
-    const closeChannel = () => {
-      notiSocket.close()
-    }
-    window.addEventListener('beforeunload', closeChannel)
-    return () => {
-      window.removeEventListener('beforeunload', closeChannel)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const closeChannel = () => {
+  //     notiSocket.close()
+  //   }
+  //   window.addEventListener('beforeunload', closeChannel)
+  //   return () => {
+  //     window.removeEventListener('beforeunload', closeChannel)
+  //   }
+  // }, [])
 
   return (
     <section>

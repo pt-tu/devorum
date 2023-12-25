@@ -3,7 +3,7 @@ import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, 
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { use } from 'react'
+import React, { use, useCallback, useMemo } from 'react'
 import { BiDotsHorizontal } from 'react-icons/bi'
 import { Notification as NotificationType } from '@/types/notification.type'
 import moment from 'moment'
@@ -31,32 +31,52 @@ const Notification = ({ data }: Props) => {
     }
   }
 
-  const markUnread = async (target: boolean) => {
-    try {
-      await updateNotificationService(data._id, { isRead: target })
-      loadNotifications(await listNotifications())
-    } catch (error) {
-      console.log('Mark unread notification error:', error)
-    }
-  }
+  const markUnread = useCallback(
+    async (target: boolean) => {
+      try {
+        await updateNotificationService(data._id, { isRead: target })
+        loadNotifications(await listNotifications())
+      } catch (error) {
+        console.log('Mark unread notification error:', error)
+      }
+    },
+    [data._id, loadNotifications],
+  )
 
-  const deleteNoti = async () => {
+  const deleteNoti = useCallback(async () => {
     try {
       await deleteNotificationService(data._id)
       loadNotifications(await listNotifications())
     } catch (error) {
       console.log('Delete notification error:', error)
     }
-  }
+  }, [data._id, loadNotifications])
 
   const handleClick = () => {
     markUnread(true)
   }
   const getAvatarSrc = () => {
-    if (data.type === 'user' && 'username' in data.fromData) {
+    if (data.fromData && data.type === 'user' && 'username' in data.fromData) {
       return data.fromData.avatar
     }
   }
+
+  const dropDownItems = useMemo(() => {
+    const nodes = [
+      <DropdownItem onClick={() => markUnread(!data.isRead)} key="markUnread">
+        Mark as {data.isRead ? 'unread' : 'read'}
+      </DropdownItem>,
+      <DropdownItem onClick={deleteNoti} key="delete">
+        Delete this
+      </DropdownItem>,
+    ]
+
+    if (data.type !== 'user' || data.action !== 'follow') {
+      nodes.push(<DropdownItem key="turnOff">Turn off notifications for</DropdownItem>)
+    }
+
+    return nodes
+  }, [data.action, data.isRead, data.type, deleteNoti, markUnread])
 
   return (
     <div className="relative">
@@ -105,15 +125,7 @@ const Notification = ({ data }: Props) => {
             <BiDotsHorizontal />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu aria-label="Static Actions">
-          <DropdownItem onClick={() => markUnread(!data.isRead)} key="markUnread">
-            Mark as {data.isRead ? 'unread' : 'read'}
-          </DropdownItem>
-          <DropdownItem onClick={deleteNoti} key="delete">
-            Delete this
-          </DropdownItem>
-          <DropdownItem key="delete">Turn off notifications for</DropdownItem>
-        </DropdownMenu>
+        <DropdownMenu aria-label="Static Actions">{dropDownItems}</DropdownMenu>
       </Dropdown>
     </div>
   )

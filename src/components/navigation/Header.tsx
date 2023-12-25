@@ -54,7 +54,7 @@ export default function Header() {
         </Button>
 
         {unreadMsgs ? (
-          <Badge content={''} size="lg" color="primary">
+          <Badge content={unreadMsgs} color="primary">
             <Button radius="full" variant="flat" isIconOnly as={Link} href="/m">
               <Chat />
             </Button>
@@ -65,7 +65,7 @@ export default function Header() {
           </Button>
         )}
         {unreadNotificationsLength !== 0 ? (
-          <Badge content={''} size="lg" color="primary">
+          <Badge content={unreadNotificationsLength} color="primary">
             <Button as={Link} href="/noti" radius="full" variant="flat" isIconOnly>
               <Alarm />
             </Button>

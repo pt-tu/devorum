@@ -1,6 +1,7 @@
 'use client'
 import useCommunityData from '@/hooks/useCommunityData'
 import {
+  deleteInvitationService,
   joinCommunityService,
   leaveCommunityService,
   selfUpdateCommunityStatusService,
@@ -38,7 +39,7 @@ const CommunityHeader = ({ community, isTheming }: Props) => {
       if (data?.joinedStatus) {
         await leaveCommunityService(community)
       } else {
-        await joinCommunityService(community)
+        await Promise.all([joinCommunityService(community), deleteInvitationService(community, user.username)])
       }
       mutate()
     } catch (error) {

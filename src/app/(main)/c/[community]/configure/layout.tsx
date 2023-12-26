@@ -17,7 +17,7 @@ export default function ConfigureCommunityLayout({ children }: { children: React
 
   useEffect(() => {
     if (data && user) {
-      if (data?.createdBy !== user?._id) {
+      if (data?.createdBy !== user?._id && !data?.moderators.find((mod) => mod._id === user?._id)) {
         setOpen(true)
       }
     }
@@ -29,6 +29,7 @@ export default function ConfigureCommunityLayout({ children }: { children: React
     { name: 'User titles', path: `/c/${community}/configure/titles` },
     { name: 'Rules & Resources', path: `/c/${community}/configure/rules-resources` },
     { name: 'Moderators', path: `/c/${community}/configure/mods` },
+    { name: 'Members', path: `/c/${community}/configure/members` },
   ]
 
   return (

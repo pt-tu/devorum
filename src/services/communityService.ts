@@ -1,4 +1,5 @@
 import { baseAxios } from '@/configs/axiosConfig'
+import { BannedUser } from '@/types/ban.type'
 import {
   NewCommunity,
   Community,
@@ -42,9 +43,26 @@ export const updateCommunityMemberStatusService = (community: string, username: 
   baseAxios.put(`${path}/${community}/members/${username}`, data)
 export const selfUpdateCommunityStatusService = (community: string, data: Omit<UpdateJoinedStatus, 'role'>) =>
   baseAxios.put(`${path}/${community}/members/self-update`, data)
+export const removeUserFromCommunityService = (community: string, username: string) =>
+  baseAxios.delete(`${path}/${community}/members/${username}`)
 
 // Mods
 export const addModService = (community: string, username: string) =>
   baseAxios.post(`${path}/${community}/mods`, { username })
 export const deleteModService = (community: string, username: string) =>
   baseAxios.delete(`${path}/${community}/mods/${username}`)
+
+export const inviteUserService = async (community: string, username: string) =>
+  baseAxios.post(`${path}/${community}/invitation`, {
+    username,
+  })
+
+export const deleteInvitationService = async (community: string, username: string) =>
+  baseAxios.delete(`${path}/${community}/invitation/${username}`)
+
+// Ban user
+export const banUserService = (community: string, username: string) =>
+  baseAxios.post(`${path}/${community}/ban`, { username })
+export const listBannedUsersService = (community: string) => baseAxios.get<BannedUser[]>(`${path}/${community}/ban`)
+export const deleteBannedUserService = async (community: string, username: string) =>
+  baseAxios.delete(`${path}/${community}/ban/${username}`)

@@ -17,7 +17,7 @@ export default function ConfigureCommunityLayout({ children }: { children: React
 
   useEffect(() => {
     if (data && user) {
-      if (data?.createdBy !== user?._id) {
+      if (data?.createdBy !== user?._id && !data?.moderators.find((mod) => mod._id === user?._id)) {
         setOpen(true)
       }
     }

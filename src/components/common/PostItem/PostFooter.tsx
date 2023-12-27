@@ -16,32 +16,63 @@ import { ArrowUpOutlined, EyeOutlined, MessageOutlined } from '@ant-design/icons
 import { useRouter } from 'next/navigation'
 import { usePostStore } from '@/store/usePostStore'
 import { useUserStore } from '@/store/useUserStore'
-import { toggleVoteService, updatePostService } from '@/services/postSevice'
+import {
+  CreatePostProps,
+  addViewService,
+  createPostService,
+  toggleVoteService,
+  updatePostService,
+} from '@/services/postSevice'
+import { NewTagProps, createTagService } from '@/services/tagService'
 
 const PostFooter = (props: Post) => {
   const router = useRouter()
-  const { toggleVote } = usePostStore()
+  const { toggleVote, addView } = usePostStore()
   const { user } = useUserStore()
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
   const checkVote = props.votes?.includes(user?._id || '')
   const [commentLoading, setCommentLoading] = useState(false)
+  const { selected } = usePostStore()
 
   const { setIsEditing, updatePost } = usePostStore()
 
   const handleSaveClick = async () => {
+    const newTag = selected?.tags
+      .filter((tag) => tag._id === '-1')
+      .reduce((acc: NewTagProps[], tag) => {
+        acc.push({
+          name: tag.name,
+          desc: tag.desc,
+        })
+        return acc
+      }, [])
+    const resTag = await createTagService(newTag || [])
+    const tags = selected?.tags
+      .filter((tag) => tag._id !== '-1')
+      .map((tag) => tag._id)
+      .concat(resTag.data.map((tag) => tag._id))
     const newData = {
-      ...props,
-      // title,
-      // content,
-    }
-    const res = await updatePostService(newData)
+      ...selected,
+      title: selected?.title,
+      content: selected?.content,
+      tags,
+    } as CreatePostProps
 
-    updatePost(res.data)
+    if (selected?._id === '-1') {
+      await createPostService(newData)
+      router.push('/')
+    } else {
+      const res = await updatePostService(newData)
+      updatePost(res.data)
+    }
   }
   const handleCommentClick = () => {
+    const addViewAndGoToComment = async () => {
+      const res = await addViewService(props._id)
+      // if (res.data) addView(props._id, res.data)
+      router.push(`post/${props._id}`)
+    }
     setCommentLoading(true)
-    if (!props.isEditing) router.push(`post/${props._id}`)
-    else onOpen()
+    if (!props.isEditing) addViewAndGoToComment()
   }
 
   const handleVoteClick = async () => {
@@ -49,37 +80,8 @@ const PostFooter = (props: Post) => {
     if (res.data) toggleVote(props._id, res.data)
   }
 
-  const onDiscard = () => {
-    setCommentLoading(false)
-    onClose()
-  }
-  const onSave = () => {
-    router.push(`post/${props._id}`)
-    onClose()
-  }
-
   return (
     <div className="flex flex-row items-center gap-1">
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Review changes</ModalHeader>
-              <ModalBody>
-                <p>You have made change. Do you want to discard or save them?</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="light" onPress={onDiscard}>
-                  Discard
-                </Button>
-                <Button color="primary" onPress={onSave}>
-                  Save
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
       <div className="flex-1" />
       {props.isEditing ? (
         <div className="mt-5 flex flex-row justify-end gap-4">
@@ -87,7 +89,7 @@ const PostFooter = (props: Post) => {
             Cancel
           </Button>
           <Button size="md" radius="sm" color="primary" onPress={handleSaveClick}>
-            {props.isEditing ? 'Post' : 'Save'}
+            {props._id === '-1' ? 'Post' : 'Save'}
           </Button>
         </div>
       ) : (

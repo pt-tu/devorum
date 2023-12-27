@@ -3,13 +3,13 @@ import { Tag } from '@/types/post.type'
 
 const path = 'posts/tags'
 
-interface NewTagProps {
+export interface NewTagProps {
   name: String
   desc?: String
 }
 
-const listTagService = async () => {
-  return await authAxios.get<Tag[]>(`${path}`)
+const listTagService = async (query: string) => {
+  return await authAxios.get<Tag[]>(`${path}?${query}`)
 }
 
 const updateTagService = async (data: Tag) => {
@@ -17,11 +17,11 @@ const updateTagService = async (data: Tag) => {
 }
 
 const createTagService = async (data: NewTagProps[]) => {
-  return await baseAxios.post<Tag[]>(`${path}/create`, data)
+  return await baseAxios.post<Tag[]>(`${path}/create`, { tags: data })
 }
 
 const deleteTagService = async (tag_id: String) => {
-  return await baseAxios.delete(`${path}/delete`, { tag_id })
+  return await baseAxios.delete(`${path}/delete?_id=${tag_id}`)
 }
 
-export {}
+export { listTagService, updateTagService, createTagService, deleteTagService }

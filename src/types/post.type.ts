@@ -17,7 +17,7 @@ export type Post = {
   comments?: string[]
   votes?: string[]
   user: User
-  tags?: Tag[]
+  tags: Tag[]
   isEditing?: boolean
   createdAt?: Date
   updatedAt?: Date

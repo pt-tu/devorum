@@ -1,28 +1,50 @@
 import { defaultAvatar } from '@/configs/defaultValues'
+import { deletePostService } from '@/services/postSevice'
 import { usePostStore } from '@/store/usePostStore'
 import { useUserStore } from '@/store/useUserStore'
 import { Post } from '@/types/post.type'
 import { MoreOutlined } from '@ant-design/icons'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image } from '@nextui-org/react'
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@nextui-org/react'
 import moment from 'moment'
 import React from 'react'
 
 const PostHeader = (props: Post) => {
-  const { setIsEditing } = usePostStore()
+  const { setSelected, setIsEditing } = usePostStore()
   const { user } = useUserStore()
   const disable = props.user._id !== user?._id
   const isNew = props._id === '-1'
+  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure()
+
+  const onDelete = async () => {
+    const res = await deletePostService(props._id)
+    console.log('first')
+    onClose()
+  }
 
   const onAction = (key: React.Key) => {
     switch (key) {
       case 'edit':
+        setSelected(props._id)
         setIsEditing(props._id)
         break
       case 'follow':
         console.log('Follow post')
         break
       case 'delete':
-        console.log('Delete post')
+        onOpen()
         break
       default:
         break
@@ -31,6 +53,26 @@ const PostHeader = (props: Post) => {
 
   return (
     <div className="flex max-h-min flex-row items-center">
+      <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Review changes</ModalHeader>
+              <ModalBody>
+                <p>You have made change. Do you want to discard or save them?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="default" variant="light" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button color="danger" onPress={onDelete}>
+                  Delete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
       <Image className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.avatar || defaultAvatar} />
       <div className="ml-4 h-full flex-1">
         <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>

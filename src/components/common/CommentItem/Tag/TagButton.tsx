@@ -18,7 +18,7 @@ function TagButton({ tag, editing = false }: IProps) {
       )}
     >
       <p className="whitespace-nowrap text-xs font-thin text-blue-8">{tag.name}</p>
-      {editing && <CloseCircleOutlined className="text-blue-8" style={{ fontSize: 14 }} />}
+      {editing && <CloseCircleOutlined className="cursor-pointer text-blue-8" style={{ fontSize: 14 }} />}
     </div>
   )
 }

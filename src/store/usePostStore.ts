@@ -20,6 +20,7 @@ interface PostActions {
   initSelected: (user: User) => void
   updateSelected: (data: PostUpdate) => void
   toggleVote: (post_id: string, votes: string[]) => void
+  addView: (post_id: string, views: string[]) => void
   updatePost: (payload: Post) => void
   setPosts: (posts: Post[]) => void
 }
@@ -60,15 +61,21 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
         updateSelected: ({ title, content, tags }) => {
           set((state) => {
             if (!state.selected) return
-            state.selected = { ...state.selected, title: title || '' }
-            state.selected = { ...state.selected, content: content || '' }
-            state.selected = { ...state.selected, tags: tags || [] }
+            if (title) state.selected.title = title
+            if (content) state.selected.content = content
+            if (tags) state.selected.tags = tags
           })
         },
         toggleVote: (post_id, votes) => {
           set((state) => {
             const postIndex = state.posts.findIndex((item) => item._id === post_id)
             if (postIndex !== -1 && votes) state.posts[postIndex].votes = votes
+          })
+        },
+        addView: (post_id, views) => {
+          set((state) => {
+            const postIndex = state.posts.findIndex((item) => item._id === post_id)
+            if (postIndex !== -1 && views) state.posts[postIndex].views = views
           })
         },
         updatePost: (payload) => {

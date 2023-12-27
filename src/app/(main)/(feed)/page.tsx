@@ -105,9 +105,9 @@ export default function Page() {
         </Tabs>
 
         <Divider className="my-5" />
-        {/* {posts.map((item) => (
+        {posts.map((item) => (
           <PostItem {...item} key={item._id} />
-        ))} */}
+        ))}
       </div>
     </div>
   )

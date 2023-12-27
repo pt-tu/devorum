@@ -11,11 +11,8 @@ interface Props {
 }
 
 function Tags({ tags, isEditing = false }: Props) {
-  const [first, setFirst] = useState('')
-
   return isEditing ? (
     <div>
-      <Input label="Tags" variant="flat" className="my-5" value={first} onChange={(e) => setFirst(e.target.value)} />
       <TagInput />
     </div>
   ) : (

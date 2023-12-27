@@ -35,11 +35,11 @@ const CommunityOverviewBar = ({ data }: Props) => {
         )}
         <div className="flex items-center gap-4">
           <div>
-            <p className="font-medium">{data.numMembers}</p>
+            <p className="font-medium">{data.numMembers ?? 0}</p>
             <p className="text-sm font-light">Members</p>
           </div>
           <div>
-            <p className="font-medium">{data.numPosts}</p>
+            <p className="font-medium">{data.numPosts ?? 0}</p>
             <p className="text-sm font-light">Posts published</p>
           </div>
         </div>

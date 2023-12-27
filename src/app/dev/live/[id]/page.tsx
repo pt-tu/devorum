@@ -79,12 +79,20 @@ const LiveRoom = ({ params }: { params: any }) => {
       console.log('received dev message', data.message)
       setMessages((prev) => [...prev, data.message])
     }
+    const handleKickResponse = (data: any) => {
+      const username = data.username
+      if (username === user?.username) {
+        window.location.href = window.location.href
+      }
+    }
 
     socket.on('joinRoomDevResponse', getRoomParticipants)
     socket.on('messageResponse', handleMessageResponse)
+    socket.on('kickResponse', handleKickResponse)
     return () => {
       socket.off('joinRoomDevResponse', getRoomParticipants)
       socket.off('messageResponse', handleMessageResponse)
+      socket.off('kickResponse', handleKickResponse)
     }
   }, [id])
 

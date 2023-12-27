@@ -10,9 +10,10 @@ type Props = {
   username: string
   data: User
   onDelete: () => void
+  allowDelete?: boolean
 }
 
-const ModCard = ({ isOwner, username, data, onDelete }: Props) => {
+const ModCard = ({ isOwner, username, data, onDelete, allowDelete }: Props) => {
   const user = useUserStore((state) => state.user)
   return (
     <div className="group relative">
@@ -36,7 +37,7 @@ const ModCard = ({ isOwner, username, data, onDelete }: Props) => {
           </div>
         </CardBody>
       </Card>
-      {!isOwner && (
+      {!isOwner && allowDelete && (
         <Button
           onClick={onDelete}
           isIconOnly

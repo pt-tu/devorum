@@ -3,6 +3,7 @@ import ModCard from '@/components/community/ModCard'
 import useCommunityData from '@/hooks/useCommunityData'
 import useCommunityMembersData from '@/hooks/useCommunityMembersData'
 import { addModService, deleteModService } from '@/services/communityService'
+import { useUserStore } from '@/store/useUserStore'
 import {
   Button,
   Autocomplete,
@@ -20,6 +21,7 @@ import React, { Key, useMemo, useState } from 'react'
 
 const ConfigureTheme = ({ params }: { params: Params }) => {
   const community = params.community
+  const user = useUserStore((state) => state.user)
   const { data, isLoading, mutate } = useCommunityData(community)
   const { data: membersData } = useCommunityMembersData(community)
   const [isOpen, setIsOpen] = useState(false)
@@ -75,9 +77,11 @@ const ConfigureTheme = ({ params }: { params: Params }) => {
       <title>Configure user titles</title>
       <div className="w-full space-y-7 rounded-xl bg-dark-2 px-8 py-7">
         <h1 className="text-2xl font-medium">Adjust moderators for `{community}`</h1>
-        <Button onClick={() => setIsOpen(true)} color="primary" size="lg">
-          Add Mod
-        </Button>
+        {data.createdBy === user?._id && (
+          <Button onClick={() => setIsOpen(true)} color="primary" size="lg">
+            Add Mod
+          </Button>
+        )}
         <div className="grid grid-cols-3 gap-6">
           {data.moderators.map((mod) => (
             <ModCard
@@ -85,6 +89,7 @@ const ConfigureTheme = ({ params }: { params: Params }) => {
               data={mod}
               isOwner={mod._id === data.createdBy}
               onDelete={deleteModHandler(mod.username)}
+              allowDelete={data.createdBy === user?._id}
               username={mod.username}
             />
           ))}

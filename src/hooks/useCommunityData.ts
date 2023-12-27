@@ -9,8 +9,11 @@ import useSWRImmutable from 'swr/immutable'
 
 const useCommunityData = (community: string) => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWRImmutable<Community, AxiosError>('getCommunityData', () =>
-    getCommunityService(community).then((res) => res.data),
+  const { isLoading, error, data, mutate } = useSWRImmutable<Community, AxiosError>(
+    // Key is not a string anymore, but an array. Note that the community parameter is passed here
+    ['getCommunityData', community],
+    // Here we take the community parameter out as 'communityKey' and use it to fetch the data
+    ([, communityKey]) => getCommunityService(communityKey as string).then((res) => res.data),
   )
 
   useEffect(() => {

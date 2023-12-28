@@ -31,7 +31,7 @@ const themes = {
   },
   dark: {
     sidebar: {
-      backgroundColor: '#192021',
+      backgroundColor: '#131313',
       color: '#8ba1b7',
     },
     menu: {
@@ -93,9 +93,10 @@ const AdminSidebar = ({ children }: { children: ReactNode }) => {
   const theme = useThemeStore((state) => state.theme) as 'light' | 'dark'
 
   const getCurrentRoute = () => {
-    if (pathname.includes('/admin/report')) return 'report'
+    if (pathname.includes('/admin/bugs')) return 'bugs'
     if (pathname.includes('/admin/developers')) return 'developers'
     if (pathname.includes('/admin/badges')) return 'badges'
+    return 'admin panel'
   }
 
   const menuItemStyles: MenuItemStyles = {
@@ -137,6 +138,7 @@ const AdminSidebar = ({ children }: { children: ReactNode }) => {
         onBackdropClick={() => setToggled(false)}
         onBreakPoint={setBroken}
         breakPoint="md"
+        className="!border-r-gray-4/20"
         backgroundColor={themes[theme].sidebar.backgroundColor}
         rootStyles={{
           color: themes[theme].sidebar.color,
@@ -152,9 +154,10 @@ const AdminSidebar = ({ children }: { children: ReactNode }) => {
                 General
               </p>
             </div>
+
             <Menu menuItemStyles={menuItemStyles}>
-              <MenuItem icon={<MdOutlineBugReport className="text-2xl" />} onClick={() => router.push('/admin/report')}>
-                Report
+              <MenuItem icon={<MdOutlineBugReport className="text-2xl" />} onClick={() => router.push('/admin/bugs')}>
+                Bugs
               </MenuItem>
               <MenuItem icon={<TbUserCode className="text-2xl" />} onClick={() => router.push('/admin/developers')}>
                 Developers
@@ -183,8 +186,8 @@ const AdminSidebar = ({ children }: { children: ReactNode }) => {
         </div>
       </Sidebar>
 
-      <main className="w-full flex-1">
-        <div className="flex h-16 w-full items-center justify-between px-6">
+      <main className="h-full w-full flex-1">
+        <div className="flex h-20 w-full items-center justify-between bg-dark-5 px-6">
           <h2 className="text-xl font-semibold">{getCurrentRoute()}</h2>
           <ThemeButton />
         </div>

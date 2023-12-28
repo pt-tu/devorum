@@ -54,7 +54,7 @@ export default function Header() {
       />
 
       {/* Right */}
-      <div className="flex flex-1 flex-row items-center justify-center gap-6">
+      <div className="flex flex-1 flex-row items-center justify-end gap-6">
         <Dropdown>
           <DropdownTrigger>
             <Button radius="full" variant="flat" isIconOnly>

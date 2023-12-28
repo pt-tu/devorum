@@ -149,6 +149,14 @@
   -webkit-box-orient: vertical;
 }
 
+.lines-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--number-of-lines, 1);
+  -webkit-box-orient: vertical;
+}
+
 .remove-border > div {
   border: 0 !important;
 }

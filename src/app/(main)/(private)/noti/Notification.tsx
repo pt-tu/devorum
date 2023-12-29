@@ -59,6 +59,7 @@ const Notification = ({ data }: Props) => {
     if (data.fromData && data.type === 'user' && 'username' in data.fromData) {
       return data.fromData.avatar
     }
+    // if (data.type === 'general' && data.from === 'admin') return '/admin.svg'
   }
 
   const dropDownItems = useMemo(() => {

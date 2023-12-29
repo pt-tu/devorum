@@ -7,7 +7,7 @@ export type Notification = {
   _id: string
   content: string
   from: string
-  fromData: User | Community
+  fromData?: User | Community
   owner: string
   isRead: boolean
   action: string

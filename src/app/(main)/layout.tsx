@@ -10,6 +10,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { Message } from '@/types/chat.type'
 import { Notification } from '@/types/notification.type'
 import checkPageStatus from '@/utils/notifyUser'
+import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
@@ -18,6 +19,9 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const appendMessage = useMessageStore((state) => state.appendMessage)
   const loadNotifications = useNotificationStore((state) => state.loadNotifications)
   const appendNotification = useNotificationStore((state) => state.appendNotification)
+  const pathname = usePathname()
+
+  const paths = ['/', '/new/post', '/new/community']
 
   const { data: rooms, mutate } = useRoomsData()
 
@@ -97,7 +101,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="h-20" />
         {children}
       </div>
-      <div className="h-16" />
+      {!paths.includes(pathname) && <div className="h-16" />}
       <Report />
     </section>
   )

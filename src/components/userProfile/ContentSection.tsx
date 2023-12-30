@@ -11,7 +11,7 @@ const ContentSection = ({}: Props) => {
     <div className="col-span-8 gap-8">
       <div className="col-span-4" />
       <div className="col-span-8 rounded-lg">
-        <Tabs aria-label="Options" size="lg">
+        <Tabs variant="underlined" aria-label="Options" size="lg">
           <Tab key="overview" title="Overview">
             {/* {posts.slice(0, 2).map((item) => (
               <PostItem {...item} key={item.postId} />

@@ -31,6 +31,7 @@
     --color-dark-6: 255 255 255;
     --color-dark-7: 245 245 245;
     --color-dark-true: 255 255 255;
+    --color-dark-8: 255 255 255;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -42,6 +43,7 @@
       --color-dark-6: 30 30 30;
       --color-dark-7: 45 45 45;
       --color-dark-true: 0 0 0;
+      --color-dark-8: 29 30 31;
     }
   }
   :root[data-theme='dark'] {
@@ -57,6 +59,7 @@
     --color-dark-6: 30 30 30;
     --color-dark-7: 45 45 45;
     --color-dark-true: 0 0 0;
+    --color-dark-8: 29 30 31;
   }
   :root[data-theme='light'] {
     --color-0: 211 202 194;
@@ -71,6 +74,7 @@
     --color-dark-6: 255 255 255;
     --color-dark-7: 245 245 245;
     --color-dark-true: 255 255 255;
+    --color-dark-8: 255 255 255;
   }
 }
 
@@ -202,4 +206,16 @@
   border-radius: 4px;
   left: -4px;
   top: -5px;
+}
+
+.customMdEditor .w-md-editor-content,
+.customMdEditor .w-md-editor-toolbar,
+.customMdEditor .w-md-editor-text-input {
+  font-family: 'Helvetica Neue', sans-serif; /* Your chosen font */
+  line-height: 19px;
+  font-size: 15px;
+}
+
+.w-md-editor-text {
+  height: 100% !important;
 }

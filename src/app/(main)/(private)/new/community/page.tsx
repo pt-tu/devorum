@@ -74,7 +74,7 @@ const NewCommunity = () => {
     <>
       <h1 className="mt-8 text-4xl font-semibold">Create new community</h1>
       <form onSubmit={createCommunityHandler}>
-        <div className="mt-6 space-y-8 rounded-xl bg-dark-2 p-8">
+        <div className="mt-6 space-y-8 rounded-xl py-8">
           <Input
             value={communityData.name}
             errorMessage={valid === false ? 'Community name is already taken.' : null}

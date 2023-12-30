@@ -40,8 +40,8 @@ const User = forwardRef<HTMLDivElement, Props>(({ size, user: outerUser }: Props
         {user.fullName || user.username}
         <p className="text-xs font-normal opacity-70">/{user.username}</p>
       </DropdownItem>,
-      <DropdownItem as={Link} href="/quicksort" key="quicksort">
-        Quicksort
+      <DropdownItem as={Link} href="/bookmarks" key="quicksort">
+        Bookmarks
       </DropdownItem>,
       <DropdownItem showDivider as={Link} href="/settings" key="settings">
         Settings

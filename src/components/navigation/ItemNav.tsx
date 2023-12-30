@@ -25,7 +25,7 @@ export default function ItemNav(props: NavItemProps) {
       onClick={handleOnClick}
       className={classNames(
         'flex h-fit max-w-full cursor-pointer flex-row items-center gap-2 rounded-xl py-2 pl-3',
-        checkSelected ? 'bg-orange-8 hover:bg-orange-bg' : 'hover:bg-dark-4',
+        checkSelected ? 'bg-gray-4/20 hover:bg-gray-4/40' : 'hover:bg-dark-4',
       )}
     >
       {typeof props.icon === 'string' ? (
@@ -34,13 +34,11 @@ export default function ItemNav(props: NavItemProps) {
         props.icon
       )}
       <div className="w-2/3 justify-between">
-        <p className={classNames('max-w-full text-sm font-semibold', checkSelected ? 'text-white' : 'text-gray-bg')}>
-          {props.title}
-        </p>
+        <p className={classNames('max-w-full text-sm font-semibold', 'text-gray-bg')}>{props.title}</p>
         <p
           className={classNames(
             'max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-xs font-normal text-gray-3',
-            checkSelected ? 'text-white' : 'text-gray-3',
+            'text-gray-3',
           )}
         >
           {props.subTitle}

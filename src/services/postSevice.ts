@@ -5,11 +5,23 @@ const path = 'posts'
 export interface CreatePostProps {
   title: string
   content: string | undefined
-  tags: Tag[] | undefined
+  tags: string[]
 }
 
 const listPostService = async (page: number, size?: number) => {
   return await authAxios.get<Posts>(`${path}/?page=${page}&size=${size}`)
+}
+
+const bookmarkService = async (id: string) => {
+  return await baseAxios.put<Posts>(`${path}/${id}/bookmark`)
+}
+
+const listBookmarkService = async () => {
+  return await baseAxios.get<Post[]>(`${path}/bookmark`)
+}
+
+const getPostService = async (id: string) => {
+  return await authAxios.get<Post>(`${path}/${id}`)
 }
 
 const updatePostService = async (data: CreatePostProps) => {
@@ -32,4 +44,14 @@ const deletePostService = async (_id: String) => {
   return await baseAxios.delete(`${path}/delete?_id=${_id}`)
 }
 
-export { listPostService, updatePostService, toggleVoteService, createPostService, addViewService, deletePostService }
+export {
+  listPostService,
+  updatePostService,
+  toggleVoteService,
+  createPostService,
+  addViewService,
+  deletePostService,
+  getPostService,
+  bookmarkService,
+  listBookmarkService,
+}

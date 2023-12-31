@@ -13,19 +13,29 @@ import {
   Spinner,
   Textarea,
 } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Comment from './Comment'
 import { useUserStore } from '@/store/useUserStore'
 import NewComment from './NewComment'
 import useListCommentsData from '@/hooks/useListCommentsData'
 import { useParams } from 'next/navigation'
 import { Comment as CommentType } from '@/types/comment.type'
+import useListProfilesData from '@/hooks/useListProfilesData'
 
 const CommentSection = () => {
   const user = useUserStore((state) => state.user)
   const { id } = useParams()
   const { data, isLoading } = useListCommentsData(id as string)
   const [replyingTo, setReplyingTo] = useState<CommentType>()
+  const { data: profiles } = useListProfilesData()
+
+  const profilesMap = useMemo(() => {
+    if (!profiles) return {}
+    return profiles.reduce((acc, cur) => {
+      acc[cur.username] = cur
+      return acc
+    }, {} as any)
+  }, [profiles])
 
   if (!data || isLoading)
     return (
@@ -52,10 +62,16 @@ const CommentSection = () => {
       <div className="h-6" />
 
       <div className="mt-6 space-y-6">
-        {data.map((comment, idx) => (
+        {data.comments.map((comment, idx) => (
           <>
-            <Comment replyingTo={replyingTo} setReplyingTo={setReplyingTo} key={comment._id} data={comment} />
-            {idx !== data.length - 1 && <Divider />}
+            <Comment
+              profilesMap={profilesMap}
+              replyingTo={replyingTo}
+              setReplyingTo={setReplyingTo}
+              key={comment._id}
+              data={comment}
+            />
+            {idx !== data.comments.length - 1 && <Divider />}
           </>
         ))}
       </div>

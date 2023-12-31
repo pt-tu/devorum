@@ -9,3 +9,8 @@ export type Comment = {
   author: string
   votes: string[]
 }
+
+export type CommentList = {
+  comments: Comment[]
+  total: number
+}

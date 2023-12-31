@@ -11,15 +11,18 @@ import React, { Fragment, useState } from 'react'
 import { BiUpvote, BiSolidUpvote } from 'react-icons/bi'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import NewComment from './NewComment'
+import useListProfilesData from '@/hooks/useListProfilesData'
 
 type Props = {
   data: Comment
   replyingTo?: Comment
   setReplyingTo: (comment?: Comment) => void
+  profilesMap: any
 }
 
-const Comment = ({ data, replyingTo, setReplyingTo }: Props) => {
+const Comment = ({ data, replyingTo, profilesMap, setReplyingTo }: Props) => {
   const user = useUserStore((state) => state.user)
+
   const { id } = useParams()
   const { mutate } = useListCommentsData(id as string)
   const voteComment = async () => {
@@ -44,7 +47,7 @@ const Comment = ({ data, replyingTo, setReplyingTo }: Props) => {
     <div className="flex-1 pt-4">
       <div className="flex items-center gap-4">
         <Link href={`/p/${data.author}`}>
-          <Avatar src={'/gray.png'} />
+          <Avatar src={profilesMap[data.author]?.avatar || '/gray.png'} />
         </Link>
         <div>
           <Link href={`/p/${data.author}`}>
@@ -96,7 +99,7 @@ const Comment = ({ data, replyingTo, setReplyingTo }: Props) => {
           <Fragment key={reply._id}>
             <div className="flex gap-10">
               <div className="w-1.5 bg-default-200/50" />
-              <Comment replyingTo={replyingTo} setReplyingTo={setReplyingTo} data={reply} />
+              <Comment profilesMap={profilesMap} replyingTo={replyingTo} setReplyingTo={setReplyingTo} data={reply} />
             </div>
           </Fragment>
         ))}

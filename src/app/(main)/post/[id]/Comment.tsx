@@ -1,71 +1,105 @@
+import useListCommentsData from '@/hooks/useListCommentsData'
+import { deleteCommentService, toggleVoteCommentService } from '@/services/commentService'
+import { useUserStore } from '@/store/useUserStore'
+import { Comment } from '@/types/comment.type'
 import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import classNames from 'classnames'
-import React, { useState } from 'react'
+import moment from 'moment'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import React, { Fragment, useState } from 'react'
 import { BiUpvote, BiSolidUpvote } from 'react-icons/bi'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
+import NewComment from './NewComment'
 
 type Props = {
-  reply?: number
+  data: Comment
+  replyingTo?: Comment
+  setReplyingTo: (comment?: Comment) => void
 }
 
-const Comment = ({ reply }: Props) => {
-  const [voted, setVoted] = useState(1)
+const Comment = ({ data, replyingTo, setReplyingTo }: Props) => {
+  const user = useUserStore((state) => state.user)
+  const { id } = useParams()
+  const { mutate } = useListCommentsData(id as string)
+  const voteComment = async () => {
+    try {
+      await toggleVoteCommentService(data._id)
+      mutate()
+    } catch (error) {
+      console.log('Upvote comment error:', error)
+    }
+  }
+
+  const handleDelete = async () => {
+    try {
+      await deleteCommentService(data._id)
+      mutate()
+    } catch (error) {
+      console.log('delete comment error:', error)
+    }
+  }
 
   return (
-    <div className="pt-4">
+    <div className="flex-1 pt-4">
       <div className="flex items-center gap-4">
-        <Avatar src="/gray.png" />
+        <Link href={`/p/${data.author}`}>
+          <Avatar src={'/gray.png'} />
+        </Link>
         <div>
-          <p>tuan-hda</p>
-          <p className="font-light">Sep 20</p>
+          <Link href={`/p/${data.author}`}>
+            <p>{data.author}</p>
+          </Link>
+          <p className="font-light">{moment(data.createdAt).format('MMM DD')}</p>
         </div>
 
-        <Dropdown>
-          <DropdownTrigger>
-            <Button variant="light" className="ml-auto text-2xl text-default-500" isIconOnly>
-              <HiOutlineDotsHorizontal />
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Static Actions">
-            <DropdownItem key="report">Report</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        {user && user.username === data.author && (
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="light" className="ml-auto text-2xl text-default-500" isIconOnly>
+                <HiOutlineDotsHorizontal />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions">
+              <DropdownItem onClick={handleDelete} key="delete">
+                Delete
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        )}
       </div>
 
-      <p className="mt-4 font-light">
-        afawefj awefklj lweakfjklawejalkwefjlakwejlkawef alkwefklawejjfawkelfj awlkejfa lkwjel
-      </p>
+      <p className="mt-4 font-light">{data.content}</p>
       <div className="-mx-3 mt-2 flex items-center gap-1">
-        <Button isIconOnly variant="light">
-          {voted === 1 ? (
-            <BiSolidUpvote className={classNames('text-2xl text-default-700')} />
-          ) : (
-            <BiUpvote className={classNames('text-2xl text-default-400')} />
-          )}
-        </Button>
-        {15}
-        <Button isIconOnly variant="light">
-          {voted === 2 ? (
-            <BiSolidUpvote className={classNames('rotate-180 text-2xl text-default-700')} />
-          ) : (
-            <BiUpvote className={classNames('rotate-180 text-2xl text-default-400')} />
-          )}
-        </Button>
+        {user && (
+          <Button onClick={voteComment} isIconOnly variant="light">
+            {data.votes.includes(user.username) ? (
+              <BiSolidUpvote className={classNames('text-2xl text-default-700')} />
+            ) : (
+              <BiUpvote className={classNames('text-2xl text-default-400')} />
+            )}
+          </Button>
+        )}
+        {data.votes.length}
 
-        <Button variant="light" size="lg" className="ml-auto">
-          Reply
-        </Button>
+        {user && (
+          <Button onClick={() => setReplyingTo(data)} variant="light" size="lg" className="ml-auto">
+            Reply
+          </Button>
+        )}
       </div>
+      {replyingTo?._id === data._id && <NewComment replyingTo={replyingTo} setReplyingTo={setReplyingTo} />}
       <div className="h-4" />
 
-      {reply && reply > 0 ? (
-        <>
-          <div className="flex gap-10">
-            <div className="w-1.5 bg-default-200/50" />
-            <Comment reply={reply - 1} />
-          </div>
-        </>
-      ) : null}
+      {data.replies &&
+        data.replies.map((reply) => (
+          <Fragment key={reply._id}>
+            <div className="flex gap-10">
+              <div className="w-1.5 bg-default-200/50" />
+              <Comment replyingTo={replyingTo} setReplyingTo={setReplyingTo} data={reply} />
+            </div>
+          </Fragment>
+        ))}
     </div>
   )
 }

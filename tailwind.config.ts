@@ -15,7 +15,7 @@ const config: Config = {
     },
     extend: {
       typography: {
-        DEFAULT: {
+        dark: {
           css: {
             color: '#fff',
             '[class~="lead"]': { color: '#ddd' },

@@ -14,6 +14,38 @@ const config: Config = {
       mono: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            color: '#fff',
+            '[class~="lead"]': { color: '#ddd' },
+            a: { color: '#fff' },
+            strong: { color: '#fff' },
+            'ol > li::before': { color: '#fff' },
+            'ul > li::before': { color: '#fff' },
+            hr: { borderColor: '#fff' },
+            blockquote: {
+              color: '#fff',
+              borderLeftColor: '#fff',
+            },
+            h1: { color: '#fff' },
+            h2: { color: '#fff' },
+            h3: { color: '#fff' },
+            h4: { color: '#fff' },
+            code: { color: '#fff' },
+            'a code': { color: '#fff' },
+            pre: {
+              color: '#fff',
+              backgroundColor: '#000',
+            },
+            thead: {
+              color: '#fff',
+              borderBottomColor: '#fff',
+            },
+            'tbody tr': { borderBottomColor: '#fff' },
+          },
+        },
+      },
       colors: {
         transparent: 'transparent',
         white: '#FFFFFF',
@@ -26,6 +58,7 @@ const config: Config = {
           5: 'rgb(var(--color-dark-5) / <alpha-value>)',
           6: 'rgb(var(--color-dark-6) / <alpha-value>)',
           7: 'rgb(var(--color-dark-7) / <alpha-value>)',
+          8: 'rgb(var(--color-dark-8) / <alpha-value>)',
           true: 'rgb(var(--color-dark-true) / <alpha-value>)',
         },
         gray: {
@@ -67,6 +100,7 @@ const config: Config = {
   },
   darkMode: 'class',
   plugins: [
+    require('@tailwindcss/typography'),
     nextui(),
     // {
     //   themes: {

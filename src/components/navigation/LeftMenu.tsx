@@ -7,8 +7,11 @@ function LeftMenu() {
   const { items } = useMenuStore()
 
   return (
-    <div className="fixed bottom-0 left-4 top-24 w-1/5 overflow-y-scroll">
+    <div className="sticky bottom-0 left-8 top-28 col-span-3 flex-[3] flex-shrink-0 self-start">
       <HorizontalNav items={items} />
+      <div className="pointer-events-none fixed bottom-0 left-0 right-0 top-40 m-auto h-full max-w-7xl">
+        <div className="absolute left-[29%] h-[calc(100vh-80px)] border-r border-gray-4/20 " />
+      </div>
     </div>
   )
 }

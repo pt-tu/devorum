@@ -10,6 +10,9 @@ import { useUserStore } from '@/store/useUserStore'
 import { useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
+import { usePathname } from 'next/navigation'
+import classNames from 'classnames'
+import { useThemeStore } from '@/store/useThemeStore'
 
 const rubik = Rubik({ subsets: ['latin'], display: 'swap' })
 
@@ -22,12 +25,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [user, getUserProfile] = useUserStore((state) => [state.user, state.getUserProfile])
   const [screenCapture, setScreenCapture] = useState('')
 
+  const theme = useThemeStore((state) => state.theme)
+  const pathname = usePathname()
+
+  const paths = ['/', '/new/post', '/new/community']
+
   useEffect(() => {
     getUserProfile()
   }, [getUserProfile])
 
   return (
-    <html lang="en" suppressHydrationWarning className="bg-dark-1 light">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={classNames('light', paths.includes(pathname) ? 'bg-dark-8' : 'bg-dark-1')}
+    >
       <body className={classnames(rubik.className, 'h-screen overflow-y-scroll')}>
         <Providers>
           {/* <SWRConfig value={{ keepPreviousData: true }}> */}

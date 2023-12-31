@@ -10,7 +10,7 @@ function RightMenu() {
   const onSearch = (input: string) => setFilterUsers(input)
 
   return (
-    <div className="fixed bottom-0 right-0 top-24 w-1/5 overflow-y-scroll">
+    <div className="sticky top-28 col-span-3 flex-[2] self-start overflow-y-scroll">
       <div className="h-fit rounded-2xl bg-dark-2 pt-3">
         <p className="pointer-events-none my-2 ml-5 flex flex-1 text-base font-semibold text-gray-bg">
           {'Recent users'}

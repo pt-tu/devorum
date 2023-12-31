@@ -19,6 +19,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import moment from 'moment'
+import Link from 'next/link'
 import React from 'react'
 
 const PostHeader = (props: Post) => {
@@ -73,12 +74,16 @@ const PostHeader = (props: Post) => {
           )}
         </ModalContent>
       </Modal>
-      <Image className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.avatar || defaultAvatar} />
-      <div className="ml-4 h-full flex-1">
-        <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>
-        {!isNew && <p className="text-[10px] font-light text-gray-400">{moment(props.updatedAt).fromNow()}</p>}
+      <Link href={`/p/${props.user.username}`}>
+        <Image className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.avatar || defaultAvatar} />
+      </Link>
+      <div className="ml-4 flex h-full flex-1 items-center gap-2 text-sm font-light">
+        <Link href={`/p/${props.user.username}`}>
+          <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>
+        </Link>
+        •<p className="text-gray-4">{moment(props.updatedAt).format('DD, MMM YYYY')}</p>
       </div>
-      {!isNew && (
+      {/* {!isNew && (
         <Dropdown backdrop="blur">
           <DropdownTrigger>
             <Button isIconOnly variant="light" radius="full">
@@ -95,7 +100,7 @@ const PostHeader = (props: Post) => {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-      )}
+      )} */}
     </div>
   )
 }

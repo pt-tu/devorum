@@ -14,6 +14,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Image,
+  Spinner,
 } from '@nextui-org/react'
 import classNames from 'classnames'
 import React, { useState } from 'react'
@@ -26,57 +27,72 @@ import ActionBar from './ActionBar'
 import Recommendation from './Recommendation'
 import Link from 'next/link'
 import CommentSection from './CommentSection'
+import usePostDetailData from '@/hooks/usePostDetailData'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github.css' // O
 
 const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-export default function Page() {
+export default function Page({ params }: { params: any }) {
   const [voted, setVoted] = useState(1)
+  const { data } = usePostDetailData(params.id)
   // const time = {
   //   ask: '2 years, 6 months ago',
   //   modified: '8 months ago',
   //   viewed: '26k times',
   // }
 
+  if (!data)
+    return (
+      <div className="flex min-h-[calc(100vh-160px)] w-full flex-col items-center justify-center gap-6">
+        <Spinner size="lg" />
+      </div>
+    )
+
   return (
     <>
       <div className="relative m-auto min-h-[calc(100vh-80px)] w-full gap-x-5 bg-dark-5 pt-4">
         <div className="mx-auto max-w-2xl">
           <div className="space-y-8 py-8">
-            <title>Why Humor Is the Perfect Benchmark for Generative AI</title>
-            <h1 className="text-4xl font-semibold">Why Humor Is the Perfect Benchmark for Generative AI</h1>
+            <title>{data?.title}</title>
+            <h1 className="text-4xl font-semibold">{data?.title}</h1>
             <p className="!mt-4 flex gap-2 font-light">
-              <span>#programming</span>
-              <span>#web</span>
-              <span>#message</span>
+              {data.tags.map((tag: any) => (
+                <span key={tag}>{tag}</span>
+              ))}
             </p>
 
             {/* Community */}
-            <Card>
-              <CardBody className="p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <Link href="/c/ghibli" className="text-lg font-medium">
-                    community/ghibli
-                  </Link>
-                  <Button color="primary">Join</Button>
-                </div>
-                {'Hello this is ghibli' && <h2 className="font mt-2 text-base">{'Hello this is ghibli'}</h2>}
-                {'What are you waiting for. Come to explore the wonderful world' && (
-                  <p className="text-base font-light">
-                    {'What are you waiting for. Come to explore the wonderful world'}
-                  </p>
-                )}
-              </CardBody>
-            </Card>
+            {data.community && (
+              <Card>
+                <CardBody className="p-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <Link href="/c/ghibli" className="text-lg font-medium">
+                      community/ghibli
+                    </Link>
+                    <Button color="primary">Join</Button>
+                  </div>
+                  {'Hello this is ghibli' && <h2 className="font mt-2 text-base">{'Hello this is ghibli'}</h2>}
+                  {'What are you waiting for. Come to explore the wonderful world' && (
+                    <p className="text-base font-light">
+                      {'What are you waiting for. Come to explore the wonderful world'}
+                    </p>
+                  )}
+                </CardBody>
+              </Card>
+            )}
 
             {/* Post info */}
             <div className="flex items-center gap-4">
-              <Avatar src="/gray.png" size="lg" />
+              <Avatar src={data.user.avatar || '/gray.png'} size="lg" />
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="font">tuan-hda</p>-<p className="cursor-pointer text-primary-400">Follow</p>
+                  <p className="font">{data.user.username}</p>-<p className="cursor-pointer text-primary-400">Follow</p>
                 </div>
                 <div className="flex items-center gap-2 font-light">
-                  <p className="">Hoang Dinh Anh Tuan</p>-<p>Sep 8</p>
+                  <p className="">{data.user.fullName || data.user.username}</p>-<p>Sep 8</p>
                 </div>
               </div>
             </div>
@@ -84,31 +100,7 @@ export default function Page() {
             <ActionBar />
             {/* Content */}
             <div className="space-y-7 text-lg font-light leading-8">
-              <p>
-                Practicing is a great way of learning. Not everyone however has a mentor that can guide them through the
-                corridors of programming. That’s why today I’ll review some open source hello world React projects and
-                give you some advice how these could be improved. I’m sure the authors of these projects are already
-                more proficient, and I always really appreciate when someone does their own projects. Also, we have to
-                consider these are just test/initial projects, so it’s not like the authors didn’t know that, but it was
-                not a requirement for them. So great work, and we can also learn a little bit from it! I’ll be just
-                describing things that can be improved in the projects I’ve found. I’m picking some low-hanging fruits,
-                so join in if you find anything more! If you like to see the whole code you can use links provided!
-              </p>
-              <p>
-                Practicing is a great way of learning. Not everyone however has a mentor that can guide them through the
-                corridors of programming. That’s why today I’ll review some open source hello world React projects and
-                give you some advice how these could be improved. I’m sure the authors of these projects are already
-                more proficient, and I always really appreciate when someone does their own projects. Also, we have to
-                consider these are just test/initial projects, so it’s not like the authors didn’t know that, but it was
-                not a requirement for them. So great work, and we can also learn a little bit from it! I’ll be just
-                describing things that can be improved in the projects I’ve found. I’m picking some low-hanging fruits,
-                so join in if you find anything more! If you like to see the whole code you can use links provided!
-              </p>
-
-              <Image
-                src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*yph4CoX-W2vwfsiJl5X30g.png"
-                alt="content_media"
-              />
+              <div className="prose" dangerouslySetInnerHTML={{ __html: data.content }}></div>
             </div>
 
             <div className="h-6" />

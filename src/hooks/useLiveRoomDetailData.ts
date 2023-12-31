@@ -7,8 +7,9 @@ import useSWRImmutable from 'swr/immutable'
 
 const useLiveRoomDetailData = (id: string) => {
   const router = useRouter()
-  const { isLoading, error, data, mutate } = useSWRImmutable<LiveRoom, AxiosError>('liveRoomDetail', () =>
-    getLiveRoomService(id).then((res) => res.data),
+  const { isLoading, error, data, mutate } = useSWRImmutable<LiveRoom, AxiosError>(
+    ['liveRoomDetail', id],
+    ([, idKey]) => getLiveRoomService(idKey as string).then((res) => res.data),
   )
 
   useEffect(() => {

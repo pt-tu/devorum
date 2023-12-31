@@ -32,11 +32,14 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css' // O
+import { useThemeStore } from '@/store/useThemeStore'
+import moment from 'moment'
 
 const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 export default function Page({ params }: { params: any }) {
   const [voted, setVoted] = useState(1)
+  const theme = useThemeStore((state) => state.theme)
   const { data } = usePostDetailData(params.id)
   // const time = {
   //   ask: '2 years, 6 months ago',
@@ -86,21 +89,27 @@ export default function Page({ params }: { params: any }) {
 
             {/* Post info */}
             <div className="flex items-center gap-4">
-              <Avatar src={data.user.avatar || '/gray.png'} size="lg" />
+              <Link href={`/p/${data.user.username}`}>
+                <Avatar src={data.user.avatar || '/gray.png'} size="lg" />
+              </Link>
               <div>
-                <div className="flex items-center gap-2">
-                  <p className="font">{data.user.username}</p>-<p className="cursor-pointer text-primary-400">Follow</p>
-                </div>
+                <Link href={`/p/${data.user.username}`}>
+                  <div className="flex items-center gap-2">
+                    <p className="font">{data.user.username}</p>-
+                    <p className="cursor-pointer text-primary-400">Follow</p>
+                  </div>
+                </Link>
                 <div className="flex items-center gap-2 font-light">
-                  <p className="">{data.user.fullName || data.user.username}</p>-<p>Sep 8</p>
+                  <p className="">{data.user.fullName || data.user.username}</p>-
+                  <p>{moment(data.createdAt).format('MMM DD')}</p>
                 </div>
               </div>
             </div>
 
             <ActionBar />
             {/* Content */}
-            <div className="space-y-7 text-lg font-light leading-8">
-              <div className="prose" dangerouslySetInnerHTML={{ __html: data.content }}></div>
+            <div className={classNames('space-y-7 text-lg font-light leading-8', theme === 'dark' && 'dark')}>
+              <div className="dark:prose-dark prose" dangerouslySetInnerHTML={{ __html: data.content }}></div>
             </div>
 
             <div className="h-6" />

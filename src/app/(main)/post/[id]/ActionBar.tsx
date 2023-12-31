@@ -1,3 +1,4 @@
+import useListCommentsData from '@/hooks/useListCommentsData'
 import usePostDetailData from '@/hooks/usePostDetailData'
 import { bookmarkService, toggleVoteService, updatePostService } from '@/services/postSevice'
 import { useUserStore } from '@/store/useUserStore'
@@ -16,6 +17,7 @@ const ActionBar = () => {
   const { id } = useParams()
   const { data, mutate } = usePostDetailData(id as string)
   const user = useUserStore((state) => state.user)
+  const { data: commentListData } = useListCommentsData(id as string)
 
   if (!data) {
     return null
@@ -54,9 +56,9 @@ const ActionBar = () => {
           {data.votes?.length || 0}
         </div>
         <Badge
-          className={classNames(data.comments?.length === 0 && 'hidden')}
-          content={data.comments?.length}
-          variant="faded"
+          className={classNames(commentListData?.total === 0 && 'hidden', 'border-0')}
+          content={commentListData?.total}
+          variant="flat"
           size="sm"
         >
           <Button isIconOnly variant="light">

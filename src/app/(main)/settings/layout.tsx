@@ -8,16 +8,8 @@ export const metadata: Metadata = {
 
 const settingMenus = [
   {
-    name: 'Settings',
-    path: '/settings',
-  },
-  {
     name: 'Profile',
     path: '/settings/profile',
-  },
-  {
-    name: 'Notifications',
-    path: '/quicksort/notifications',
   },
 ]
 

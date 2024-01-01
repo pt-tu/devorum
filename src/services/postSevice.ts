@@ -12,6 +12,10 @@ const listPostService = async (page: number, size?: number) => {
   return await authAxios.get<Posts>(`${path}/?page=${page}&size=${size}`)
 }
 
+export const listSelfPostsService = async () => {
+  return await baseAxios.get<Posts>(`${path}/self`)
+}
+
 const bookmarkService = async (id: string) => {
   return await baseAxios.put<Posts>(`${path}/${id}/bookmark`)
 }
@@ -28,7 +32,7 @@ const updatePostService = async (data: CreatePostProps) => {
   return await baseAxios.put<Post>(`${path}/update`, data)
 }
 
-const createPostService = async (data: CreatePostProps) => {
+const createPostService = async (data: Partial<Post>) => {
   return await baseAxios.post<Post>(`${path}/create`, data)
 }
 
@@ -41,7 +45,7 @@ const addViewService = async (data: String) => {
 }
 
 const deletePostService = async (_id: String) => {
-  return await baseAxios.delete(`${path}/delete?_id=${_id}`)
+  return await baseAxios.delete(`${path}/${_id}`)
 }
 
 export {

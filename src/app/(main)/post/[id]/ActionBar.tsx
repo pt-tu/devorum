@@ -94,7 +94,7 @@ const ActionBar = () => {
         </Badge>
 
         <div className="ml-auto flex gap-2">
-          {user && user._id !== data.user._id && (
+          {user && (
             <Button onClick={handleBookmark} isIconOnly variant="light">
               {!data.bookmark.includes(user.username) ? (
                 <TbBookmarkPlus className="text-2xl text-default-500" />

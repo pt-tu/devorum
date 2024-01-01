@@ -36,12 +36,19 @@ export default function Page() {
   const [selectedTab, setSelectedTab] = useState<string | number>(tabs[0].key)
   const { user } = useUserStore()
   const router = useRouter()
+  const [domLoaded, setDomLoaded] = useState(false)
+
+  useEffect(() => {
+    setDomLoaded(true)
+  }, [])
 
   useEffect(() => {
     if (data?.posts) {
       setPosts(data.posts)
     }
   }, [data])
+
+  if (!domLoaded) return null
 
   const onSelectionChange = (key: string | number) => {
     setSelectedTab(key)

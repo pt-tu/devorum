@@ -111,7 +111,7 @@ const MessageChannelsBar = () => {
             >
               <div className="relative  flex h-full w-full items-center gap-6">
                 {!isSeen(room) && <div className="absolute -left-4 h-full w-1 bg-primary-400"></div>}
-                <Avatar className="flex-shrink-0" size="lg" src={getToUserInfo(room).avatar} />
+                <Avatar className="flex-shrink-0" size="lg" src={getToUserInfo(room)?.avatar} />
                 <div className="min-w-0  flex-1  text-left">
                   <p className="text-base">
                     {room.participants.find((participant) => participant !== user.username) || user.username}

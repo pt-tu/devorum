@@ -5,12 +5,14 @@ import { Avatar, Button, Chip, Divider, Link, Tooltip } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { FiEdit2 } from 'react-icons/fi'
 import EditTitle from './EditTitle'
+import { useParams } from 'next/navigation'
 
 type Props = {
   data: Community
 }
 
 const CommunityOverviewBar = ({ data }: Props) => {
+  const { community } = useParams()
   const user = useUserStore((state) => state.user)
   const [showEditTitle, setShowEditTitle] = useState(false)
 
@@ -22,7 +24,7 @@ const CommunityOverviewBar = ({ data }: Props) => {
     <div className="small-scrollbar sticky top-20 col-span-3 h-full max-h-[calc(100vh-80px)] space-y-4 self-start overflow-y-auto pr-4">
       <div />
       {user && (
-        <Button color="primary">
+        <Button as={Link} href={`/new/post/${community}`} color="primary">
           <p className="text-base">Create Post</p>
         </Button>
       )}

@@ -34,9 +34,11 @@ import {
 import Link from 'next/link'
 import { useUserStore } from '@/store/useUserStore'
 import { bookmarkService, deletePostService } from '@/services/postSevice'
+import classNames from 'classnames'
 
 type Props = Post & {
   mutate?: () => void
+  hideActions?: boolean
 }
 
 function PostItem(props: Props) {
@@ -83,7 +85,7 @@ function PostItem(props: Props) {
 
   return (
     mounted && (
-      <div className="mb-6 flex h-[300px] flex-col py-6">
+      <div className={classNames('mb-6 flex flex-col py-6', !props.hideActions ? 'h-[300px]' : 'pointer-events-none')}>
         <PostHeader {...props} />
 
         {/* Body */}
@@ -116,65 +118,69 @@ function PostItem(props: Props) {
                 dangerouslySetInnerHTML={{ __html: content }}
               ></div>
             </Link>
-            <div className="mt-auto flex items-center gap-1">
-              <Tags isEditing={props.isEditing} tags={props.tags || []} />
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="flex items-center gap-2 text-sm font-light text-gray-6/80">
-                <TbArrowBigUp />
-                {props.votes?.length || 0} upvotes
-              </div>
+            {!props.hideActions && (
+              <>
+                <div className="mt-auto flex items-center gap-1">
+                  <Tags isEditing={props.isEditing} tags={props.tags || []} />
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2 text-sm font-light text-gray-6/80">
+                    <TbArrowBigUp />
+                    {props.votes?.length || 0} upvotes
+                  </div>
 
-              <div className="ml-4 flex items-center gap-2 text-sm font-light text-gray-6/80">
-                <TbMessageCircle />
-                {props.comments?.length || 0} comments
-              </div>
+                  <div className="ml-4 flex items-center gap-2 text-sm font-light text-gray-6/80">
+                    <TbMessageCircle />
+                    {props.comments?.length || 0} comments
+                  </div>
 
-              <p className="ml-auto mr-4 mt-0.5 text-sm font-light text-gray-6/80">
-                {minsRead} min{minsRead > 1 && 's'} read
-              </p>
-              <Tooltip content="Bookmark">
-                {user && (
-                  <Button onClick={handleBookmark} variant="light" radius="full" isIconOnly>
-                    {props.bookmark.includes(user.username) ? (
-                      <TbBookmarkFilled className="text-xl text-gray-6/80" />
-                    ) : (
-                      <TbBookmarkPlus className="text-xl text-gray-6/80" />
+                  <p className="ml-auto mr-4 mt-0.5 text-sm font-light text-gray-6/80">
+                    {minsRead} min{minsRead > 1 && 's'} read
+                  </p>
+                  <Tooltip content="Bookmark">
+                    {user && (
+                      <Button onClick={handleBookmark} variant="light" radius="full" isIconOnly>
+                        {props.bookmark.includes(user.username) ? (
+                          <TbBookmarkFilled className="text-xl text-gray-6/80" />
+                        ) : (
+                          <TbBookmarkPlus className="text-xl text-gray-6/80" />
+                        )}
+                      </Button>
                     )}
-                  </Button>
-                )}
-              </Tooltip>
-              {user?._id !== props?.user?._id && (
-                <Tooltip content="Not interested">
-                  <Button variant="light" radius="full" isIconOnly>
-                    <TbCodeMinus className="text-xl text-gray-6/80" />
-                  </Button>
-                </Tooltip>
-              )}
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button variant="light" radius="full" isIconOnly>
-                    <TbDots className="text-xl text-gray-6/80" />
-                  </Button>
-                </DropdownTrigger>
-                {user?._id === props?.user?._id ? (
-                  <DropdownMenu>
-                    <DropdownItem
-                      color="danger"
-                      onClick={() => {
-                        onOpen()
-                      }}
-                    >
-                      Delete post
-                    </DropdownItem>
-                  </DropdownMenu>
-                ) : (
-                  <DropdownMenu>
-                    <DropdownItem>Mute this dev</DropdownItem>
-                  </DropdownMenu>
-                )}
-              </Dropdown>
-            </div>
+                  </Tooltip>
+                  {user?._id !== props?.user?._id && (
+                    <Tooltip content="Not interested">
+                      <Button variant="light" radius="full" isIconOnly>
+                        <TbCodeMinus className="text-xl text-gray-6/80" />
+                      </Button>
+                    </Tooltip>
+                  )}
+                  <Dropdown>
+                    <DropdownTrigger>
+                      <Button variant="light" radius="full" isIconOnly>
+                        <TbDots className="text-xl text-gray-6/80" />
+                      </Button>
+                    </DropdownTrigger>
+                    {user?._id === props?.user?._id ? (
+                      <DropdownMenu>
+                        <DropdownItem
+                          color="danger"
+                          onClick={() => {
+                            onOpen()
+                          }}
+                        >
+                          Delete post
+                        </DropdownItem>
+                      </DropdownMenu>
+                    ) : (
+                      <DropdownMenu>
+                        <DropdownItem>Mute this dev</DropdownItem>
+                      </DropdownMenu>
+                    )}
+                  </Dropdown>
+                </div>
+              </>
+            )}
           </div>
 
           {image && (

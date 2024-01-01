@@ -8,8 +8,15 @@ export interface CreatePostProps {
   tags: string[]
 }
 
-const listPostService = async (page: number, size?: number) => {
-  return await authAxios.get<Posts>(`${path}/?page=${page}&size=${size}`)
+const listPostService = async (page: number, size?: number, community?: string, state?: string) => {
+  return await authAxios.get<Posts>(`${path}/`, {
+    params: {
+      page,
+      size,
+      community,
+      state,
+    },
+  })
 }
 
 export const listSelfPostsService = async () => {
@@ -28,7 +35,7 @@ const getPostService = async (id: string) => {
   return await authAxios.get<Post>(`${path}/${id}`)
 }
 
-const updatePostService = async (data: CreatePostProps) => {
+const updatePostService = async (data: Partial<Post>) => {
   return await baseAxios.put<Post>(`${path}/update`, data)
 }
 

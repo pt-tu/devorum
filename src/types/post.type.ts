@@ -23,6 +23,7 @@ export type Post = {
   updatedAt?: Date
   community: string
   bookmark: string[]
+  state: 'pending' | 'accepted' | 'rejected'
 }
 
 export type Posts = {

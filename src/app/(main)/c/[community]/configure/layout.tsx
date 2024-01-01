@@ -30,6 +30,7 @@ export default function ConfigureCommunityLayout({ children }: { children: React
     { name: 'Rules & Resources', path: `/c/${community}/configure/rules-resources` },
     { name: 'Moderators', path: `/c/${community}/configure/mods` },
     { name: 'Members', path: `/c/${community}/configure/members` },
+    { name: 'Queues', path: `/c/${community}/configure/queues` },
   ]
 
   return (

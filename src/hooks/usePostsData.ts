@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useSWRImmutable from 'swr/immutable'
 
-const usePostsData = (page: number, size?: number) => {
+const usePostsData = (page: number, size?: number, community?: string, state?: string) => {
   const router = useRouter()
   const { isLoading, error, data, mutate } = useSWRImmutable<Posts, AxiosError>('postsData', () =>
-    listPostService(page, size).then((res) => res.data),
+    listPostService(page, size, community, state).then((res) => res.data),
   )
   useEffect(() => {
     if (error) console.log('error', error)

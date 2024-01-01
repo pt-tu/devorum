@@ -8,7 +8,7 @@ import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined
 import { Button, Tab, Tabs } from '@nextui-org/react'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 const tabs: TabProps[] = [
   {
@@ -108,8 +108,11 @@ export default function Page() {
           ))}
         </Tabs>
 
-        {posts.map((item) => (
-          <PostItem {...item} key={item._id} />
+        {posts.map((item, idx) => (
+          <Fragment key={item._id}>
+            <PostItem {...item} key={item._id} />
+            {idx !== posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}
+          </Fragment>
         ))}
       </div>
     </div>

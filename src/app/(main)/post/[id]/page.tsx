@@ -109,7 +109,7 @@ export default function Page({ params }: { params: any }) {
             <ActionBar />
             {/* Content */}
             <div className={classNames('space-y-7 text-lg font-light leading-8', theme === 'dark' && 'dark')}>
-              <div className="dark:prose-dark prose" dangerouslySetInnerHTML={{ __html: data.content }}></div>
+              <div className="prose dark:prose-dark" dangerouslySetInnerHTML={{ __html: data.content }}></div>
             </div>
 
             <div className="h-6" />

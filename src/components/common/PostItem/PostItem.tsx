@@ -2,7 +2,21 @@
 import React, { CSSProperties, useEffect, useMemo, useState } from 'react'
 import { Tags } from '../CommentItem/Tag'
 import { MDEditor, Markdown } from '../Markdown'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Tooltip } from '@nextui-org/react'
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Tooltip,
+  useDisclosure,
+} from '@nextui-org/react'
 import { Post } from '@/types/post.type'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
@@ -19,13 +33,14 @@ import {
 } from 'react-icons/tb'
 import Link from 'next/link'
 import { useUserStore } from '@/store/useUserStore'
-import { bookmarkService } from '@/services/postSevice'
+import { bookmarkService, deletePostService } from '@/services/postSevice'
 
 type Props = Post & {
   mutate?: () => void
 }
 
 function PostItem(props: Props) {
+  const [curr, setCurr] = useState()
   const [mounted, setMounted] = useState(false)
   const user = useUserStore((state) => state.user)
   const { updateSelected } = usePostStore()
@@ -54,6 +69,17 @@ function PostItem(props: Props) {
   }
 
   const minsRead = Math.ceil(props.content.split(' ').length / 200)
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
+
+  const handleDelete = async () => {
+    try {
+      await deletePostService(props._id)
+      onClose()
+      props.mutate && props.mutate()
+    } catch (error) {
+      console.log('delete post error:', error)
+    }
+  }
 
   return (
     mounted && (
@@ -81,7 +107,7 @@ function PostItem(props: Props) {
           <div className="flex h-full min-w-0 flex-1 flex-col">
             <Link className="block h-full w-full" href={`/post/${props._id}`}>
               <div
-                className="lines-ellipsis l !bg-dark-8 w-full min-w-0 flex-1 text-sm font-light text-gray-3"
+                className="lines-ellipsis l w-full min-w-0 flex-1 !bg-dark-8 text-sm font-light text-gray-3"
                 style={
                   {
                     '--number-of-lines': 3,
@@ -118,20 +144,35 @@ function PostItem(props: Props) {
                   </Button>
                 )}
               </Tooltip>
-              <Tooltip content="Not interested">
-                <Button variant="light" radius="full" isIconOnly>
-                  <TbCodeMinus className="text-xl text-gray-6/80" />
-                </Button>
-              </Tooltip>
+              {user?._id !== props?.user?._id && (
+                <Tooltip content="Not interested">
+                  <Button variant="light" radius="full" isIconOnly>
+                    <TbCodeMinus className="text-xl text-gray-6/80" />
+                  </Button>
+                </Tooltip>
+              )}
               <Dropdown>
                 <DropdownTrigger>
                   <Button variant="light" radius="full" isIconOnly>
                     <TbDots className="text-xl text-gray-6/80" />
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu>
-                  <DropdownItem>Mute this dev</DropdownItem>
-                </DropdownMenu>
+                {user?._id === props?.user?._id ? (
+                  <DropdownMenu>
+                    <DropdownItem
+                      color="danger"
+                      onClick={() => {
+                        onOpen()
+                      }}
+                    >
+                      Delete post
+                    </DropdownItem>
+                  </DropdownMenu>
+                ) : (
+                  <DropdownMenu>
+                    <DropdownItem>Mute this dev</DropdownItem>
+                  </DropdownMenu>
+                )}
               </Dropdown>
             </div>
           </div>
@@ -144,6 +185,25 @@ function PostItem(props: Props) {
         </div>
         {/* )}
         </div> */}
+
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">Confirm</ModalHeader>
+                <ModalBody>You sure you want to delete?</ModalBody>
+                <ModalFooter>
+                  <Button color="default" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button color="danger" variant="light" onPress={handleDelete}>
+                    Delete
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     )
   )

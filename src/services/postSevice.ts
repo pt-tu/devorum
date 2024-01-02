@@ -19,8 +19,20 @@ const listPostService = async (page: number, size?: number, community?: string, 
   })
 }
 
-export const listSelfPostsService = async () => {
-  return await baseAxios.get<Posts>(`${path}/self`)
+export const listRecommendedPostsService = async (community?: string) => {
+  return await baseAxios.get<Posts>(`${path}/recommend`, {
+    params: {
+      community,
+    },
+  })
+}
+
+export const listReadNextPostsService = async (postId?: string) => {
+  return await baseAxios.get<Posts>(`${path}/recommend/${postId}`)
+}
+
+export const listSelfPostsService = async (username: string) => {
+  return await baseAxios.get<Posts>(`${path}/self/${username}`)
 }
 
 const bookmarkService = async (id: string) => {

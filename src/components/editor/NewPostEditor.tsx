@@ -2,14 +2,14 @@
 
 import dynamic from 'next/dynamic'
 
-import { createPostService } from '@/services/postSevice'
+import { createPostService, getPostService, updatePostService } from '@/services/postSevice'
 import { Avatar, Button, Card, CardBody, Input, Textarea } from '@nextui-org/react'
 import React, { useEffect, useMemo, useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css' // Or any other style you prefer
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useUserStore } from '@/store/useUserStore'
 import { Community } from '@/types/community.type'
 import { Post } from '@/types/post.type'
@@ -24,11 +24,43 @@ type Props = {
 
 const NewPostEditor = ({ data }: Props) => {
   const [title, setTitle] = useState('')
+  const [oldData, setOldData] = useState<Post | undefined>(undefined)
+  const { id } = useParams()
   const [tag, setTag] = useState('')
   const [value, setValue] = useState('')
   const [loading, setLoading] = useState(false)
   const user = useUserStore((state) => state.user)
   const router = useRouter()
+
+  useEffect(() => {
+    if (oldData) {
+      setTitle(oldData.title)
+      setValue(oldData.content)
+      setTag(oldData.tags.join(', '))
+    } else {
+      setTitle('')
+      setValue('')
+      setTag('')
+    }
+  }, [oldData])
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        if (id) {
+          const post = await getPostService(id as string)
+          setOldData(post.data)
+          if (user?._id !== post.data.user._id) {
+            router.push('/not-found')
+          }
+        } else {
+          setOldData(undefined)
+        }
+      } catch (error) {
+        console.log('get post error:', error)
+      }
+    })()
+  }, [id, router, user?._id])
 
   const isValid = useMemo(() => {
     try {
@@ -56,7 +88,11 @@ const NewPostEditor = ({ data }: Props) => {
       if (data) {
         postData.community = data.name
       }
-      await createPostService(postData)
+      if (!oldData) {
+        await createPostService(postData)
+      } else {
+        await updatePostService({ ...oldData, ...postData })
+      }
       router.push(`/p/${user?.username}`)
     } catch (error) {
       console.log('publish error:', error)

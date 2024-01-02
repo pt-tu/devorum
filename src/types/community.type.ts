@@ -7,6 +7,7 @@ export type NewCommunity = {
 }
 
 export type Community = NewCommunity & {
+  _id: string
   numMembers: number
   numPosts: number
   title?: string

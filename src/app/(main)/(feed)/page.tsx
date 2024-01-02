@@ -2,13 +2,14 @@
 import { AppButton, HorizontalNav, PostItem, Divider } from '@/components'
 import { TabProps } from '@/components/common/Tab/TabButton'
 import usePostsData from '@/hooks/usePostsData'
+import useRecommendedPostsData from '@/hooks/useRecommendedPostsData'
 import { usePostStore } from '@/store/usePostStore'
 import { useUserStore } from '@/store/useUserStore'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
 import { Button, Tab, Tabs } from '@nextui-org/react'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 
 const tabs: TabProps[] = [
   {
@@ -32,15 +33,26 @@ const tabs: TabProps[] = [
 export default function Page() {
   const { posts, setPosts, initSelected } = usePostStore()
   console.log('posts', posts)
-  const { data, isLoading } = usePostsData(1, 10)
+  const { data, isLoading, mutate } = useRecommendedPostsData()
   const [selectedTab, setSelectedTab] = useState<string | number>(tabs[0].key)
   const { user } = useUserStore()
   const router = useRouter()
   const [domLoaded, setDomLoaded] = useState(false)
 
+  const filteredPosts = useMemo(() => {
+    if (!data) return []
+    console.log('filtered user:', user)
+    if (user) {
+      return data.posts.filter((item) => !user.blocks.find((block) => block === item.user.username))
+    } else {
+      return data.posts
+    }
+  }, [data, user])
+
   useEffect(() => {
     setDomLoaded(true)
-  }, [])
+    mutate()
+  }, [mutate])
 
   useEffect(() => {
     if (data?.posts) {
@@ -95,7 +107,7 @@ export default function Page() {
             Post
           </Button>
         </div> */}
-        <Tabs
+        {/* <Tabs
           aria-label="Options"
           className="-ml-3 mb-6"
           variant="underlined"
@@ -113,9 +125,9 @@ export default function Page() {
               }
             />
           ))}
-        </Tabs>
+        </Tabs> */}
 
-        {posts.map((item, idx) => (
+        {filteredPosts.map((item, idx) => (
           <Fragment key={item._id}>
             <PostItem {...item} key={item._id} />
             {idx !== posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}

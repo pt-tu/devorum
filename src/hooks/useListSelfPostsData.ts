@@ -8,11 +8,11 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useSWRImmutable from 'swr/immutable'
 
-const useListSelfPostsData = () => {
+const useListSelfPostsData = (username: string) => {
   const router = useRouter()
   const user = useUserStore((state) => state.user)
   const { isLoading, error, data, mutate } = useSWRImmutable<Posts, AxiosError>(['listSelfPosts', user?.username], () =>
-    listSelfPostsService().then((res) => res.data),
+    listSelfPostsService(username).then((res) => res.data),
   )
 
   useEffect(() => {

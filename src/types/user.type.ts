@@ -15,9 +15,11 @@ type User = {
   createdAt: Date
   updatedAt: Date
   work?: string
+  block?: string
   education?: string
   position?: string
   _id: string
+  blocks: [string]
   followStatus?: Follow
   blockStatus?: Block
 }

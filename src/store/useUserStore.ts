@@ -43,6 +43,7 @@ export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
             state._id = ''
           })
           useUserStore.getState().clearUserProfile()
+          window.location.href = '/login'
         },
       }),
       {

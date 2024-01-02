@@ -5,7 +5,7 @@ import Link from 'next/link'
 import ThemeButton from '../common/ThemeButton'
 import { useAuthStore, useUserStore } from '@/store/useUserStore'
 import { Badge, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import useRoomsData from '@/hooks/useRoomsData'
 import { IoMdCode } from 'react-icons/io'
 import User from './User'
@@ -22,6 +22,7 @@ export default function Header() {
   const { data } = useRoomsData()
   const unreadMsgs = data?.filter((room) => !room.lastMessage?.seen?.includes(user?.username || '')).length
   const router = useRouter()
+  const { value } = useParams()
 
   return (
     <div className="fixed -right-4 left-0 top-0 z-50 flex h-20 flex-1 flex-row items-center justify-between border-b border-b-dark-1 bg-dark-2/90 px-5 backdrop-blur-md">
@@ -49,6 +50,11 @@ export default function Header() {
       <Input
         placeholder="Type here to search..."
         endContent={<Search className="mr-2" />}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            router.push(`/search/${e.currentTarget.value}`)
+          }
+        }}
         className="flex-1"
         classNames={{ inputWrapper: ['pl-5'] }}
       />

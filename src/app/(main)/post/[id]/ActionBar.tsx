@@ -19,6 +19,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import classNames from 'classnames'
+import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { BiSolidUpvote, BiUpvote } from 'react-icons/bi'
@@ -106,28 +107,33 @@ const ActionBar = () => {
           <Button onClick={copyCurrentLink} isIconOnly variant="light">
             <IoShareOutline className="text-2xl text-default-500" />
           </Button>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="light" className="text-2xl text-default-500" isIconOnly>
-                <HiOutlineDotsHorizontal />
-              </Button>
-            </DropdownTrigger>
-            {user?._id === data.user._id ? (
-              <DropdownMenu aria-label="Static Actions">
-                <DropdownItem key="delete" color="danger" onClick={onOpen}>
-                  Delete
-                </DropdownItem>
-              </DropdownMenu>
-            ) : (
-              <DropdownMenu aria-label="Static Actions">
-                <DropdownItem showDivider key="show-less">
-                  I don{"'"} like this
-                </DropdownItem>
-                <DropdownItem key="mute">Blacklist this author</DropdownItem>
-                <DropdownItem key="report">Report</DropdownItem>
-              </DropdownMenu>
-            )}
-          </Dropdown>
+          {user && (
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="light" className="text-2xl text-default-500" isIconOnly>
+                  <HiOutlineDotsHorizontal />
+                </Button>
+              </DropdownTrigger>
+              {user?._id === data.user._id ? (
+                <DropdownMenu aria-label="Static Actions">
+                  <DropdownItem key="edit" as={Link} href={`/edit/post/${id}`}>
+                    Edit
+                  </DropdownItem>
+                  <DropdownItem key="delete" color="danger" onClick={onOpen}>
+                    Delete
+                  </DropdownItem>
+                </DropdownMenu>
+              ) : (
+                <DropdownMenu aria-label="Static Actions">
+                  <DropdownItem showDivider key="show-less">
+                    I don{"'"} like this
+                  </DropdownItem>
+                  <DropdownItem key="mute">Blacklist this author</DropdownItem>
+                  <DropdownItem key="report">Report</DropdownItem>
+                </DropdownMenu>
+              )}
+            </Dropdown>
+          )}
         </div>
       </div>
       <Divider />

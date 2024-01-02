@@ -36,12 +36,15 @@ import { useThemeStore } from '@/store/useThemeStore'
 import moment from 'moment'
 import { followUserService, getProfileService, unfollowUserService } from '@/services/userService'
 import { User } from '@/types/user.type'
-import { isAxiosError } from 'axios'
+import recombee from 'recombee-js-api-client'
+import client from '@/configs/recombeeClient'
+import { useUserStore } from '@/store/useUserStore'
 
 const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 export default function Page({ params }: { params: any }) {
   const [voted, setVoted] = useState(1)
+  const user = useUserStore((state) => state.user)
   const theme = useThemeStore((state) => state.theme)
   const { data } = usePostDetailData(params.id)
   const [userProfile, setUserProfile] = useState<User | undefined>()
@@ -95,6 +98,12 @@ export default function Page({ params }: { params: any }) {
       console.log(err)
     }
   }, [data])
+
+  useEffect(() => {
+    if (user) {
+      client.send(new recombee.AddDetailView(user.username, params.id))
+    }
+  }, [params.id, user])
 
   useEffect(() => {
     fetchUserProfile()
@@ -158,7 +167,10 @@ export default function Page({ params }: { params: any }) {
             <ActionBar />
             {/* Content */}
             <div className={classNames('space-y-7 text-lg font-light leading-8', theme === 'dark' && 'dark')}>
-              <div className="prose dark:prose-dark" dangerouslySetInnerHTML={{ __html: data.content }}></div>
+              <div
+                className="prose tracking-wide dark:prose-dark"
+                dangerouslySetInnerHTML={{ __html: data.content }}
+              ></div>
             </div>
 
             <div className="h-6" />

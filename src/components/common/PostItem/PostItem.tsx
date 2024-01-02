@@ -39,6 +39,7 @@ import classNames from 'classnames'
 import useCommunityData from '@/hooks/useCommunityData'
 import { useParams } from 'next/navigation'
 import { Community } from '@/types/community.type'
+import useListCommentsData from '@/hooks/useListCommentsData'
 
 type Props = Post & {
   mutate?: () => void
@@ -49,6 +50,7 @@ type Props = Post & {
 
 function PostItem(props: Props) {
   const [curr, setCurr] = useState()
+  const { data: commentsData } = useListCommentsData(props._id)
   const [mounted, setMounted] = useState(false)
   const user = useUserStore((state) => state.user)
 
@@ -136,12 +138,12 @@ function PostItem(props: Props) {
                 <div className="flex items-center gap-1">
                   <div className="flex items-center gap-2 text-sm font-light text-gray-6/80">
                     <TbArrowBigUp />
-                    {props.votes?.length || 0} upvotes
+                    {props.votes?.length || 0} votes
                   </div>
 
                   <div className="ml-4 flex items-center gap-2 text-sm font-light text-gray-6/80">
                     <TbMessageCircle />
-                    {props.comments?.length || 0} comments
+                    {commentsData?.comments.length || 0} comments
                   </div>
 
                   <p className="ml-auto mr-4 mt-0.5 text-sm font-light text-gray-6/80">
@@ -169,36 +171,38 @@ function PostItem(props: Props) {
                       </Button>
                     )}
                   </Tooltip>
-                  {user?._id !== props?.user?._id && (
+                  {user && user?._id !== props?.user?._id && (
                     <Tooltip content="Not interested">
                       <Button variant="light" radius="full" isIconOnly>
                         <TbCodeMinus className="text-xl text-gray-6/80" />
                       </Button>
                     </Tooltip>
                   )}
-                  <Dropdown>
-                    <DropdownTrigger>
-                      <Button variant="light" radius="full" isIconOnly>
-                        <TbDots className="text-xl text-gray-6/80" />
-                      </Button>
-                    </DropdownTrigger>
-                    {user?._id === props?.user?._id ? (
-                      <DropdownMenu>
-                        <DropdownItem
-                          color="danger"
-                          onClick={() => {
-                            onOpen()
-                          }}
-                        >
-                          Delete post
-                        </DropdownItem>
-                      </DropdownMenu>
-                    ) : (
-                      <DropdownMenu>
-                        <DropdownItem>Mute this dev</DropdownItem>
-                      </DropdownMenu>
-                    )}
-                  </Dropdown>
+                  {user && (
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <Button variant="light" radius="full" isIconOnly>
+                          <TbDots className="text-xl text-gray-6/80" />
+                        </Button>
+                      </DropdownTrigger>
+                      {user?._id === props?.user?._id ? (
+                        <DropdownMenu>
+                          <DropdownItem
+                            color="danger"
+                            onClick={() => {
+                              onOpen()
+                            }}
+                          >
+                            Delete post
+                          </DropdownItem>
+                        </DropdownMenu>
+                      ) : (
+                        <DropdownMenu>
+                          <DropdownItem>Mute this dev</DropdownItem>
+                        </DropdownMenu>
+                      )}
+                    </Dropdown>
+                  )}
                 </div>
               </>
             )}

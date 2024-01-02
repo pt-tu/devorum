@@ -4,12 +4,14 @@ import { usePostStore } from '@/store/usePostStore'
 import usePostsData from '@/hooks/usePostsData'
 import useListSelfPostsData from '@/hooks/useListSelfPostsData'
 import { Fragment } from 'react'
+import { useParams } from 'next/navigation'
 
 type Props = {}
 
 const ContentSection = ({}: Props) => {
   // const { data } = usePostsData(1, 10)
-  const { data, mutate } = useListSelfPostsData()
+  const { username } = useParams()
+  const { data, mutate } = useListSelfPostsData(username as string)
 
   if (!data) return null
 

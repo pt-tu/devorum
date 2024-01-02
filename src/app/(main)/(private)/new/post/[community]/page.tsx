@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import NewPostEditor from '../NewPostEditor'
+import NewPostEditor from '../../../../../../components/editor/NewPostEditor'
 import useCommunityData from '@/hooks/useCommunityData'
 import { useParams } from 'next/navigation'
 

@@ -17,7 +17,7 @@ import {
   Spinner,
 } from '@nextui-org/react'
 import classNames from 'classnames'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BiSolidUpvote, BiUpvote } from 'react-icons/bi'
 import { CiBookmark } from 'react-icons/ci'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
@@ -34,6 +34,9 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css' // O
 import { useThemeStore } from '@/store/useThemeStore'
 import moment from 'moment'
+import { followUserService, getProfileService, unfollowUserService } from '@/services/userService'
+import { User } from '@/types/user.type'
+import { isAxiosError } from 'axios'
 
 const sample = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 
@@ -41,11 +44,61 @@ export default function Page({ params }: { params: any }) {
   const [voted, setVoted] = useState(1)
   const theme = useThemeStore((state) => state.theme)
   const { data } = usePostDetailData(params.id)
-  // const time = {
-  //   ask: '2 years, 6 months ago',
-  //   modified: '8 months ago',
-  //   viewed: '26k times',
-  // }
+  const [userProfile, setUserProfile] = useState<User | undefined>()
+
+  const unfollow = async () => {
+    try {
+      if (userProfile) {
+        await unfollowUserService(userProfile.username)
+        fetchUserProfile()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const follow = async () => {
+    try {
+      if (userProfile) {
+        await followUserService(userProfile.username)
+        fetchUserProfile()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleFollowClick = () => {
+    if (userProfile) {
+      if (userProfile.followStatus) {
+        unfollow()
+      } else {
+        follow()
+      }
+    }
+  }
+
+  const fetchUserProfile = useCallback(async () => {
+    try {
+      if (!data) return
+      if (!data?.user.username) {
+        return console.log('No username in url')
+      }
+
+      if (typeof data?.user.username !== 'string') {
+        return console.log('Invalid type of username')
+      }
+
+      const response = await getProfileService(data.user.username)
+      setUserProfile(response.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [data])
+
+  useEffect(() => {
+    fetchUserProfile()
+  }, [fetchUserProfile])
 
   if (!data)
     return (
@@ -68,20 +121,17 @@ export default function Page({ params }: { params: any }) {
             </p>
 
             {/* Community */}
-            {data.community && (
+            {data.communityData && (
               <Card>
                 <CardBody className="p-6">
                   <div className="flex items-center justify-between gap-4">
                     <Link href="/c/ghibli" className="text-lg font-medium">
-                      community/ghibli
+                      community/{data.communityData.name}
                     </Link>
-                    <Button color="primary">Join</Button>
                   </div>
-                  {'Hello this is ghibli' && <h2 className="font mt-2 text-base">{'Hello this is ghibli'}</h2>}
-                  {'What are you waiting for. Come to explore the wonderful world' && (
-                    <p className="text-base font-light">
-                      {'What are you waiting for. Come to explore the wonderful world'}
-                    </p>
+                  {data.communityData.title && <h2 className="font mt-2 text-base">{data.communityData.title}</h2>}
+                  {data.communityData.description && (
+                    <p className="text-base font-light">{data.communityData.description}</p>
                   )}
                 </CardBody>
               </Card>
@@ -95,8 +145,7 @@ export default function Page({ params }: { params: any }) {
               <div>
                 <Link href={`/p/${data.user.username}`}>
                   <div className="flex items-center gap-2">
-                    <p className="font">{data.user.username}</p>-
-                    <p className="cursor-pointer text-primary-400">Follow</p>
+                    <p className="font">{data.user.username}</p>
                   </div>
                 </Link>
                 <div className="flex items-center gap-2 font-light">
@@ -126,10 +175,7 @@ export default function Page({ params }: { params: any }) {
 
         <div className="space-y-4">
           <div className="flex items-center gap-2 font-light">
-            <p className="text-2xl font-medium">Encoded by tuan-hda</p>
-            <Button className="ml-auto" size="lg" color="primary">
-              Follow
-            </Button>
+            <p className="text-2xl font-medium">Encoded by {data.user.username}</p>
           </div>
           <div className="flex items-center gap-6">
             <Avatar src="/gray.png" size="lg" className="flex-shrink-0" />

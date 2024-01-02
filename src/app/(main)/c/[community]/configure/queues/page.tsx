@@ -79,16 +79,8 @@ const QueuesPage = ({ params }: { params: Params }) => {
     <>
       <title>Configure user titles</title>
       <div className="w-full space-y-7 rounded-xl bg-dark-2 px-8 py-7">
-        <h1 className="text-2xl font-medium">Adjust queues for `{community}`</h1>
-        <Tabs size="lg">
-          <Tab key="pending" title="Pending">
-            <PendingList />
-          </Tab>
-          <Tab key="reported" title="Reported">
-            {/* <BannedTab community={community} /> */}
-          </Tab>
-          <Tab key="closed" title="Closed"></Tab>
-        </Tabs>
+        <h1 className="text-2xl font-medium">Moderate queues for `{community}`</h1>
+        <PendingList />
       </div>
 
       {/* <Modal isOpen={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>

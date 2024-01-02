@@ -81,6 +81,15 @@ const PostHeader = (props: Post) => {
         <Link href={`/p/${props.user.username}`}>
           <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>
         </Link>
+        {props.community && (
+          <>
+            <span>in</span>
+
+            <Link href={`/c/${props.community}`}>
+              <p className="font-normal text-gray-bg">{props.community}</p>
+            </Link>
+          </>
+        )}
         •<p className="text-gray-4">{moment(props.updatedAt).format('DD, MMM YYYY')}</p>
       </div>
       {/* {!isNew && (

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import useSWRImmutable from 'swr/immutable'
 
-const useCommunityData = (community: string) => {
+const useCommunityData = (community?: string) => {
   const router = useRouter()
   const { isLoading, error, data, mutate } = useSWRImmutable<Community, AxiosError>(
     // Key is not a string anymore, but an array. Note that the community parameter is passed here

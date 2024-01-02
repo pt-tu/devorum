@@ -1,35 +1,41 @@
-import { Button, Card, CardBody } from '@nextui-org/react'
-import React from 'react'
+import { PostItem } from '@/components'
+import useReadNextData from '@/hooks/useReadNextData copy'
+import { useUserStore } from '@/store/useUserStore'
+import { Button, Card, CardBody, Divider } from '@nextui-org/react'
+import React, { Fragment, useMemo } from 'react'
 
 type Props = {
   title: string
   viewMoreTitle: string
+  postId: string
 }
 
-const Recommendation = ({ title, viewMoreTitle }: Props) => {
+const Recommendation = ({ title, viewMoreTitle, postId }: Props) => {
+  const { data } = useReadNextData(postId)
+  const user = useUserStore((state) => state.user)
+
+  const filteredPosts = useMemo(() => {
+    if (!data) return []
+    console.log('filtered user:', user)
+    if (user) {
+      return data.posts.filter(
+        (item) => !user.blocks.find((block) => block === item.user.username) && item._id !== postId,
+      )
+    } else {
+      return data.posts
+    }
+  }, [data, postId, user])
+
   return (
     <div className="!mt-6 grid grid-cols-1 gap-6">
-      <p className="col-span-full">{title}</p>
+      <p className="col-span-full text-2xl">Read Next</p>
 
-      <Button className="bg-dark-5 px-6 py-10 text-left" fullWidth radius="lg">
-        <p className="font w-full text-left text-lg">This is a new post paperwork hello world</p>
-      </Button>
-
-      <Button className="bg-dark-5 px-6 py-10 text-left" fullWidth radius="lg">
-        <p className="font w-full text-left text-lg">This is a new post paperwork hello world</p>
-      </Button>
-
-      <Button className="bg-dark-5 px-6 py-10 text-left" fullWidth radius="lg">
-        <p className="font w-full text-left text-lg">This is a new post paperwork hello world</p>
-      </Button>
-
-      <Button className="bg-dark-5 px-6 py-10 text-left" fullWidth radius="lg">
-        <p className="font w-full text-left text-lg">This is a new post paperwork hello world</p>
-      </Button>
-
-      <Button className="col-span-full" fullWidth variant="bordered" size="lg">
-        {viewMoreTitle}
-      </Button>
+      {filteredPosts.map((post) => (
+        <Fragment key={post._id}>
+          <PostItem {...post} />
+          <div className="mb-8 border-t border-t-gray-4/20" />
+        </Fragment>
+      ))}
     </div>
   )
 }

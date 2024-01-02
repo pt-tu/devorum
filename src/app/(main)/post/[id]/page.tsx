@@ -190,20 +190,15 @@ export default function Page({ params }: { params: any }) {
             <p className="text-2xl font-medium">Encoded by {data.user.username}</p>
           </div>
           <div className="flex items-center gap-6">
-            <Avatar src="/gray.png" size="lg" className="flex-shrink-0" />
-            <p className="two-lines-ellipsis min-w-0 font-light">
-              Hello world Hello world Hello world Hello world Hello world Hello world Hello world Hello world Hello
-              world Hello world Hello world Hello world Hello world Hello world Hello world Hello world{' '}
-            </p>
+            <Avatar src={data.user.username || '/gray.png'} size="lg" className="flex-shrink-0" />
+            {data.user.about && <p className="two-lines-ellipsis min-w-0 font-light">{data.user.about}</p>}
           </div>
         </div>
 
         <Divider />
-        <Recommendation title="More from tuan-hda" viewMoreTitle="View more from tuan-hda" />
-
-        <Divider />
 
         <Recommendation
+          postId={params.id}
           title="You might like these (our algorithm says so, hope it's right this time...)"
           viewMoreTitle="View more from our recommendation"
         />

@@ -32,11 +32,7 @@ function getUser(id: string, title?: ReactNode, icon?: ReactNode): NavItemProps 
   } as NavItemProps
 }
 
-const defaulf = getItem('defaulf', null, null, null, [
-  getItem('defaulf0', 'Home', 'Find the latest update'),
-  getItem('defaulf1', 'Popular', 'Shots featured today by curators'),
-  getItem('defaulf2', 'Following', 'Explore from your favorite person'),
-])
+const defaulf = getItem('defaulf', null, null, null, [getItem('defaulf0', 'Home', 'Find the latest update')])
 const communities = getItem('communities', 'Communities', null, null, [
   getItem('community0', '#javascript', '82,645 Posted by this tag'),
   getItem('community1', '#design', '51,354 • Trending in Bangladesh'),
@@ -101,36 +97,29 @@ const SAMPLE_RIGHT = [
 ]
 
 export const useMenuStore = createWithEqualityFn<MenuState & MenuActions>()(
-  immer(
-    persist(
-      (set) => ({
-        items: [defaulf, communities, tags],
-        users: SAMPLE_RIGHT,
-        filterUsers: SAMPLE_RIGHT,
-        isSelected: 'defaulf0',
-        toggleExpand: (id) =>
-          set((state) => ({
-            items: state.items.map((item) => (item.id === id ? { ...item, expand: !item.expand } : item)),
-          })),
-        setIsSelected: (id) =>
-          set((state) => {
-            state.isSelected = id
-          }),
-        setFilterUsers: (searchText) => {
-          set((state) => {
-            if (searchText === '') state.filterUsers[0].children = state.users[0].children
-            else
-              state.filterUsers[0].children = state.users[0].children?.filter(
-                (user) => user.title?.toString().toLowerCase().includes(searchText.trim().toLowerCase()),
-              )
-          })
-        },
+  immer((set) => ({
+    items: [defaulf],
+    users: SAMPLE_RIGHT,
+    filterUsers: SAMPLE_RIGHT,
+    isSelected: 'defaulf0',
+    toggleExpand: (id) =>
+      set((state) => ({
+        items: state.items.map((item) => (item.id === id ? { ...item, expand: !item.expand } : item)),
+      })),
+    setIsSelected: (id) =>
+      set((state) => {
+        state.isSelected = id
       }),
-      {
-        name: 'menu-store',
-      },
-    ),
-  ),
+    setFilterUsers: (searchText) => {
+      set((state) => {
+        if (searchText === '') state.filterUsers[0].children = state.users[0].children
+        else
+          state.filterUsers[0].children = state.users[0].children?.filter(
+            (user) => user.title?.toString().toLowerCase().includes(searchText.trim().toLowerCase()),
+          )
+      })
+    },
+  })),
   shallow,
 )
 

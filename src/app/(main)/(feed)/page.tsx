@@ -33,7 +33,7 @@ const tabs: TabProps[] = [
 export default function Page() {
   const { posts, setPosts, initSelected } = usePostStore()
   console.log('posts', posts)
-  const { data, isLoading } = useRecommendedPostsData()
+  const { data, isLoading, mutate } = useRecommendedPostsData()
   const [selectedTab, setSelectedTab] = useState<string | number>(tabs[0].key)
   const { user } = useUserStore()
   const router = useRouter()
@@ -51,7 +51,8 @@ export default function Page() {
 
   useEffect(() => {
     setDomLoaded(true)
-  }, [])
+    mutate()
+  }, [mutate])
 
   useEffect(() => {
     if (data?.posts) {

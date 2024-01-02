@@ -27,6 +27,10 @@ export const listRecommendedPostsService = async (community?: string) => {
   })
 }
 
+export const listReadNextPostsService = async (postId?: string) => {
+  return await baseAxios.get<Posts>(`${path}/recommend/${postId}`)
+}
+
 export const listSelfPostsService = async (username: string) => {
   return await baseAxios.get<Posts>(`${path}/self/${username}`)
 }

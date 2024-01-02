@@ -1,25 +1,22 @@
 import { usePostStore } from '@/store/usePostStore'
 import { Tab, Tabs } from '@nextui-org/react'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { PostItem } from '..'
+import { useParams } from 'next/navigation'
+import useRecommendedPostsData from '@/hooks/useRecommendedPostsData'
 
 const CommunityContent = () => {
-  const posts = usePostStore((state) => state.posts)
+  const { community } = useParams()
+  const { data } = useRecommendedPostsData(community as string)
 
   return (
-    <div className="col-span-9 mt-4">
-      <Tabs aria-label="Options" size="lg">
-        <Tab key="Hot" title="Hot">
-          {/* {posts.slice(0, 10).map((item) => (
-            <PostItem {...item} key={item.postId} />
-          ))} */}
-        </Tab>
-        <Tab key="New" title="New">
-          {/* {posts.slice(1, 3).map((item) => (
-            <PostItem {...item} key={item.postId} />
-          ))} */}
-        </Tab>
-      </Tabs>
+    <div className="col-span-9 mt-4 pl-16">
+      {data?.posts.map((item, idx) => (
+        <Fragment key={item._id}>
+          <PostItem {...item} key={item._id} />
+          {idx !== data.posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}
+        </Fragment>
+      ))}
     </div>
   )
 }

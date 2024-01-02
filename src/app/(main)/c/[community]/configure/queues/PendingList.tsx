@@ -91,16 +91,18 @@ const PendingList = () => {
         placeholder="Search for post"
       />
 
-      <div className="rounded-xl bg-dark-8 px-10 py-6">
-        {filteredPostsData.map((post, idx) => (
-          <Fragment key={post._id}>
-            <div className="cursor-pointer" onClick={handleClick(post)}>
-              <PostItem hideActions {...post} />
-            </div>
-            {idx !== filteredPostsData.length - 1 && <div className="mb-8 border-t border-t-gray-4/20" />}
-          </Fragment>
-        ))}
-      </div>
+      {filteredPostsData.length > 0 && (
+        <div className="rounded-xl bg-dark-8 px-10 py-6">
+          {filteredPostsData.map((post, idx) => (
+            <Fragment key={post._id}>
+              <div className="cursor-pointer" onClick={handleClick(post)}>
+                <PostItem hideActions {...post} />
+              </div>
+              {idx !== filteredPostsData.length - 1 && <div className="mb-8 border-t border-t-gray-4/20" />}
+            </Fragment>
+          ))}
+        </div>
+      )}
 
       <Modal
         isDismissable={false}

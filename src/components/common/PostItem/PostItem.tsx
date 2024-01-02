@@ -30,21 +30,28 @@ import {
   TbCodeMinus,
   TbDots,
   TbMessageCircle,
+  TbTrash,
 } from 'react-icons/tb'
 import Link from 'next/link'
 import { useUserStore } from '@/store/useUserStore'
 import { bookmarkService, deletePostService } from '@/services/postSevice'
 import classNames from 'classnames'
+import useCommunityData from '@/hooks/useCommunityData'
+import { useParams } from 'next/navigation'
+import { Community } from '@/types/community.type'
 
 type Props = Post & {
   mutate?: () => void
   hideActions?: boolean
+  isMod?: boolean
+  communityData?: Community
 }
 
 function PostItem(props: Props) {
   const [curr, setCurr] = useState()
   const [mounted, setMounted] = useState(false)
   const user = useUserStore((state) => state.user)
+
   const { updateSelected } = usePostStore()
   useEffect(() => {
     setMounted(true)
@@ -101,9 +108,12 @@ function PostItem(props: Props) {
               <MDEditor value={props.content} onChange={(e) => updateSelected({ content: e })} />
             </>
           ) : ( */}
-        <Link href={`/post/${props._id}`}>
-          <p className="my-3 mb-[10px] text-2xl font-semibold text-gray-bg">{props.title}</p>
-        </Link>
+
+        <div className="my-3 mb-[10px] ">
+          <Link href={`/post/${props._id}`}>
+            <p className="text-2xl font-semibold text-gray-bg">{props.title}</p>
+          </Link>
+        </div>
 
         <div className="flex min-w-0 flex-1 items-start justify-between gap-20">
           <div className="flex h-full min-w-0 flex-1 flex-col">
@@ -137,6 +147,17 @@ function PostItem(props: Props) {
                   <p className="ml-auto mr-4 mt-0.5 text-sm font-light text-gray-6/80">
                     {minsRead} min{minsRead > 1 && 's'} read
                   </p>
+
+                  <Tooltip content="Delete">
+                    {user &&
+                      props.communityData &&
+                      props.communityData.moderators.find((mod) => mod.username === user.username) && (
+                        <Button onClick={handleBookmark} variant="light" radius="full" isIconOnly>
+                          <TbTrash className="text-xl text-gray-6/80" />
+                        </Button>
+                      )}
+                  </Tooltip>
+
                   <Tooltip content="Bookmark">
                     {user && (
                       <Button onClick={handleBookmark} variant="light" radius="full" isIconOnly>

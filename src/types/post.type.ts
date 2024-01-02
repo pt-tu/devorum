@@ -1,3 +1,4 @@
+import { Community } from './community.type'
 import { User } from './user.type'
 
 export type Tag = {
@@ -21,7 +22,8 @@ export type Post = {
   isEditing?: boolean
   createdAt?: Date
   updatedAt?: Date
-  community: string
+  community?: string
+  communityData?: Community
   bookmark: string[]
   state: 'pending' | 'accepted' | 'rejected'
 }

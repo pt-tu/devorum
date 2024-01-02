@@ -18,9 +18,9 @@ type Props = {
 
 export default function UserProfile({ searchParams }: Props) {
   const [loading, setLoading] = useState(true)
-  const [userProfile, setUserProfile] = useState<User | undefined>()
-  const { username } = useParams()
   const router = useRouter()
+  const { username } = useParams()
+  const [userProfile, setUserProfile] = useState<User | undefined>()
 
   const fetchUserProfile = useCallback(async () => {
     try {

@@ -87,7 +87,7 @@ const NewCommunity = () => {
             label={<p className="text-base font-medium">Community Name</p>}
             labelPlacement="outside"
           />
-          <div>
+          <div className="hidden">
             <p className="font-medium">Community Visibility</p>
             <RadioGroup onChange={onChangeHandler('visibility')} value={communityData.visibility} className="mt-2">
               <Radio value="public">Public</Radio>

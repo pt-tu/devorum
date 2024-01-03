@@ -22,7 +22,11 @@ import moment from 'moment'
 import Link from 'next/link'
 import React from 'react'
 
-const PostHeader = (props: Post) => {
+type Props = Post & {
+  joinedStatusMap?: any
+}
+
+const PostHeader = (props: Props) => {
   const { setSelected, setIsEditing } = usePostStore()
   const { user } = useUserStore()
   const disable = props.user._id !== user?._id
@@ -77,21 +81,25 @@ const PostHeader = (props: Post) => {
       <Link href={`/p/${props.user.username}`}>
         <Image className="h-9 w-9 rounded-full" alt="devorum_avt" src={props.user.avatar || defaultAvatar} />
       </Link>
-      <div className="ml-4 flex h-full flex-1 items-center gap-2 text-sm font-light">
-        <Link href={`/p/${props.user.username}`}>
-          <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>
-        </Link>
-        {props.community && (
-          <>
-            <span>in</span>
+      <div className="ml-4 ">
+        {/* {} */}
+        <div className="flex h-full flex-1 items-center gap-2 text-sm font-light">
+          <Link href={`/p/${props.user.username}`}>
+            <p className="text-sm font-normal text-gray-bg">{props.user.username}</p>
+          </Link>
+          {props.community && (
+            <>
+              <span>in</span>
 
-            <Link href={`/c/${props.community}`}>
-              <p className="font-normal text-gray-bg">{props.community}</p>
-            </Link>
-          </>
-        )}
-        •<p className="text-gray-4">{moment(props.updatedAt).format('DD, MMM YYYY')}</p>
+              <Link href={`/c/${props.community}`}>
+                <p className="font-normal text-gray-bg">{props.community}</p>
+              </Link>
+            </>
+          )}
+          •<p className="text-gray-4">{moment(props.updatedAt).format('DD, MMM YYYY')}</p>
+        </div>
       </div>
+
       {/* {!isNew && (
         <Dropdown backdrop="blur">
           <DropdownTrigger>

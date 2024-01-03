@@ -113,7 +113,7 @@ const CommunityOverviewBar = ({ data }: Props) => {
                     variant="flat"
                     radius="full"
                     as={Link}
-                    href={resource.split('](')[1].replace(')', '') || '#'}
+                    href={(resource && resource.split('](')[1].replace(')', '')) || '#'}
                     target="_blank"
                   >
                     {resource.split('](')[0].replace('[', '')}

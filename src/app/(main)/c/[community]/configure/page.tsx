@@ -111,14 +111,6 @@ const ConfigureCommunity = ({ params }: { params: Params }) => {
           </div>
 
           <div>
-            <p className="font-medium">Community Visibility</p>
-            <RadioGroup onChange={onChangeHandler('visibility')} value={communityData.visibility} className="mt-2">
-              <Radio value="public">Public</Radio>
-              <Radio value="private">Private</Radio>
-            </RadioGroup>
-          </div>
-
-          <div>
             <p className="font-medium">Other</p>
             <Checkbox
               className="mt-0"

@@ -46,6 +46,7 @@ type Props = Post & {
   hideActions?: boolean
   isMod?: boolean
   communityData?: Community
+  joinedStatusMap?: any
 }
 
 function PostItem(props: Props) {

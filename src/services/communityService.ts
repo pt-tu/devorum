@@ -25,6 +25,7 @@ export const checkValidityCommunityNameService = (name: string) =>
 export const listCommunitiesService = () => baseAxios.get<string[]>(`${path}/`)
 export const listAllCommunitiesService = () => baseAxios.get<Community[]>(`${path}/all`)
 export const getCommunityService = (name: string) => baseAxios.get<Community>(`${path}/${name}`)
+export const listJoinedStatusService = (name: string) => baseAxios.get<JoinedStatus[]>(`${path}/${name}/joined-status`)
 export const updateCommunityService = (name: string, data: Community) => baseAxios.put(`${path}/${name}`, data)
 
 // title

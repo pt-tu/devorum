@@ -10,8 +10,8 @@ function CommentFooter() {
         <p className="text-sm font-medium text-gray-500">Edit</p>
         <p className="text-sm font-medium text-gray-500">Follow</p>
         <div className="flex flex-1 flex-row-reverse">
-          {authors.map((item) => (
-            <Author />
+          {authors.map((item, index) => (
+            <Author key={index} />
           ))}
         </div>
       </div>

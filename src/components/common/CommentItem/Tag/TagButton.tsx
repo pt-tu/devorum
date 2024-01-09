@@ -17,8 +17,8 @@ function TagButton({ tag, editing = false }: IProps) {
         editing && 'border',
       )}
     >
-      <p className="text-dark-8 whitespace-nowrap text-sm font-light invert">{tag}</p>
-      {editing && <CloseCircleOutlined className="text-dark-8 cursor-pointer invert" style={{ fontSize: 14 }} />}
+      <p className="whitespace-nowrap text-sm font-light text-dark-8 invert">{tag}</p>
+      {editing && <CloseCircleOutlined className="cursor-pointer text-dark-8 invert" style={{ fontSize: 14 }} />}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import NewPostEditor from '../../../../../components/editor/NewPostEditor'
+import NewPostEditor from '@/components/editor/NewPostEditor'
 
 const NewPost = () => {
   return (

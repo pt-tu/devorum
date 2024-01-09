@@ -21,7 +21,7 @@ function CommentItem() {
         <div className="col-span-6 flex flex-col">
           <CommentContent />
           {/* Tags slider */}
-          <Tags tags={tags} />
+          {/* <Tags tags={tags} /> */}
           {/* Footer */}
           <CommentFooter />
         </div>

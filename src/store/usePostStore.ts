@@ -47,7 +47,7 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
           })
         },
         initSelected: (user) => {
-          const initPost: Post = {
+          const initPost: any = {
             _id: '-1',
             title: '',
             isEditing: true,
@@ -63,7 +63,7 @@ export const usePostStore = createWithEqualityFn<PostState & PostActions>()(
             if (!state.selected) return
             if (title) state.selected.title = title
             if (content) state.selected.content = content
-            if (tags) state.selected.tags = tags
+            // if (tags) state.selected.tags = tags
           })
         },
         toggleVote: (post_id, votes) => {

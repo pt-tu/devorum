@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import NewPostEditor from '../../../../../../components/editor/NewPostEditor'
 import useCommunityData from '@/hooks/useCommunityData'
 import { useParams } from 'next/navigation'
+import NewPostEditor from '@/components/editor/NewPostEditor'
 
 const NewPostCommunity = () => {
   const { community } = useParams()

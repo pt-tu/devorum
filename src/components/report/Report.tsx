@@ -35,6 +35,7 @@ const Report = ({ children }: { children?: ReactNode }) => {
   const [loading, setLoading] = useState(false)
   const ref = useRef<HTMLInputElement | null>(null)
   const getImage = () => {
+    if (typeof document === 'undefined') return
     html2canvas(document.documentElement).then((canvas) => {
       const ctx = canvas.getContext('2d')
       ctx?.fillRect(50, 50, 50, 50)

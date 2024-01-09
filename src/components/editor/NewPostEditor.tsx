@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { createPostService, getPostService, updatePostService } from '@/services/postSevice'
 import { Avatar, Button, Card, CardBody, Input, Textarea } from '@nextui-org/react'
 import React, { useEffect, useMemo, useState } from 'react'
-import ReactQuill from 'react-quill'
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 import 'react-quill/dist/quill.snow.css'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css' // Or any other style you prefer

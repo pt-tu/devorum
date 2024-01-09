@@ -37,18 +37,18 @@ const PostFooter = (props: Post) => {
 
   const handleSaveClick = async () => {
     const newTag = selected?.tags
-      .filter((tag) => tag._id === '-1')
+      .filter((tag) => tag === '-1')
       .reduce((acc: NewTagProps[], tag) => {
         acc.push({
-          name: tag.name,
-          desc: tag.desc,
+          name: tag,
+          desc: tag,
         })
         return acc
       }, [])
     const resTag = await createTagService(newTag || [])
     const tags = selected?.tags
-      .filter((tag) => tag._id !== '-1')
-      .map((tag) => tag._id)
+      .filter((tag) => tag !== '-1')
+      .map((tag) => tag)
       .concat(resTag.data.map((tag) => tag._id))
     const newData = {
       ...selected,

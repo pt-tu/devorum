@@ -18,8 +18,8 @@ function ThemeButton({ size = 'md' }: Props) {
   }, [])
 
   const changeTheme = useCallback((theme: string) => {
-    document.querySelector('html')?.setAttribute('data-theme', theme)
-    document.querySelector('html')?.setAttribute('data-color-mode', theme)
+    typeof document !== 'undefined' && document.querySelector('html')?.setAttribute('data-theme', theme)
+    typeof document !== 'undefined' && document.querySelector('html')?.setAttribute('data-color-mode', theme)
   }, [])
 
   useEffect(() => {

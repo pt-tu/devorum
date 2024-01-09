@@ -16,6 +16,7 @@ import { DevMessage } from '@/types/dev.type'
 import { IoSend } from 'react-icons/io5'
 import classNames from 'classnames'
 import Call from '@/app/call/Call'
+import configs from '@/configs/configs'
 
 const LiveRoom = ({ params }: { params: any }) => {
   const id = params.id
@@ -27,7 +28,7 @@ const LiveRoom = ({ params }: { params: any }) => {
   const [ws, setWs] = useState<WebSocket | null>(null)
   const editor = useEditor(false, (innerEditor, monaco) => {
     const doc = new Y.Doc()
-    const provider = new WebsocketProvider('ws://localhost/live', id, doc, {})
+    const provider = new WebsocketProvider(`ws://${configs.BACKEND_HOSTNAME}/live`, id, doc, {})
     const type = doc.getText('monaco')
     const binding = new MonacoBinding(type, innerEditor.getModel(), new Set([innerEditor]), provider.awareness)
 

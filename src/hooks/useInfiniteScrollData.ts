@@ -4,7 +4,7 @@ function useInfiniteScrollData<T>(data: T[], message?: string, initLimit?: numbe
   const [limit, setLimit] = useState(10)
 
   const limitData = useMemo(() => {
-    return data.slice(0, limit)
+    return data.slice(0, limit || data.length)
   }, [data, limit])
 
   const hasMore = useMemo(() => {

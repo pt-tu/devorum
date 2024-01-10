@@ -1,6 +1,7 @@
 'use client'
 import { AppButton, HorizontalNav, PostItem, Divider } from '@/components'
 import { TabProps } from '@/components/common/Tab/TabButton'
+import useFixMissingScroll from '@/hooks/useFixMissingScroll'
 import useInfiniteScrollData from '@/hooks/useInfiniteScrollData'
 import usePostsData from '@/hooks/usePostsData'
 import useRecommendedPostsData from '@/hooks/useRecommendedPostsData'
@@ -34,7 +35,6 @@ const tabs: TabProps[] = [
 
 export default function Page() {
   const { posts, setPosts, initSelected } = usePostStore()
-  console.log('posts', posts)
   const { data, isLoading, mutate } = useRecommendedPostsData()
   const [selectedTab, setSelectedTab] = useState<string | number>(tabs[0].key)
   const { user } = useUserStore()
@@ -62,7 +62,14 @@ export default function Page() {
     }
   }, [data])
 
-  const { hasMore, limitData, releaseData } = useInfiniteScrollData(data?.posts || [], '', 5)
+  const { hasMore, limitData, releaseData } = useInfiniteScrollData(data?.posts || [], '')
+  const [element, setElement] = useState<HTMLDivElement | null>(null)
+
+  useFixMissingScroll({
+    hasMoreItems: hasMore,
+    fetchMoreItems: releaseData,
+    element: element,
+  })
 
   if (!domLoaded) return null
 
@@ -103,7 +110,7 @@ export default function Page() {
           <p className="text-gray-bg">main</p>
         </main>
       </Head>
-      <div className="flex h-full flex-col">
+      <div className="flex h-full flex-col" ref={(node) => setElement(node)}>
         {/* Question */}
         {/* <div className="mb-2 flex flex-row justify-center">
           <p className="flex-1 text-3xl font-normal text-gray-bg">Top Questions</p>

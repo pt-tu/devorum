@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-function useInfiniteScrollData<T>(data: T[], message?: string) {
+function useInfiniteScrollData<T>(data: T[], message?: string, initLimit?: number) {
   const [limit, setLimit] = useState(10)
+
   const limitData = useMemo(() => {
     return data.slice(0, limit)
   }, [data, limit])

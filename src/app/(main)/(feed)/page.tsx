@@ -1,15 +1,17 @@
 'use client'
 import { AppButton, HorizontalNav, PostItem, Divider } from '@/components'
 import { TabProps } from '@/components/common/Tab/TabButton'
+import useInfiniteScrollData from '@/hooks/useInfiniteScrollData'
 import usePostsData from '@/hooks/usePostsData'
 import useRecommendedPostsData from '@/hooks/useRecommendedPostsData'
 import { usePostStore } from '@/store/usePostStore'
 import { useUserStore } from '@/store/useUserStore'
 import { ArrowUpOutlined, CheckCircleOutlined, ClockCircleOutlined, FireOutlined } from '@ant-design/icons'
-import { Button, Tab, Tabs } from '@nextui-org/react'
+import { Button, Spinner, Tab, Tabs } from '@nextui-org/react'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const tabs: TabProps[] = [
   {
@@ -59,6 +61,8 @@ export default function Page() {
       setPosts(data.posts)
     }
   }, [data])
+
+  const { hasMore, limitData, releaseData } = useInfiniteScrollData(data?.posts || [], '', 5)
 
   if (!domLoaded) return null
 
@@ -127,12 +131,25 @@ export default function Page() {
           ))}
         </Tabs> */}
 
-        {filteredPosts.map((item, idx) => (
-          <Fragment key={item._id}>
-            <PostItem {...item} key={item._id} />
-            {idx !== posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}
-          </Fragment>
-        ))}
+        <InfiniteScroll
+          dataLength={data?.posts.length || 0} //This is important field to render the next data
+          next={releaseData}
+          hasMore={hasMore}
+          loader={<Spinner className="w-full" />}
+        >
+          {limitData.map((item, idx) => (
+            <Fragment key={item._id}>
+              <PostItem {...item} key={item._id} />
+              {idx !== posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}
+            </Fragment>
+          ))}
+          {/* {notifications.map((noti, i) => (
+                  <Fragment key={i}>
+                    <Notification data={noti} />
+                    {i !== notifications.length - 1 && <Divider />}
+                  </Fragment>
+                ))} */}
+        </InfiniteScroll>
       </div>
     </div>
   )

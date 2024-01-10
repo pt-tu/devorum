@@ -23,7 +23,7 @@ const CommunityOverviewBar = ({ data }: Props) => {
   return (
     <div className="small-scrollbar sticky top-20 col-span-3 h-full max-h-[calc(100vh-80px)] space-y-4 self-start overflow-y-auto pr-4">
       <div />
-      {user && data.joinedStatus && (
+      {user && (data.joinedStatus || data.createdBy === user._id) && (
         <Button as={Link} href={`/new/post/${community}`} color="primary">
           <p className="text-base">Create Post</p>
         </Button>

@@ -137,26 +137,38 @@ export default function Page() {
             />
           ))}
         </Tabs> */}
-
-        <InfiniteScroll
-          dataLength={data?.posts.length || 0} //This is important field to render the next data
-          next={releaseData}
-          hasMore={hasMore}
-          loader={<Spinner className="w-full" />}
-        >
-          {limitData.map((item, idx) => (
-            <Fragment key={item._id}>
-              <PostItem {...item} key={item._id} />
-              {idx !== posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}
-            </Fragment>
-          ))}
-          {/* {notifications.map((noti, i) => (
+        {user ? (
+          <>
+            <InfiniteScroll
+              dataLength={data?.posts.length || 0} //This is important field to render the next data
+              next={releaseData}
+              hasMore={hasMore}
+              loader={<Spinner className="w-full" />}
+            >
+              {limitData.map((item, idx) => (
+                <Fragment key={item._id}>
+                  <PostItem {...item} key={item._id} />
+                  {idx !== posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}
+                </Fragment>
+              ))}
+              {/* {notifications.map((noti, i) => (
                   <Fragment key={i}>
                     <Notification data={noti} />
                     {i !== notifications.length - 1 && <Divider />}
                   </Fragment>
                 ))} */}
-        </InfiniteScroll>
+            </InfiniteScroll>
+          </>
+        ) : (
+          <>
+            {posts.map((item, idx) => (
+              <Fragment key={item._id}>
+                <PostItem {...item} key={item._id} />
+                {idx !== posts.length - 1 && <div className="mb-10 border-t border-t-gray-4/20" />}
+              </Fragment>
+            ))}
+          </>
+        )}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 import { getProfileService } from '@/services/userService'
 import { useUserStore } from '@/store/useUserStore'
 import { User } from '@/types/user.type'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 
 const useUserProfileData = (username: string) => {

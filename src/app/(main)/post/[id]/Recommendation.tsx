@@ -30,7 +30,7 @@ const Recommendation = ({ title, viewMoreTitle, postId }: Props) => {
     <div className="!mt-6 grid grid-cols-1 gap-6">
       <p className="col-span-full text-2xl">Read Next</p>
 
-      {filteredPosts.map((post) => (
+      {filteredPosts?.slice(0, 4).map((post) => (
         <Fragment key={post._id}>
           <PostItem {...post} />
           <div className="mb-8 border-t border-t-gray-4/20" />

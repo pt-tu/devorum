@@ -110,6 +110,9 @@ const CommunityHeader = ({ community, isTheming }: Props) => {
                     <DropdownItem key="share" onClick={copyCurrentLink}>
                       Share link
                     </DropdownItem>
+                    <DropdownItem key="conf" as={Link} href={`/c/${community}/configure`}>
+                      Configure
+                    </DropdownItem>
                     {data.createdBy === user?._id ? (
                       <DropdownItem key="leave">Leave community</DropdownItem>
                     ) : (
